@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>VST P3-P4 - Time Delays</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <style>
+            .lowercase {
+                text-transform: lowercase;
+            }
+
+            /* Light Academic Style Overrides */
+            .academic-container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 40px 20px;
+            }
+
+            .academic-header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+
+            .academic-header .badge {
+                display: inline-block;
+                padding: 4px 14px;
+                background-color: #eff6ff;
+                color: #2563eb;
+                font-size: 0.8rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                border-radius: 20px;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+                border: 1px solid #dbeafe;
+            }
+
+            .academic-header h3 {
+                font-size: 2.1rem;
+                color: #0f172a;
+                font-weight: 700;
+                margin: 0 0 8px 0;
+                letter-spacing: -0.02em;
+            }
+
+            .academic-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 36px;
+            }
+
+            .figure-card {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+                padding: 28px;
+                margin: 0;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .figure-card:hover {
+                border-color: #cbd5e1;
+                box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.07);
+            }
+
+            .figure-card img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto 20px auto;
+                border-radius: 6px;
+            }
+
+            .figure-card figcaption {
+                font-size: 0.95rem;
+                color: #475569;
+                line-height: 1.6;
+                padding-top: 16px;
+                border-top: 1px solid #f1f5f9;
+                text-align: center;
+            }
+
+            .figure-card figcaption strong {
+                color: #0f172a;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body class="homepage is-preload">
+        <div id="page-wrapper">
+
+            <div id="header-wrapper-home">
+                    <div class="container">
+
+                        <header id="header">
+                                <div class="inner">
+
+                                    <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div>
+
+                                    <nav id="nav">
+                        <ul>
+                            <li class=""><a href="index.html">Home</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li class="current_page_item"><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN variability</a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+
+                                </div>
+                            </header>
+                            
+                            <div id="banner">
+                            </div>
+
+                        </div>
+                </div>
+
+            <div id="main-wrapper">
+                    <div class="wrapper style1">
+                        <div class="inner">
+
+                            <section class="academic-container">
+                                <header class="academic-header">
+                                    <span class="badge">VST P3-P4 Monitoring</span>
+                                    <h3>Time Delay Results for J0542-2125</h3>
+                                </header>
+                                
+                                <div class="academic-grid">
+                                    <figure class="figure-card">
+                                        <img src="images/J0542-2125_VST/marginalisation_spline_sigma_0.50.png"
+                                             alt="Time Delay results for J0542-2125">
+                                        <figcaption>
+                                            <strong>Figure 1:</strong> Time Delay measurements for J0542-2125.
+                                        </figcaption>
+                                    </figure>
+
+                                    <figure class="figure-card">
+                                        <img src="images/J0542-2125_VST/plot_ab.png"
+                                             alt="Matched light curves">
+                                        <figcaption>
+                                            <strong>Figure 2:</strong> Matched light curves for J0542-2125 with the above time delay.
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </section>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            <div id="footer-wrapper-logo">
+                    <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer>
+                </div>
+
+        </div>
+
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+
+    </body>
+</html>

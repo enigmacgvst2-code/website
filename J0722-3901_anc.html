@@ -1,0 +1,363 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>VST P3-P4 - Ancillary Data (J0722-3901)</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <style>
+            /* Custom Page Enhancements */
+            .lowercase { text-transform: lowercase; }
+            
+            /* Base Dataset Card Layout */
+            .dataset-card {
+                border-radius: 8px;
+                padding: 30px;
+                margin-bottom: 30px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+                border-top: 1px solid #e2e8f0;
+                border-right: 1px solid #e2e8f0;
+                border-bottom: 1px solid #e2e8f0;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+            .dataset-header {
+                border-bottom: 2px solid #f0f4f8;
+                padding-bottom: 12px;
+                margin-bottom: 20px;
+            }
+            .dataset-header h2 {
+                margin: 0;
+                font-size: 1.5em;
+                font-weight: 700;
+            }
+
+            /* --- CUSTOM COLOR PALETTE --- */
+            
+            /* 1. Discovery Paper Card (Purpleish: #8b5cf6) */
+            .card-purple {
+                border-left: 6px solid #8b5cf6;
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, #ffffff 100%);
+            }
+            .card-purple .dataset-header h2 { color: #7c3aed; }
+            .card-purple .dataset-header { border-bottom-color: rgba(139, 92, 246, 0.2); }
+            .card-purple .button {
+                background-color: #8b5cf6 !important;
+                color: #ffffff !important;
+                border: none;
+            }
+            .card-purple .button:hover { background-color: #7c3aed !important; }
+
+            /* 2. MUSE Data Card (Blueish: #5e86f7) */
+            .card-blue {
+                border-left: 6px solid #5e86f7;
+                background: linear-gradient(135deg, rgba(94, 134, 247, 0.05) 0%, #ffffff 100%);
+            }
+            .card-blue .dataset-header h2 { color: #5e86f7; }
+            .card-blue .dataset-header { border-bottom-color: rgba(94, 134, 247, 0.2); }
+            .card-blue .button {
+                background-color: #5e86f7 !important;
+                color: #ffffff !important;
+                border: none;
+            }
+            .card-blue .button:hover { background-color: #4870e0 !important; }
+
+            /* 3. FORS2 Data Card (Greenish: #10b981) */
+            .card-green {
+                border-left: 6px solid #10b981;
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, #ffffff 100%);
+            }
+            .card-green .dataset-header h2 { color: #059669; }
+            .card-green .dataset-header { border-bottom-color: rgba(16, 185, 129, 0.2); }
+            .card-green .button {
+                background-color: #10b981 !important;
+                color: #ffffff !important;
+                border: none;
+            }
+            .card-green .button:hover { background-color: #059669 !important; }
+
+            /* 4. HST Data Card (Orangish: #f59e0b) */
+            .card-orange {
+                border-left: 6px solid #f59e0b;
+                background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, #ffffff 100%);
+            }
+            .card-orange .dataset-header h2 { color: #d97706; }
+            .card-orange .dataset-header { border-bottom-color: rgba(245, 158, 11, 0.2); }
+            .card-orange .button {
+                background-color: #f59e0b !important;
+                color: #ffffff !important;
+                border: none;
+            }
+            .card-orange .button:hover { background-color: #d97706 !important; }
+
+            /* 5. JWST Data Card (Reddish: #ef4444) */
+            .card-red {
+                border-left: 6px solid #ef4444;
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, #ffffff 100%);
+            }
+            .card-red .dataset-header h2 { color: #dc2626; }
+            .card-red .dataset-header { border-bottom-color: rgba(239, 68, 68, 0.2); }
+            .card-red .button {
+                background-color: #ef4444 !important;
+                color: #ffffff !important;
+                border: none;
+            }
+            .card-red .button:hover { background-color: #dc2626 !important; }
+
+            /* Layout Grids */
+            .grid-2col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+                align-items: center;
+            }
+            @media (max-width: 768px) {
+                .grid-2col { grid-template-columns: 1fr; }
+            }
+            
+            /* Meta Badges */
+            .meta-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin: 15px 0;
+            }
+            .meta-item {
+                background: rgba(255, 255, 255, 0.85);
+                border: 1px solid #e2e8f0;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 0.9em;
+            }
+            .meta-label {
+                font-weight: bold;
+                color: #4a5568;
+            }
+
+            /* Forces grouped items (like RA & Dec) to stay together on a fresh row */
+            .meta-break {
+                flex-basis: 100%;
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            
+            /* Status Badges */
+            .status-badge {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 0.8em;
+                font-weight: 600;
+            }
+            .status-badge.info {
+                background-color: #e0f2fe;
+                color: #075985;
+            }
+            .status-badge.progress {
+                background-color: #fee2e2;
+                color: #991b1b;
+            }
+            .status-badge.credit {
+                background-color: #ffe4e6;
+                color: #9f1239;
+                border: 1px solid #fecdd3;
+            }
+            
+            /* Action Buttons Group */
+            .btn-group {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 15px;
+            }
+            
+            /* Image Formatting */
+            figure.data-figure {
+                margin: 0;
+                text-align: center;
+            }
+            figure.data-figure img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 6px;
+            }
+            figcaption {
+                font-size: 0.85em;
+                color: #718096;
+                margin-top: 8px;
+            }
+        </style>
+    </head>
+    <body class="homepage is-preload">
+        <div id="page-wrapper">
+
+            <!-- Navigation Header -->
+            <div id="header-wrapper-home">
+                <div class="container">
+                    <header id="header">
+                        <div class="inner">
+                            <div class="logo"> 
+                                <a href="index.html" id="logo"> 
+                                    <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                                    <span class="logo-text">(VST)<sup>2</sup></span>
+                                </a> 
+                            </div>
+
+                            <nav id="nav">
+                        <ul>
+                            <li class=""><a href="index.html">Home</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN variability</a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li class="current_page_item">
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                        </div>
+                    </header>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div id="main-wrapper">
+                <div class="wrapper style1">
+                    <div class="container">
+                        
+                        <!-- Page Title Header -->
+                        <header class="major" style="text-align: center; margin-bottom: 40px;">
+                            <h2>J0722-3901 — Ancillary Data</h2>
+                        </header>
+
+                        <!-- 1. Discovery Paper Card (Purpleish) -->
+                        <section class="dataset-card card-purple">
+                            <div class="dataset-header">
+                                <h2>Discovery Paper</h2>
+                            </div>
+                            <p><strong>Reference:</strong> No discovery paper</p>
+                        </section>
+
+                        <!-- 2. HST Data Card (Orangish) -->
+                        <section class="dataset-card card-orange">
+                            <div class="dataset-header">
+                                <h2>HST Data</h2>
+                            </div>
+                            <div class="grid-2col">
+                                <div>
+                                    <div class="meta-grid">
+                                        <div class="meta-item"><span class="meta-label">PID:</span> 17916</div>
+                                        <div class="meta-item"><span class="meta-label">Filters:</span> F160w</div>
+                                        <div class="meta-break">
+                                            <div class="meta-item"><span class="meta-label">RA:</span> 110.6773750°</div>
+                                            <div class="meta-item"><span class="meta-label">Dec:</span> -39.03310°</div>
+                                        </div>
+                                    </div>
+                                    <div class="btn-group">
+                                        <a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=110.6773750+-39.03310&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2" target="_blank" class="button icon solid fa-search">
+                                            MAST HST Search
+                                        </a>
+                                        <a href="https://www.stsci.edu/hst/phase2-public/17916.pdf" target="_blank" class="button alt icon solid fa-external-link-alt">
+                                            STScI Program 17916
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <figure class="data-figure">
+                                        <img src="images/J0722-3901_VST/f160w_hst.png" alt="HST image for J0722-3901">
+                                        <figcaption>
+                                            HST F160w image for J0722-3901.
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div id="footer-wrapper-logo">
+                <footer id="footer" class="container"> 
+                    <div class="row"> 
+                        <div class="col-3 col-6-medium col-12-small"> 
+                            <section> 
+                                <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                                <dl class="contact"> 
+                                    <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                                </dl> 
+                            </section> 
+                        </div> 
+                        <div class="col-3 col-6-medium col-12-small"> 
+                            <h2 class="footer-heading">Website Last Update</h2> 
+                            <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                        </div> 
+                        <div class="col-3 col-6-medium col-12-small"> 
+                            <h2 class="footer-heading">Website Credits</h2> 
+                            <p class="footer-subtext">M. Annunziatella</p> 
+                        </div> 
+                    </div> 
+                </footer>
+            </div>
+
+        </div>
+
+        <!-- Scripts -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>

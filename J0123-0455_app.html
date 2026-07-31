@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>J0123-0455</title>
+  <style>
+    [v-cloak] { display: none; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    #plot { width: 100%; height: 700px; }
+    .card { border:1px solid #e5e5e5; border-radius:8px; background:#fafafa; padding:14px; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .row + .row { margin-top: 8px; }
+    .label { font-weight:600; margin-right:6px; }
+    .small { font-size: 12px; color:#666; }
+    .pill { padding:4px 8px; border-radius:14px; border:1px solid #ddd; background:#fff; cursor:pointer; }
+    .pill.active { background:#e7f1ff; border-color:#9ec1ff; }
+    .grid { display:grid; grid-template-columns: 1fr 320px; gap: 16px; }
+    .controls { display:grid; gap:10px; }
+    .images { max-height: 280px; overflow:auto; border:1px solid #eee; padding:8px; border-radius:8px; background:#fff; }
+    .images .row { justify-content: space-between; }
+    input[type="number"] { width: 100px; }
+    .sticky { position: sticky; top: 12px; }
+  </style>
+</head>
+<body>
+  <div id="app" v-cloak class="container">
+    <h2 style="margin-top:0;">J0123-0455</h2>
+
+    <div class="grid">
+      <div>
+        <div id="plot" class="card"></div>
+        <div class="small">
+          Tips: Click on a curve to select it. Hold Cmd/Ctrl and click to snap the nearest point of the selected curve to your click (updates ΔT, ΔM).
+        </div>
+      </div>
+
+      <div class="controls sticky">
+        <div class="card">
+          <h3 class="cp-title">Curves</h3>
+          <div class="row" v-for="c in curves" :key="c.name">
+            <label class="label">
+              <input type="checkbox" v-model="c.visible" @change="draw">
+              {{ c.name }}
+            </label>
+            <label class="small">
+              <input type="checkbox" v-model="c.showErrors" @change="draw">
+              Show errors
+            </label>
+          </div>
+          <div v-if="!curves.length" class="small">No curves found.</div>
+        </div>
+
+        <div class="card">
+          <h3 class="cp-title">Shift Selected Curve</h3>
+          <div class="row"><label class="small"><input type="checkbox" v-model="showDeltas"> Show ΔT/ΔM</label></div>
+          <div class="row">
+            <span class="small">Active:</span>
+            <button v-for="c in curves" :key="c.name" class="pill" :class="{active: activeCurve && activeCurve.name===c.name}" @click="activeCurve=c">{{c.name}}</button>
+          </div>
+          <div class="row" style="margin-top:8px;" v-if="activeCurve && showDeltas">
+            <label>ΔT <input type="number" step="0.01" v-model.number="activeCurve.offsetX" @input="draw"></label>
+            <button class="pill" @click="activeCurve.offsetX-=0.1; draw()">-0.1</button>
+            <button class="pill" @click="activeCurve.offsetX+=0.1; draw()">+0.1</button>
+          </div>
+          <div class="row" v-if="activeCurve && showDeltas">
+            <label>ΔM <input type="number" step="0.01" v-model.number="activeCurve.offsetY" @input="draw"></label>
+            <button class="pill" @click="activeCurve.offsetY-=0.01; draw()">-0.01</button>
+            <button class="pill" @click="activeCurve.offsetY+=0.01; draw()">+0.01</button>
+          </div>
+          <div class="small" v-if="showDeltas" style="margin-top:6px;">Positive ΔM shifts to fainter magnitudes (y-axis is reversed).</div>
+        </div>
+
+        <div class="card">
+          <h3 class="cp-title">MJD</h3>
+          <div class="images">
+            <div class="row" v-for="im in images" :key="im.label">
+              <label>
+                <input type="checkbox" v-model="im.selected" @change="draw"> {{ im.label }}
+              </label>
+              <span class="small">{{ im.count }} points</span>
+            </div>
+          </div>
+          <div class="row" style="margin-top:8px;">
+            <button class="pill" @click="selectAllImages(true)">Select all</button>
+            <button class="pill" @click="selectAllImages(false)">Select none</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const RAW = {"curves": [{"name": "A", "color": "royalblue", "visible": true, "showErrors": true, "offsetX": 0.0, "offsetY": 0.0, "x": [61204.39040599, 61207.3962278045, 61211.368271311, 61212.374015584996, 61213.413038562, 61216.352406109494, 61217.350404995006, 61219.39353920219, 61220.344113325606, 61221.348371985, 61222.354208994, 61227.3309487158, 61232.3100668925, 61233.366081912995, 61234.292485626, 61235.31507476966, 61244.33280673125, 61245.287405742005, 61246.282237515, 61247.292104461], "y": [20.73157020043901, 20.765296171403783, 20.76906309161345, 20.81672135185188, 20.77402753556571, 20.843185522225504, 20.826583643260538, 20.866430135901215, 20.842975895240663, 20.836344802833892, 20.900032285981737, 20.873012449366826, 20.868882250766987, 20.83741423047476, 20.81650989627515, 20.82470583269404, 20.824803346527737, 20.795316271463033, 20.814436237592005, 20.83505485196994], "err": [0.0171236480255504, 0.0169950312279901, 0.027533744796299, 0.0204783159416628, 0.0284170881160971, 0.0211081653030344, 0.0146989455662958, 0.0155713714190343, 0.0259895746593497, 0.0220264492744215, 0.0221499757122007, 0.0173678893422874, 0.0265201132664983, 0.0125175428936347, 0.0281713913348443, 0.0145306982941142, 0.0128576993529733, 0.0193811923538571, 0.0170127794984859, 0.0150866312568418]}, {"name": "B", "color": "mediumvioletred", "visible": true, "showErrors": true, "offsetX": 0.0, "offsetY": 0.0, "x": [61204.39040599, 61207.3962278045, 61211.368271311, 61212.374015584996, 61213.413038562, 61216.352406109494, 61217.350404995006, 61219.39353920219, 61220.344113325606, 61221.348371985, 61222.354208994, 61227.3309487158, 61232.3100668925, 61233.366081912995, 61234.292485626, 61235.31507476966, 61244.33280673125, 61245.287405742005, 61246.282237515, 61247.292104461], "y": [21.57855599854744, 21.57502975825856, 21.57646810763928, 21.53363080118813, 21.44294166943899, 21.523774634397384, 21.60084472107024, 21.588299740698098, 21.612563892983022, 21.60813458306749, 21.568235157807695, 21.52668415219126, 21.457916649212684, 21.60306672834487, 21.568070878678096, 21.584651073578012, 21.58104171208961, 21.542311532349103, 21.64433424156665, 21.56579941811657], "err": [0.0380778326831194, 0.0365450546903346, 0.0573126885311237, 0.0399097899248146, 0.0555911809331369, 0.0414419203114065, 0.0306239386108497, 0.0309446344487649, 0.0536514802792701, 0.0455147635193969, 0.0418632310503744, 0.0325023056473842, 0.0461212895263735, 0.0242362382680913, 0.05819093352212, 0.0285224245589052, 0.026503831551716, 0.0399197914894115, 0.0372432871776875, 0.03003881413949]}], "images": [{"label": "61204.39041", "count": 1, "selected": true}, {"label": "61207.39623", "count": 1, "selected": true}, {"label": "61211.36827", "count": 1, "selected": true}, {"label": "61212.37402", "count": 1, "selected": true}, {"label": "61213.41304", "count": 1, "selected": true}, {"label": "61216.35241", "count": 1, "selected": true}, {"label": "61217.35040", "count": 1, "selected": true}, {"label": "61219.39354", "count": 1, "selected": true}, {"label": "61220.34411", "count": 1, "selected": true}, {"label": "61221.34837", "count": 1, "selected": true}, {"label": "61222.35421", "count": 1, "selected": true}, {"label": "61227.33095", "count": 1, "selected": true}, {"label": "61232.31007", "count": 1, "selected": true}, {"label": "61233.36608", "count": 1, "selected": true}, {"label": "61234.29249", "count": 1, "selected": true}, {"label": "61235.31507", "count": 1, "selected": true}, {"label": "61244.33281", "count": 1, "selected": true}, {"label": "61245.28741", "count": 1, "selected": true}, {"label": "61246.28224", "count": 1, "selected": true}, {"label": "61247.29210", "count": 1, "selected": true}], "point_images": ["61204.39041", "61207.39623", "61211.36827", "61212.37402", "61213.41304", "61216.35241", "61217.35040", "61219.39354", "61220.34411", "61221.34837", "61222.35421", "61227.33095", "61232.31007", "61233.36608", "61234.29249", "61235.31507", "61244.33281", "61245.28741", "61246.28224", "61247.29210"]};
+      const PALETTE = ["royalblue", "mediumvioletred", "lightseagreen", "orange", "crimson", "teal", "goldenrod", "slateblue", "tomato", "seagreen"];
+
+      function ensure(src, cb){
+        const s = document.createElement('script');
+        s.src = src; s.onload = cb; document.head.appendChild(s);
+      }
+      function boot(){ ensure('https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js', function(){
+        ensure('https://cdn.plot.ly/plotly-2.35.2.min.js', start);
+      }); }
+
+      function start(){
+        const vm = new Vue({
+          el: '#app',
+          data: {
+            showDeltas: true,
+            curves: RAW.curves || [],
+            images: RAW.images || [],
+            activeCurve: null,
+          },
+          mounted(){ this.draw(); Vue.nextTick(()=>this.attachDrag()); },
+          methods: {
+
+            attachDrag(){
+              const gd = document.getElementById('plot');
+              const vm = this;
+              if (!gd || vm._dragHandlersAttached) return;
+              vm._dragHandlersAttached = true;
+
+              let dragging = false;
+              let startX = 0, startY = 0;
+              let originalDragmode = null;
+
+              function getScales(){
+                const fl = gd._fullLayout;
+                if (!fl || !fl.xaxis || !fl.yaxis) return {sx:1, sy:1};
+                const xr = fl.xaxis.range, yr = fl.yaxis.range;
+                const sx = (xr[1]-xr[0]) / (fl.xaxis._length || 1);
+                const sy = (yr[1]-yr[0]) / (fl.yaxis._length || 1);
+                return {sx, sy};
+              }
+
+              const onDown = (e) => {
+                if (!(e.ctrlKey || e.metaKey)) return; // only with Ctrl/⌘
+                if (!vm.activeCurve) return;
+                dragging = true;
+                startX = e.clientX; startY = e.clientY;
+                originalDragmode = (gd.layout && gd.layout.dragmode) || 'zoom';
+                Plotly.relayout(gd, {'dragmode':'none'});
+                e.preventDefault(); e.stopPropagation();
+              };
+
+              const onMove = (e) => {
+                if (!dragging || !vm.activeCurve) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                const {sx, sy} = getScales();
+                vm.activeCurve.offsetX = (vm.activeCurve.offsetX || 0) + dx * sx;
+                vm.activeCurve.offsetY = (vm.activeCurve.offsetY || 0) - dy * sy;
+                startX = e.clientX; startY = e.clientY;
+                vm.draw(false);
+                e.preventDefault(); e.stopPropagation();
+              };
+
+              const onUp = () => {
+                if (!dragging) return;
+                dragging = false;
+                if (originalDragmode){ Plotly.relayout(gd, {'dragmode': originalDragmode}); }
+              };
+
+              gd.addEventListener('mousedown', onDown);
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onUp);
+              window.addEventListener('resize', () => Plotly.Plots.resize(gd));
+            },
+
+            selectAllImages(v){ this.images.forEach(im => im.selected = v); this.draw(); },
+            filteredIndices(){
+              const allowed = new Set(this.images.filter(im => im.selected).map(im => im.label));
+              const img = RAW.point_images || [];
+              const out = [];
+              for (let i=0;i<img.length;i++){ if (allowed.has(img[i])) out.push(i); }
+              return out;
+            },
+            buildTrace(c){
+              const idx = this.filteredIndices();
+              const xsAll = c.x, ysAll = c.y, errAll = c.err || [];
+              const xs = [], ys = [], es = [];
+              for (let k=0;k<xsAll.length;k++){
+                if (idx.indexOf(k) !== -1){
+                  xs.push(xsAll[k] + (c.offsetX || 0));
+                  ys.push(ysAll[k] + (c.offsetY || 0));
+                  if (errAll.length === xsAll.length) es.push(errAll[k]);
+                }
+              }
+              const hasErr = es.length === xs.length && xs.length>0;
+            const t = {
+            x: xs, y: ys, name: c.name, mode: 'markers',
+            marker: { size: 6, color: c.color },
+            textfont: { color: 'white' },
+            visible: c.visible ? true : 'legendonly',
+            hovertemplate: 'mjd=%{x}<br>' + c.name + '_mag=%{y:.4f}' +
+                 (hasErr ? '<br>err=%{customdata:.4f}' : '') + '<extra></extra>',
+            hoverlabel: {
+            bgcolor: c.color,          // same color as the point
+            font: { color: 'white' },  // white text for readability
+            bordercolor: c.color       // optional, makes the border blend in
+            }
+            };
+              if (c.showErrors && hasErr){
+                t.error_y = { type: 'data', array: es, visible: true, color: c.color };
+                t.customdata = es;
+              }
+              return t;
+            },
+            draw(){
+              const traces = [];
+              for (const c of this.curves){
+                if (!c.visible) continue;
+                traces.push(this.buildTrace(c));
+              }
+              
+              // Ensure the active (dragged) curve is drawn on top by placing its trace last
+              if (this.activeCurve) {
+                const _i = traces.findIndex(t => t && t.name === this.activeCurve.name);
+                if (_i >= 0 && _i !== traces.length - 1) {
+                  const _t = traces.splice(_i, 1)[0];
+                  traces.push(_t);
+                }
+              }
+
+const gd = document.getElementById('plot');
+let currentRanges = null;
+if (gd && gd.layout && gd.layout.xaxis && gd.layout.yaxis) {
+  currentRanges = {
+    x: gd.layout.xaxis.range ? [...gd.layout.xaxis.range] : null,
+    y: gd.layout.yaxis.range ? [...gd.layout.yaxis.range] : null
+  };
+}
+
+const layout = {
+  margin: { t: 20, r: 20, b: 55, l: 70 },
+  xaxis: { title: 'mjd (MJD)' },
+  yaxis: { title: 'Magnitude (mag)', autorange: 'reversed' },
+  hoverlabel: { bgcolor: '#222', font: { color: 'white' } },
+  legend: { orientation: 'h' },
+};
+
+window.Plotly.react('plot', traces, layout, {displaylogo:false, responsive:true}).then(() => {
+  if (currentRanges && currentRanges.x && currentRanges.y) {
+    Plotly.relayout(gd, {
+      'xaxis.range': currentRanges.x,
+      'yaxis.range': currentRanges.y
+    });
+  }
+});
+},
+          }
+        });
+
+        // Click to activate curve; Cmd/Ctrl+Click to shift it to clicked coords
+        const plotDiv = document.getElementById('plot');
+        plotDiv.on = window.Plotly.d3.select(plotDiv).on; // ensure .on exists (Plotly binds d3 selection)
+
+        plotDiv.on('plotly_click', function(ev){
+          if (!ev || !ev.points || !ev.points.length) return;
+          const pt = ev.points[0];
+          const traceName = (pt.data && pt.data.name) ? pt.data.name : null;
+          if (traceName){
+            const clicked = vm.curves.find(c => c.name === traceName);
+            if (clicked) vm.activeCurve = clicked;
+          }
+          // Only shift with Cmd/Ctrl
+          if (!(ev.event && (ev.event.ctrlKey || ev.event.metaKey))) return;
+          if (!vm.activeCurve) return;
+
+          const xVal = pt.x, yVal = pt.y;
+          const idx = vm.filteredIndices();
+          let bestIdx = -1, bestDist = 1e99;
+          for (const k of idx){
+            const xi = vm.activeCurve.x[k] + (vm.activeCurve.offsetX || 0);
+            const yi = vm.activeCurve.y[k] + (vm.activeCurve.offsetY || 0);
+            const d2 = (xi - xVal)*(xi - xVal) + (yi - yVal)*(yi - yVal);
+            if (d2 < bestDist){ bestDist = d2; bestIdx = k; }
+          }
+          if (bestIdx >= 0){
+            const baseX = vm.activeCurve.x[bestIdx];
+            const baseY = vm.activeCurve.y[bestIdx];
+            vm.activeCurve.offsetX += (xVal - (baseX + (vm.activeCurve.offsetX||0)));
+            vm.activeCurve.offsetY += (yVal - (baseY + (vm.activeCurve.offsetY||0)));
+            vm.draw();
+          }
+        });
+      }
+
+      if (document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', boot); } else { boot(); }
+    })();
+  </script>
+</body>
+</html>
