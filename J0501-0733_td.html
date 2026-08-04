@@ -9,13 +9,102 @@
             .lowercase {
                 text-transform: lowercase;
             }
-            /* Optional: Style to center the content within the main area */
-            .image-container {
-                text-align: center;
-                padding: 40px 0;
+
+            /* Light Academic Style Overrides */
+            .academic-container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 40px 20px;
             }
-            .image-container h3 {
-                margin-bottom: 25px;
+
+            .academic-header {
+                text-align: center;
+                margin-bottom: 35px;
+            }
+
+            .academic-header .badge {
+                display: inline-block;
+                padding: 4px 14px;
+                background-color: #eff6ff;
+                color: #2563eb;
+                font-size: 0.8rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                border-radius: 20px;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+                border: 1px solid #dbeafe;
+            }
+
+            .academic-header h3 {
+                font-size: 1.8rem;
+                color: #0f172a;
+                font-weight: 700;
+                margin: 0 0 8px 0;
+                letter-spacing: -0.02em;
+                line-height: 1.35;
+            }
+
+            .academic-header h3 a {
+                color: #2563eb;
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+
+            .academic-header h3 a:hover {
+                color: #1d4ed8;
+            }
+
+            .academic-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 36px;
+            }
+
+            .figure-card {
+                background: #ffffff;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+                padding: 28px;
+                margin: 0;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .figure-card:hover {
+                border-color: #cbd5e1;
+                box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.07);
+            }
+
+            .figure-card img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto 20px auto;
+                border-radius: 6px;
+            }
+
+            .figure-card figcaption {
+                font-size: 0.95rem;
+                color: #475569;
+                line-height: 1.6;
+                padding-top: 16px;
+                border-top: 1px solid #f1f5f9;
+                text-align: center;
+            }
+
+            .figure-card figcaption strong {
+                color: #0f172a;
+                font-weight: 600;
+            }
+
+            .section-divider {
+                height: 1px;
+                background: #e2e8f0;
+                margin: 40px auto;
+                max-width: 920px;
+                border: none;
             }
         </style>
     </head>
@@ -110,24 +199,62 @@
                     <div class="wrapper style1">
                         <div class="inner">
 
-                            <section class="container box feature1 image-container">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <header>
-                                                <h3>Time Delay Results for J0501-0733</h3>
-                                            </header>
-                                            
-                                            <figure>
-                                                <img src="images/J0501-0733_VST/marginalisation_spline_sigma_0.50.png"
-                                                     alt="Time Delay results for J0501-0733"
-                                                     style="max-width: 100%; height: auto;">
-                                                
-                                                <figcaption>Time Delay measurements for J0501-0733.</figcaption>
-                                            </figure>
-                                            
-                                        </div>
-                                    </div>
-                                </section>
+                            <!-- Section 1: Solution 1 -->
+                            <section class="academic-container">
+                                <header class="academic-header">
+                                    <span class="badge">VST P3 Monitoring</span>
+                                    <h3>Time Delay Results for J0501-0733 (Solution 1)</h3>
+                                </header>
+                                
+                                <div class="academic-grid">
+                                    <figure class="figure-card">
+                                        <img src="images/J0501-0733_VST/marginalisation_spline_sigma_0.50.png"
+                                             alt="Time Delay results for J0501-0733 - Solution 1">
+                                        <figcaption>
+                                            <strong>Figure 1:</strong> Time Delay measurements for J0501-0733 (Solution 1).
+                                        </figcaption>
+                                    </figure>
+
+                                     <figure class="figure-card">
+                                        <!-- Replace 'plot_solution1.png' with your actual overlapping curves plot filename -->
+                                        <img src="images/J0501-0733_VST/J0501_match_td1.png"
+                                             alt="Matched light curves for Solution 1">
+                                        <figcaption>
+                                            <strong>Figure 2:</strong> Matched light curves for J0501-0733 with the time delay from Solution 1.
+                                        </figcaption>
+                                    </figure>    
+                                </div>
+                            </section>
+
+                            <hr class="section-divider">
+
+                            <!-- Section 2: Solution 2 -->
+                            <section class="academic-container" style="padding-top: 10px;">
+                                <header class="academic-header">
+                                    <span class="badge">VST P3 Monitoring</span>
+                                    <h3>Time Delay Results for J0501-0733 (Solution 2)</h3>
+                                </header>
+                                    
+                                <div class="academic-grid">
+                                    <figure class="figure-card">
+                                        <!-- Replace 'marginalisation_spline_sigma_alt.png' with your actual TD plot filename -->
+                                        <img src="images/J0501-0733_VST/marginalisation_spline_sigma_0.50_2.png"
+                                             alt="Time Delay results for J0501-0733 - Solution 2">
+                                        <figcaption>
+                                            <strong>Figure 3:</strong> Alternative Time Delay measurements for J0501-0733 (Solution 2).
+                                        </figcaption>
+                                    </figure>
+
+                                    <figure class="figure-card">
+                                        <!-- Replace 'plot_solution2.png' with your actual overlapping curves plot filename -->
+                                        <img src="images/J0501-0733_VST/J0501_match_td2.png"
+                                             alt="Matched light curves for Solution 2">
+                                        <figcaption>
+                                            <strong>Figure 4:</strong> Matched light curves for J0501-0733 with the time delay from Solution 1.
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </section>
 
                         </div>
                     </div>
@@ -160,11 +287,11 @@
         </div>
 
         <script src="assets/js/jquery.min.js"></script>
-            <script src="assets/js/jquery.dropotron.min.js"></script>
-            <script src="assets/js/browser.min.js"></script>
-            <script src="assets/js/breakpoints.min.js"></script>
-            <script src="assets/js/util.js"></script>
-            <script src="assets/js/main.js"></script>
+        <script src="assets/js/jquery.dropotron.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
 
     </body>
 </html>
