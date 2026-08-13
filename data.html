@@ -1,0 +1,417 @@
+<!DOCTYPE HTML><!DOCTYPE HTML>
+
+<html>  
+<head> 
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>VST P3-P4 - Data</title> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+
+    <style> 
+        /* --- Modern ESO Target Inspector Custom Styles --- */
+        :root {
+            --primary-navy: #002b49;
+            --primary-accent: #0284c7;
+            --primary-accent-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #e0f2fe;
+            --badge-text: #0369a1;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .lowercase { 
+            text-transform: lowercase; 
+        } 
+
+        /* Footer Adjustments */
+        .footer-heading {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-subtext {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+
+        /* --- Refined Scientific Styles for the Data Page --- */
+        .data-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .data-section {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Accent bar */
+        .data-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--primary-accent);
+        }
+
+        .data-section h3 {
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .data-section p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .data-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .data-section a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .data-section a:hover {
+            color: var(--primary-accent-hover);
+            border-bottom-color: var(--primary-accent-hover);
+        }
+
+        /* Highlight Box for Access Rules */
+        .access-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #10b981; /* Emerald Accent */
+            padding: 1.5rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 1.5rem 0;
+        }
+
+        .access-box h4 {
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-size: 1.1rem;
+        }
+
+        /* Table Styles for Targets */
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            background: #ffffff;
+            margin-top: 1rem;
+        }
+
+        .data-table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+        } 
+
+        .data-table th, .data-table td { 
+            padding: 14px 20px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color);
+        } 
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table th { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; 
+            background-color: var(--primary-navy) !important; 
+            color: #ffffff !important; 
+            font-size: 0.9rem !important; 
+            font-weight: 600 !important; 
+            letter-spacing: 0.5px !important; 
+            text-transform: uppercase !important; 
+        } 
+
+        .data-table tr:nth-child(even) { 
+            background-color: #f8fafc; 
+        } 
+
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .target-badge {
+            background: var(--badge-bg); 
+            color: var(--badge-text); 
+            padding: 4px 12px; 
+            border-radius: 9999px; 
+            font-size: 0.85rem; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            font-weight: 600; 
+            display: inline-block; 
+        }
+    </style> 
+</head> 
+<body class="homepage is-preload"> 
+<div id="page-wrapper"> 
+
+    <!-- Header Wrapper --> 
+    <div id="header-wrapper-home"> 
+        <div class="container"> 
+            <header id="header">
+                <div class="inner">
+
+                   <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div> 
+
+                    <nav id="nav">
+                        <ul>
+                            <li class=""><a href="index.html">Home</a></li>
+                            <li ><a href="people.html">People</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN </a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li class="current_page_item"><a href="data.html">Data</a></li>                        </ul>
+                    </nav>
+                </div>
+            </header> 
+            <div id="banner"></div> 
+        </div> 
+    </div> 
+
+    <!-- Main Wrapper --> 
+    <div id="main-wrapper"> 
+        <div class="wrapper style1"> 
+            <div class="inner"> 
+                <section class="container box feature1"> 
+                    <div class="row"> 
+                        <div class="col-12"> 
+
+                            <!-- Hero Section -->
+                            <div class="hero-brand-section">
+                                <h1 class="hero-title">
+                                    <span class="dark-text">Data Release & Access</span>
+                                </h1>
+                            </div>
+
+                            <div class="data-container">
+                                
+                                <!-- Data Access Section -->
+                                <div class="data-section">
+                                    <h3>Data Products</h3>
+                                    <p>
+                                        Our processed data products, including <strong>nightly reduced single exposures data</strong>, <strong>nightly mosaics</strong>, <strong>difference imaging</strong>, and <strong>mosaic stacks</strong>, will be systematically made available through the ADHOC data center.
+                                    </p>
+                                    
+                                    <p>
+                                        The data center overview can be found at: <br>
+                                        <a href="https://www.fisica.unina.it/strutture/adhoc" target="_blank" rel="noopener noreferrer">https://www.fisica.unina.it/strutture/adhoc</a>
+                                    </p>
+
+                                    <div class="access-box">
+                                        <h4><i class="fa fa-lock" style="margin-right: 8px;"></i> Access Requirements</h4>
+                                        <p style="font-size: 0.95rem; margin-bottom: 0;">
+                                            Data access is granted to researchers with <strong>LSST data rights</strong>. To request access to the data products, please send an email to either <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> or <a href="mailto:claudio.grillo@unimi.it">Claudio Grillo</a>, and complete the dedicated Google Form provided on the ADHOC website.
+                                        </p>
+                                    </div>
+
+                                    <p style="font-size: 0.95rem; color: var(--text-muted);">
+                                        <strong>Note:</strong> All public ancillary data corresponding to the targets are linked directly within their respective target pages on this website.
+                                    </p>
+                                </div>
+
+                                <!-- Targets & Coordinates Section -->
+                                <div class="data-section">
+                                    <h3>Target Coordinates</h3>
+                                    <p>Below is the summary of the targets monitored in our campaign along with their Right Ascension (RA) and Declination (Dec) coordinates.</p>
+                                    
+                                    <div class="table-responsive-wrapper">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Target ID</th>
+                                                    <th>Right Ascension (J2000)</th>
+                                                    <th>Declination (J2000)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><span class="target-badge">J0123-0455</span></td>
+                                                    <td>01h 23m</td>
+                                                    <td>-04° 55'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J0335-1927</span></td>
+                                                    <td>03h 35m</td>
+                                                    <td>-19° 27'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J0501-0733</span></td>
+                                                    <td>05h 01m</td>
+                                                    <td>-07° 33'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J0542-2125</span></td>
+                                                    <td>05h 42m</td>
+                                                    <td>-21° 25'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J0722-3901</span></td>
+                                                    <td>07h 22m</td>
+                                                    <td>-39° 01'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J1029+2623</span></td>
+                                                    <td>10h 29m</td>
+                                                    <td>+26° 23'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J1330+1810</span></td>
+                                                    <td>13h 30m</td>
+                                                    <td>+18° 10'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J2107-1611</span></td>
+                                                    <td>21h 07m</td>
+                                                    <td>-16° 11'</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="target-badge">J2329-1258</span></td>
+                                                    <td>23h 29m</td>
+                                                    <td>-12° 58'</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End Data Sections -->
+
+                        </div> 
+                    </div> 
+                </section> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- Footer Wrapper --> 
+    <div id="footer-wrapper-logo"> 
+        <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer> 
+    </div> 
+
+</div> 
+
+<!-- Scripts --> 
+<script src="assets/js/jquery.min.js"></script> 
+<script src="assets/js/jquery.dropotron.min.js"></script> 
+<script src="assets/js/browser.min.js"></script> 
+<script src="assets/js/breakpoints.min.js"></script> 
+<script src="assets/js/util.js"></script> 
+<script src="assets/js/main.js"></script> 
+
+</body> 
+</html>
