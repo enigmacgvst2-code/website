@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>  
-<head>  
+<head> 
     <meta name="robots" content="noindex, nofollow"> 
     <title>VST P3-P4</title> 
     <meta charset="utf-8" /> 
@@ -282,6 +282,7 @@
                     <nav id="nav">
                         <ul>
                             <li class="current_page_item"><a href="index.html">Home</a></li>
+                            <li ><a href="people.html">People</a></li>
                             <li>
                                 <a href="#">Lightcurves</a>
                                 <ul>
@@ -375,13 +376,6 @@
                                 <h3>Observed Targets by Night (Program 114.27U3.001)</h3> 
 
                                 <div class="controls-grid"> 
-                                    <div class="form-group"> 
-                                        <label for="target-select">Select Target</label> 
-                                        <select id="target-select"> 
-                                            <option value="ALL">Loading targets...</option> 
-                                        </select> 
-                                    </div>
-
                                     <div class="form-group"> 
                                         <label for="night-select">Select Specific Night</label> 
                                         <select id="night-select"> 
@@ -480,7 +474,6 @@ function getEsoNightLogUrl(displayTarget, night) {
 async function loadData() { 
     const statusEl = document.getElementById('status'); 
     const nightSelect = document.getElementById('night-select'); 
-    const targetSelect = document.getElementById('target-select');
     const captionEl = document.getElementById('timeline-caption'); 
 
     try { 
@@ -516,17 +509,6 @@ async function loadData() {
             };
         }); 
 
-        // Populate Target Dropdown
-        const uniqueTargets = [...new Set(rawObservations.map(o => o.target))].sort();
-        targetSelect.innerHTML = `<option value="ALL">All Targets (${uniqueTargets.length})</option>`;
-        uniqueTargets.forEach(target => {
-            const opt = document.createElement('option');
-            opt.value = target;
-            opt.textContent = target;
-            targetSelect.appendChild(opt);
-        });
-
-        // Populate Nights Dropdown
         const uniqueNights = [...new Set(rawObservations.map(o => o.observingNight))].sort(); 
         nightSelect.innerHTML = `<option value="ALL">All Nights (${uniqueNights.length})</option>`; 
         uniqueNights.forEach(night => { 
@@ -557,7 +539,6 @@ function toggleRowsDisplay() {
 } 
 
 function renderTable() { 
-    const selectedTarget = document.getElementById('target-select').value;
     const selectedNight = document.getElementById('night-select').value; 
     const startDate = document.getElementById('start-date').value; 
     const endDate = document.getElementById('end-date').value; 
@@ -565,7 +546,6 @@ function renderTable() {
     const tableContainer = document.getElementById('table-container'); 
 
     let filtered = rawObservations.filter(obs => { 
-        if (selectedTarget !== 'ALL' && obs.target !== selectedTarget) return false;
         if (selectedNight !== 'ALL' && obs.observingNight !== selectedNight) return false; 
         if (startDate && obs.observingNight < startDate) return false; 
         if (endDate && obs.observingNight > endDate) return false; 
@@ -576,42 +556,6 @@ function renderTable() {
         tableContainer.innerHTML = "<p style='padding:1rem; color:var(--text-muted);'>No target observations match the selected criteria.</p>"; 
         return; 
     } 
-    
-    let summaryHtml = "";
-
-    // If a specific target is selected, calculate and show the first and last night
-    if (selectedTarget !== 'ALL') {
-        const nights = [...new Set(filtered.map(o => o.observingNight))].sort();
-        if (nights.length > 0) {
-            const firstNight = nights[0];
-            const lastNight = nights[nights.length - 1];
-            
-            // Build a separate, styled summary table using standard badge styling
-            summaryHtml = `
-            <h4 style="margin-bottom:0.75rem;">Target Summary: ${selectedTarget}</h4> 
-            <div class="table-responsive-wrapper" style="margin-bottom: 2rem;">
-                <table class="eso-table"> 
-                    <thead> 
-                        <tr> 
-                            <th>Target</th> 
-                            <th>Total Exposures</th> 
-                            <th>First Night of Observation</th> 
-                            <th>Last Night of Observation</th> 
-                        </tr> 
-                    </thead> 
-                    <tbody> 
-                        <tr>
-                            <td><span class="badge">${selectedTarget}</span></td>
-                            <td>${filtered.length}</td>
-                            <td><strong>${firstNight}</strong></td>
-                            <td><strong>${lastNight}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            `;
-        }
-    }
 
     // SPECIFIC NIGHT SELECTED: Detailed exposure breakdown
     if (selectedNight !== 'ALL') { 
@@ -646,7 +590,7 @@ function renderTable() {
         }); 
 
         html += `</tbody></table></div>`; 
-        tableContainer.innerHTML = summaryHtml + html; 
+        tableContainer.innerHTML = html; 
         return; 
     } 
 
@@ -712,10 +656,9 @@ function renderTable() {
         `; 
     } 
 
-    tableContainer.innerHTML = summaryHtml + html; 
+    tableContainer.innerHTML = html; 
 } 
 
-document.getElementById('target-select').addEventListener('change', renderTable);
 document.getElementById('night-select').addEventListener('change', renderTable); 
 document.getElementById('start-date').addEventListener('change', renderTable); 
 document.getElementById('end-date').addEventListener('change', renderTable); 

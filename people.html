@@ -1,0 +1,457 @@
+<!DOCTYPE HTML>
+<!--
+    ZeroFour by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>  
+<head> 
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>VST P3-P4 - People</title> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+
+    <style> 
+        /* --- Modern ESO Target Inspector Custom Styles --- */
+        :root {
+            --primary-navy: #002b49;
+            --primary-accent: #0284c7;
+            --primary-accent-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #e0f2fe;
+            --badge-text: #0369a1;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .lowercase { 
+            text-transform: lowercase; 
+        } 
+
+        /* Footer Adjustments */
+        .footer-heading {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-subtext {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+
+        /* --- Refined Scientific Styles for the People Page --- */
+        .people-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .people-section {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 2rem 2.5rem;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Elegant color accent bars for each section */
+        .people-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+        .section-pi::before { background-color: #3b82f6; }        /* Classic Blue */
+        .section-data::before { background-color: #0ea5e9; }      /* Light Blue/Cyan */
+        .section-time::before { background-color: #eab308; }      /* Refined Gold */
+        .section-transients::before { background-color: #8b5cf6; } /* Muted Purple */
+        .section-lensing::before { background-color: #f97316; }    /* Terracotta/Orange */
+        .section-ancillary::before { background-color: #10b981; }  /* Emerald Green */
+
+        .people-section h3 {
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .person-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem 1rem;
+            border-radius: var(--radius-sm);
+            color: var(--text-dark);
+            text-align: center;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .person-card:hover {
+            transform: translateY(-2px);
+            background: #ffffff;
+            box-shadow: var(--shadow-card);
+            border-color: #cbd5e1;
+        }
+
+        .person-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+
+        .person-affiliation {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 6px;
+            font-weight: 400;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+    </style> 
+</head> 
+<body class="homepage is-preload"> 
+<div id="page-wrapper"> 
+
+    <!-- Header Wrapper --> 
+    <div id="header-wrapper-home"> 
+        <div class="container"> 
+            <header id="header">
+                <div class="inner">
+
+                   <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div> 
+
+                    <nav id="nav">
+                        <ul>
+                            <li class=""><a href="index.html">Home</a></li>
+                            <li class="current_page_item" ><a href="people.html">People</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN variability</a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </header> 
+            <div id="banner"></div> 
+        </div> 
+    </div> 
+
+    <!-- Main Wrapper --> 
+    <div id="main-wrapper"> 
+        <div class="wrapper style1"> 
+            <div class="inner"> 
+                <section class="container box feature1"> 
+                    <div class="row"> 
+                        <div class="col-12"> 
+
+                            <!-- Hero Section -->
+                            <div class="hero-brand-section">
+                                <h1 class="hero-title">
+                                    <span class="dark-text">The Team</span>
+                                </h1>
+                            </div>
+
+                            <!-- People Sections -->
+                            <div class="people-container">
+                                
+                                <!-- Principal Investigator -->
+                                <div class="people-section section-pi">
+                                    <h3>Principal Investigator</h3>
+                                    <div class="people-grid">
+                                        <div class="person-card">
+                                            <span class="person-name">Claudio Grillo</span>
+                                            <span class="person-affiliation">University of Milan</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Data Acquisition and Reduction -->
+                                <div class="people-section section-data">
+                                    <h3>Data Acquisition and Reduction</h3>
+                                    <div class="people-grid">
+                                      
+                                        <div class="person-card">
+                                            <span class="person-name">Marianna Annunziatella</span>
+                                            <span class="person-affiliation">INAF - IASF MI</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Massimo Brescia</span>
+                                            <span class="person-affiliation">University of Naples Federico II</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Frederic Dux</span>
+                                            <span class="person-affiliation">Independent</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Time Delay Measurement -->
+                                <div class="people-section section-time">
+                                    <h3>Time Delay Measurement</h3>
+                                    <div class="people-grid">
+                                        <div class="person-card">
+                                            <span class="person-name">Marianna Annunziatella</span>
+                                            <span class="person-affiliation">INAF - IASF MI</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Frederic Courbin</span>
+                                            <span class="person-affiliation">University of Barcelona</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Martin Millon</span>
+                                            <span class="person-affiliation"> University of Geneve</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Transients Search -->
+                                <div class="people-section section-transients">
+                                    <h3>Transients Search</h3>
+                                    <div class="people-grid">
+                                        <div class="person-card">
+                                            <span class="person-name">Mateusz Bronikowski</span>
+                                            <span class="person-affiliation">University of Nova Gorica</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Limeng Deng</span>
+                                            <span class="person-affiliation">Technical University of Munich</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Tanja Petrushevska</span>
+                                            <span class="person-affiliation">University of Nova Gorica</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Carla Schmitt</span>
+                                            <span class="person-affiliation">Technical University of Munich</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Sherry Suyu</span>
+                                            <span class="person-affiliation">MPA Garching</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Lina Witti</span>
+                                            <span class="person-affiliation">Technical University of Munich</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Lensing models -->
+                                <div class="people-section section-lensing">
+                                    <h3>Lensing models</h3>
+                                    <div class="people-grid">
+                                        <div class="person-card">
+                                            <span class="person-name">Ana Acebron</span>
+                                            <span class="person-affiliation">University of Cantabria</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Lorenzo Bazzanini</span>
+                                            <span class="person-affiliation">University of Ferrara</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Pietro Bergamini</span>
+                                            <span class="person-affiliation">INAF - OABo</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Andrea Bolamperti</span>
+                                            <span class="person-affiliation">MPA Garching</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Maurizio D'Addona</span>
+                                            <span class="person-affiliation">INAF - OAC</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Giorgia Di Rosa</span>
+                                            <span class="person-affiliation">University of Ferrara</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Claudio Grillo</span>
+                                            <span class="person-affiliation">University of Milan</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Marco Lombardi</span>
+                                            <span class="person-affiliation">University of Milan</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Piero Rosati</span>
+                                            <span class="person-affiliation">University of Ferrara</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Stefan Schuldt</span>
+                                            <span class="person-affiliation">University of Turku</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Sherry Suyu</span>
+                                            <span class="person-affiliation">MPA Garching</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Ancillary Data Collection and Reduction -->
+                                <div class="people-section section-ancillary">
+                                    <h3>Ancillary Data Collection and Reduction</h3>
+                                    <div class="people-grid">
+                                        <div class="person-card">
+                                            <span class="person-name">Marianna Annunziatella</span>
+                                            <span class="person-affiliation">INAF</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Nicola Bianchetti</span>
+                                            <span class="person-affiliation">University of Milan</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Andrea Bolamperti</span>
+                                            <span class="person-affiliation">MPA Garching</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Maurizio D'Addona</span>
+                                            <span class="person-affiliation">INAF</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Enrico Augusto Maraboli</span>
+                                            <span class="person-affiliation">University of Milan</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Amata Mercurio</span>
+                                            <span class="person-affiliation">University of Salerno</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Luisa Pecoraro</span>
+                                            <span class="person-affiliation">University of Salerno</span>
+                                        </div>
+                                        <div class="person-card">
+                                            <span class="person-name">Rossella Ragusa</span>
+                                            <span class="person-affiliation">INAF</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- End People Sections -->
+
+                        </div> 
+                    </div> 
+                </section> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- Footer Wrapper --> 
+    <div id="footer-wrapper-logo"> 
+        <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer> 
+    </div> 
+
+</div> 
+
+<!-- Scripts --> 
+<script src="assets/js/jquery.min.js"></script> 
+<script src="assets/js/jquery.dropotron.min.js"></script> 
+<script src="assets/js/browser.min.js"></script> 
+<script src="assets/js/breakpoints.min.js"></script> 
+<script src="assets/js/util.js"></script> 
+<script src="assets/js/main.js"></script> 
+
+</body> 
+</html>
