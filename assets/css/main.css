@@ -1891,7 +1891,7 @@ input, select, textarea {
 	}
 
 	#header-wrapper-home {
-		background: url("images/cutout-CDS_P_DESI-Legacy-Surveys_DR10_color.jpg");
+		background: url("images/test3.png");
 		background-position: top;
 		background-size: cover;
 		width: 100%;
@@ -1899,64 +1899,10 @@ input, select, textarea {
 		padding: 3em 0;
 	}
 
-	#header-wrapper-venue {
-		background: url("../../images/toledo-elgreco.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-        padding: 3em 0;
-	}
+	
 
-	#header-wrapper-people {
-        background: url("../../images/toledo-day1.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-       padding: 3em 0;
-    }
-
-	#header-wrapper-abstract {
-        background:  url("../../images/toledo-sunset2.jpeg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: top;
-        padding: 3em 0;
-    }
-
-	#header-wrapper-scientific {
-        background:  url("../../images/toledo-bridge-day.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-        padding: 3em 0;
-    }
-
-	#header-wrapper-poster {
-        background:  url("../../images/toledo-bridge-night2.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-        padding: 3em 0;
-    }
-
-	#header-wrapper-social {
-        background:  url("../../images/toledo-bridge-night3.jpg");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-        padding: 3em 0;
-    }
-
-
-	#header-wrapper-coc {
-        background:  url("../../images/toledo-night1.jpg");
-        background-position: top left, center center;
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: top;
-        padding: 3em 0;
-    }
-
+	
+	
 	#main-wrapper {
 		background: #fff;
 	}
