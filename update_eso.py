@@ -107,11 +107,11 @@ def generate_timeline_plot(observations):
         return
 
     # Define observing periods (Start Date, End Date, Output Filename)
+    # The general plot uses the original filename "P3_P4_timeline" to replace the old one
     periods = {
+        "All Observations": (None, None, "P3_P4_timeline"),
         "Pilot Program": ("2024-10-01", "2025-09-20", "P3_P4_timeline_pilot"),
-        "In-Kind Contribution Y1": ("2025-10-01", "2026-09-30", "P3_P4_timeline_inkind1"),
-        "In-Kind Contribution Y2": ("2026-10-01", "2027-09-30", "P3_P4_timeline_inkind2"),
-        "All Observations": (None, None, "P3_P4_timeline_all")
+        "In-Kind Contribution Y1": ("2025-10-01", "2026-09-30", "P3_P4_timeline_inkind1")
     }
 
     os.makedirs("images", exist_ok=True)
@@ -267,3 +267,4 @@ except Exception as e:
     print(f"Error executing script: {e}")
     traceback.print_exc()
     exit(1)
+    
