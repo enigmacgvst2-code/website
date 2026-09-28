@@ -60,6 +60,57 @@
             text-align: center;
         }
 
+        /* --- Period Tabs --- */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            padding: 4px;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 1rem;
+        }
+        /* Scoped + !important to override the theme's global button styles (main.css) */
+        .tab-bar .tab {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            border: none !important;
+            color: #334155 !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            letter-spacing: 0.2px !important;
+            text-transform: none !important;
+            line-height: 1.2 !important;
+            padding: 8px 18px !important;
+            border-radius: 9999px !important;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+        }
+        .tab-bar .tab:hover { background: #e2e8f0 !important; color: var(--primary-navy) !important; }
+        .tab-bar .tab.active,
+        .tab-bar .tab.active:hover { background: var(--primary-navy) !important; color: #ffffff !important; }
+        .tab-bar .tab:focus-visible { outline: 2px solid var(--primary-accent) !important; outline-offset: 2px; }
+        @media (max-width: 480px) {
+            .tab-bar .tab { padding: 6px 11px !important; font-size: 0.82rem !important; }
+            .timeline-plot { min-height: 0; }
+        }
+
+        /* --- Interactive Timeline --- */
+        .timeline-plot {
+            width: 100%;
+            min-height: 380px;
+            background: #000000;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        /* The theme adds a text-shadow to all text; keep plot labels crisp */
+        .timeline-plot text { text-shadow: none !important; }
+
         /* Controls Grid */
         .controls-grid { 
             display: grid; 
@@ -366,11 +417,30 @@
 
                             <h3 style="margin-top: 1rem;">Targets Overview</h3> 
 
+<<<<<<< Updated upstream
                             <!-- General Plot (All Observations) -->
                             <figure class="timeline-card"> 
                                 <img src="images/P3_P4_timeline.png" alt="Targets observed timeline"> 
                                 <figcaption id="timeline-caption">Targets observed from 01/10/2024 to ...</figcaption> 
                             </figure> 
+=======
+                            <!-- Observing Timeline: one card, period tabs, interactive plot -->
+                            <figure class="timeline-card">
+                                <div class="tab-bar" role="tablist" aria-label="Observing period">
+                                    <button class="tab active" role="tab" data-period="all">All periods</button>
+                                    <button class="tab" role="tab" data-period="pilot">Pilot</button>
+                                    <button class="tab" role="tab" data-period="y1">In-Kind Y1</button>
+                                </div>
+
+                                <!-- Interactive plot (Plotly), drawn from data.json -->
+                                <div id="timeline-plot" class="timeline-plot"></div>
+
+                                <!-- Static fallback, shown only if the plot library fails to load -->
+                                <img id="timeline-fallback" src="images/P3_P4_timeline.png" alt="Targets observed timeline" style="display:none;">
+
+                                <figcaption id="timeline-caption">Targets observed from 01/10/2024 to ...</figcaption>
+                            </figure>
+>>>>>>> Stashed changes
 
                             <!-- Specific Periods in Grid -->
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
@@ -461,6 +531,8 @@
 <script src="assets/js/breakpoints.min.js"></script> 
 <script src="assets/js/util.js"></script> 
 <script src="assets/js/main.js"></script> 
+<!-- Plotly (basic bundle: scatter/line/bar only, ~1 MB) for the interactive timeline -->
+<script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
 
 <!-- ESO Data Loader Script --> 
 <script> 
@@ -514,11 +586,15 @@ async function loadData() {
 
             const instrument = isArray ? row[1] : row.instrument;
             const expStart = isArray ? row[2] : (row.expStart || row.exp_start);
+            const airmass = isArray ? row[3] : row.tel_airm_start;
+            const seeing = isArray ? row[4] : row.tel_ambi_fwhm_start;
 
             return { 
                 target: target, 
                 instrument: instrument || 'N/A', 
                 expStart: expStart, 
+                airmass: (typeof airmass === 'number') ? airmass : null,
+                seeing: (typeof seeing === 'number' && seeing > 0) ? seeing : null,
                 filter: 'r_SDSS', 
                 observingNight: expStart ? getObservingNight(expStart) : 'N/A' 
             };
@@ -536,14 +612,16 @@ async function loadData() {
         if (uniqueNights.length > 0 && captionEl) { 
             const lastNight = uniqueNights[uniqueNights.length - 1]; 
             const [yyyy, mm, dd] = lastNight.split('-'); 
-            captionEl.textContent = `Targets observed from 01/10/2024 to ${dd}/${mm}/${yyyy}`; 
+            PERIODS.all.caption = `Targets observed from 01/10/2024 to ${dd}/${mm}/${yyyy}`; 
         } 
 
         statusEl.textContent = `${uniqueNights.length} observing night(s) loaded.`; 
         renderTable(); 
+        buildTimeline(); 
 
     } catch (err) { 
         console.error(err); 
+        showFallback(); 
         statusEl.textContent = "Data is generating in the cloud. Run the GitHub Action or wait 1 minute and refresh."; 
     } 
 } 
@@ -673,6 +751,224 @@ function renderTable() {
 
     tableContainer.innerHTML = html; 
 } 
+
+/* ================= Interactive Observing Timeline ================= */
+
+// Row order (bottom → top) and colors, matched to the original matplotlib plots.
+// Targets are matched by coordinate string so COOL/SDSS/PS prefixes don't matter.
+const TARGET_STYLE = [
+    { key: '0501', color: '#c8a6f5' },
+    { key: '0542', color: '#88bef7' },
+    { key: '0722', color: '#88f7dd' },
+    { key: '1029', color: '#88f78e' },
+    { key: '2107', color: '#f5f1a6' },
+    { key: '0335', color: '#ffc185' },
+    { key: '1330', color: '#ff9f7a' },
+    { key: '2329', color: '#ff7f66' },
+    { key: '0123', color: '#e4574f' },
+];
+
+// Period windows for the tabs; the "all" caption is filled in by loadData()
+const PERIODS = {
+    all:   { start: '2024-10-01', end: null,
+             caption: 'Targets observed from 01/10/2024 to ...',
+             png: 'images/P3_P4_timeline.png' },
+    pilot: { start: '2024-10-01', end: '2025-09-30',
+             caption: 'Pilot Program (01/10/2024 - 20/09/2025)',
+             png: 'images/P3_P4_timeline_pilot.png' },
+    y1:    { start: '2025-10-01', end: '2026-09-30',
+             caption: 'In-Kind Contribution Y1 (01/10/2025 - 30/09/2026)',
+             png: 'images/P3_P4_timeline_inkind1.png' },
+};
+
+let currentPeriod = 'all';
+let nightlyPoints = [];   // one point per target per observing night
+
+function styleIndex(target) {
+    const i = TARGET_STYLE.findIndex(s => target.includes(s.key));
+    return i === -1 ? TARGET_STYLE.length : i;
+}
+function targetColor(target) {
+    const s = TARGET_STYLE.find(s => target.includes(s.key));
+    return s ? s.color : '#bbbbbb';
+}
+function shiftDays(isoDate, days) {
+    const d = new Date(isoDate + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().split('T')[0];
+}
+function mean(arr) {
+    const v = arr.filter(x => x !== null);
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+}
+
+function buildTimeline() {
+    // Aggregate exposures into one point per (target, night)
+    const groups = {};
+    rawObservations.forEach(o => {
+        if (o.observingNight === 'N/A') return;
+        const k = o.target + '|' + o.observingNight;
+        if (!groups[k]) groups[k] = { target: o.target, night: o.observingNight, n: 0, airm: [], see: [] };
+        groups[k].n++;
+        groups[k].airm.push(o.airmass);
+        groups[k].see.push(o.seeing);
+    });
+    nightlyPoints = Object.values(groups).map(g => ({
+        target: g.target, night: g.night, n: g.n,
+        airmass: mean(g.airm), seeing: mean(g.see),
+    }));
+    drawTimeline(currentPeriod);
+}
+
+function drawTimeline(periodKey) {
+    currentPeriod = periodKey;
+    const p = PERIODS[periodKey];
+    document.getElementById('timeline-caption').textContent = p.caption;
+
+    if (typeof Plotly === 'undefined') { showFallback(); return; }
+    if (nightlyPoints.length === 0) return;
+
+    const lastNight = nightlyPoints.reduce((m, pt) => pt.night > m ? pt.night : m, '0000');
+    const end = p.end || lastNight;
+    const pts = nightlyPoints.filter(pt => pt.night >= p.start && pt.night <= end);
+
+    // Rows: only targets observed in this tab, in the same order as every other tab:
+    // by each target's first-ever observation in the programme (earliest at the bottom).
+    const firstEver = {};
+    nightlyPoints.forEach(pt => { if (!firstEver[pt.target] || pt.night < firstEver[pt.target]) firstEver[pt.target] = pt.night; });
+    const targets = [...new Set(pts.map(pt => pt.target))].sort((a, b) =>
+        firstEver[a].localeCompare(firstEver[b]) || styleIndex(a) - styleIndex(b));
+
+    const traces = targets.map(t => {
+        const tp = pts.filter(pt => pt.target === t);
+        return {
+            type: 'scatter', mode: 'markers', name: t,
+            x: tp.map(pt => pt.night),
+            y: tp.map(() => t),
+            customdata: tp.map(pt => [
+                pt.night, pt.n,
+                pt.airmass !== null ? pt.airmass.toFixed(2) : 'n/a',
+                pt.seeing !== null ? pt.seeing.toFixed(2) + '″' : 'n/a',
+            ]),
+            marker: { color: targetColor(t), size: 8 },
+            hovertemplate:
+                '<b>%{y}</b><br>Night %{customdata[0]}<br>' +
+                'Exposures: %{customdata[1]}<br>' +
+                'Mean airmass: %{customdata[2]}<br>' +
+                'Mean seeing: %{customdata[3]}<extra></extra>',
+            hoverlabel: { bgcolor: '#111111', bordercolor: targetColor(t), font: { color: '#ffffff' } },
+        };
+    });
+
+    const axisStyle = {
+        color: '#ffffff', linecolor: '#ffffff', showline: true, mirror: true,
+        ticks: 'outside', tickcolor: '#ffffff', zeroline: false,
+    };
+
+    // Pick a month spacing that fits the available width
+    const el = document.getElementById('timeline-plot');
+    const narrow = el.clientWidth < 600;
+    const spanMonths = (new Date(end) - new Date(p.start)) / (30.44 * 864e5);
+    const maxTicks = Math.max(3, Math.floor((el.clientWidth - (narrow ? 110 : 190)) / 60));
+    const monthStep = [1, 2, 3, 6, 12].find(m => spanMonths / m <= maxTicks) || 12;
+
+    // In the "all" view, mark the switch from the Pilot to In-Kind Y1
+    const shapes = [], annotations = [];
+    if (periodKey === 'all') {
+        shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: '2025-10-01', x1: '2025-10-01', y0: 0, y1: 1,
+                      line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } });
+        if (!narrow) annotations.push(
+            { x: '2025-10-01', y: 1, xref: 'x', yref: 'paper', text: 'Pilot ◂ ', xanchor: 'right', yanchor: 'bottom',
+              showarrow: false, font: { color: '#cbd5e1', size: 11 } },
+            { x: '2025-10-01', y: 1, xref: 'x', yref: 'paper', text: ' ▸ In-Kind Y1', xanchor: 'left', yanchor: 'bottom',
+              showarrow: false, font: { color: '#cbd5e1', size: 11 } });
+    }
+
+    const layout = {
+        paper_bgcolor: '#000000', plot_bgcolor: '#000000',
+        font: { color: '#ffffff', size: 13 },
+        height: Math.max(320, 110 + 46 * targets.length),
+        margin: { l: 10, r: narrow ? 10 : 20, t: 30, b: 20 },
+        showlegend: false,
+        hovermode: 'closest',
+        dragmode: 'zoom',
+        xaxis: Object.assign({}, axisStyle, {
+            type: 'date',
+            range: [shiftDays(p.start, -10), shiftDays(end, 10)],
+            showgrid: true, gridcolor: 'rgba(255,255,255,0.08)',
+            tickformat: '%b %Y', dtick: 'M' + monthStep, tickangle: -35,
+            tickfont: { size: narrow ? 11 : 12 },
+            automargin: true,
+            title: { text: 'Observing Night', standoff: 16 },
+        }),
+        yaxis: Object.assign({}, axisStyle, {
+            type: 'category', categoryorder: 'array', categoryarray: targets,
+            tickvals: targets,
+            // On phones show only the coordinate part of the name (full name stays in the tooltip)
+            ticktext: targets.map(t => narrow ? ((t.match(/J?\d{4}[+-]\d{4}/) || [t])[0]) : t),
+            tickfont: { size: narrow ? 11 : 13 },
+            range: [-0.6, targets.length - 0.4],
+            showgrid: false, automargin: true, fixedrange: true,
+            title: narrow ? undefined : { text: 'Target', standoff: 14 },
+        }),
+        shapes, annotations,
+    };
+
+    const config = {
+        responsive: true, displaylogo: false,
+        modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d'],
+        toImageButtonOptions: { filename: 'VST2_timeline_' + periodKey, scale: 2 },
+    };
+
+    Plotly.react(el, traces, layout, config);
+
+    // Click a point → open that night in the table below
+    if (!el._clickBound) {
+        el.on('plotly_click', ev => {
+            const night = ev.points[0].customdata[0];
+            const sel = document.getElementById('night-select');
+            if ([...sel.options].some(o => o.value === night)) {
+                sel.value = night;
+                document.getElementById('start-date').value = '';
+                document.getElementById('end-date').value = '';
+                renderTable();
+                document.querySelector('.eso-inspector-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+        el._clickBound = true;
+    }
+}
+
+// Static PNGs if Plotly or data.json isn't available
+function showFallback() {
+    document.getElementById('timeline-plot').style.display = 'none';
+    const img = document.getElementById('timeline-fallback');
+    img.src = PERIODS[currentPeriod].png;
+    img.style.display = 'block';
+}
+
+// Redraw on resize so tick spacing and label length adapt
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        if (typeof Plotly !== 'undefined' && nightlyPoints.length) drawTimeline(currentPeriod);
+    }, 200);
+});
+
+document.querySelectorAll('.tab-bar .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-bar .tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPeriod = tab.dataset.period;
+        if (typeof Plotly === 'undefined' || nightlyPoints.length === 0) {
+            document.getElementById('timeline-caption').textContent = PERIODS[currentPeriod].caption;
+            showFallback();
+        } else {
+            drawTimeline(currentPeriod);
+        }
+    });
+});
 
 document.getElementById('night-select').addEventListener('change', renderTable); 
 document.getElementById('start-date').addEventListener('change', renderTable); 
