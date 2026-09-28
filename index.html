@@ -366,22 +366,10 @@
 
                             <h3 style="margin-top: 1rem;">Targets Overview</h3> 
 
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
-                                <figure class="timeline-card" style="margin-bottom: 0;"> 
-                                    <img src="images/P3_P4_timeline_pilot.png" alt="Pilot Program Timeline" onerror="this.parentElement.style.display='none'"> 
-                                    <figcaption>Pilot Program (01/10/2024 - 20/09/2025)</figcaption> 
-                                </figure> 
-
-                                <figure class="timeline-card" style="margin-bottom: 0;"> 
-                                    <img src="images/P3_P4_timeline_inkind1.png" alt="In-Kind Y1 Timeline" onerror="this.parentElement.style.display='none'"> 
-                                    <figcaption>In-Kind Contribution Y1 (01/10/2025 - 30/09/2026)</figcaption> 
-                                </figure> 
-                                
-                                <figure class="timeline-card" style="margin-bottom: 0;"> 
-                                    <img src="images/P3_P4_timeline_inkind2.png" alt="In-Kind Y2 Timeline" onerror="this.parentElement.style.display='none'"> 
-                                    <figcaption>In-Kind Contribution Y2 (01/10/2026 - 30/09/2027)</figcaption> 
-                                </figure> 
-                            </div>
+                            <figure class="timeline-card"> 
+                                <img src="images/P3_P4_timeline.png" alt="Targets observed timeline"> 
+                                <figcaption id="timeline-caption">Targets observed from 01/10/2024 to ...</figcaption> 
+                            </figure> 
 
                             <!-- ESO Target Inspector Section --> 
                             <div class="eso-inspector-container"> 
@@ -486,6 +474,7 @@ function getEsoNightLogUrl(displayTarget, night) {
 async function loadData() { 
     const statusEl = document.getElementById('status'); 
     const nightSelect = document.getElementById('night-select'); 
+    const captionEl = document.getElementById('timeline-caption'); 
 
     try { 
         const response = await fetch('./data.json?v=' + new Date().getTime()); 
@@ -528,6 +517,12 @@ async function loadData() {
             opt.textContent = night; 
             nightSelect.appendChild(opt); 
         }); 
+
+        if (uniqueNights.length > 0) { 
+            const lastNight = uniqueNights[uniqueNights.length - 1]; 
+            const [yyyy, mm, dd] = lastNight.split('-'); 
+            captionEl.textContent = `Targets observed from 01/10/2024 to ${dd}/${mm}/${yyyy}`; 
+        } 
 
         statusEl.textContent = `${uniqueNights.length} observing night(s) loaded.`; 
         renderTable(); 
