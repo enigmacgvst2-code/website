@@ -79,7 +79,7 @@ def get_observing_night(utc_str):
 
 
 def generate_timeline_plot(observations):
-    """Generates and saves the dark-themed timeline figure grouped by observing night."""
+    """Generates and saves dark-themed timeline figures grouped by observing period."""
     if not observations:
         print("No observations available to generate timeline plot.")
         return
@@ -106,61 +106,75 @@ def generate_timeline_plot(observations):
         print("No valid target observations found for timeline plot.")
         return
 
-    # Determine chronological order by first observation time per object
-    objects_sorted = (
-        df.groupby("object")["dt_display"]
-        .min()
-        .sort_values(kind="mergesort")
-        .index.astype(str)
-        .tolist()
-    )
+    # Define observing periods (Start Date, End Date, Output Filename)
+    periods = {
+        "Pilot Program": ("2024-10-01", "2025-09-20", "P3_P4_timeline_pilot"),
+        "In-Kind Contribution Y1": ("2025-10-01", "2026-09-30", "P3_P4_timeline_inkind1"),
+        "In-Kind Contribution Y2": ("2026-10-01", "2027-09-30", "P3_P4_timeline_inkind2"),
+        "All Observations": (None, None, "P3_P4_timeline_all")
+    }
 
-    y_map = {obj: i for i, obj in enumerate(objects_sorted)}
-    y_vals = df["object"].map(y_map)
-
-    # Plot styling setup
-    fig, ax = plt.subplots(figsize=(12, max(4, len(objects_sorted) * 0.4)))
-
-    # Get colors per observation point
-    colors = [get_target_color(obj, color_map) for obj in df["object"].values]
-
-    # Scatter plot using night-shifted datetimes
-    ax.scatter(
-        df["dt_display"].values,
-        y_vals.values,
-        s=16.0,
-        alpha=1,
-        edgecolor="none",
-        c=colors,
-    )
-
-    # Format Axes
-    ax.set_yticks(list(y_map.values()), list(y_map.keys()))
-    ax.set_xlabel("Observing Night (UTC Date at Start of Night)", labelpad=10)
-    ax.set_ylabel("Target", labelpad=10)
-
-    # X-axis date formatting (monthly ticks)
-    ax.xaxis.set_major_locator(mdates.MonthLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-    fig.autofmt_xdate()
-
-    # Apply Dark Aesthetics
-    fig.patch.set_facecolor("black")
-    ax.set_facecolor("black")
-    ax.xaxis.label.set_color("white")
-    ax.yaxis.label.set_color("white")
-    ax.tick_params(axis="x", colors="white")
-    ax.tick_params(axis="y", colors="white")
-
-    for spine in ax.spines.values():
-        spine.set_color("white")
-
-    # Ensure output directory exists and save
     os.makedirs("images", exist_ok=True)
-    out_png = os.path.join("images", "P3_P4_timeline.png")
-    fig.savefig(out_png, dpi=160, bbox_inches="tight")
-    plt.close(fig)
-    print(f"Successfully generated dark timeline plot at: {out_png}")
+
+    for period_name, (start_date, end_date, filename) in periods.items():
+        # Filter data based on date ranges
+        if start_date and end_date:
+            mask = (df["dt_display"] >= pd.to_datetime(start_date)) & (df["dt_display"] <= pd.to_datetime(end_date))
+            period_df = df.loc[mask]
+        else:
+            period_df = df.copy()
+
+        if period_df.empty:
+            print(f"No observations found for {period_name}.")
+            continue
+
+        objects_sorted = (
+            period_df.groupby("object")["dt_display"]
+            .min()
+            .sort_values(kind="mergesort")
+            .index.astype(str)
+            .tolist()
+        )
+
+        y_map = {obj: i for i, obj in enumerate(objects_sorted)}
+        y_vals = period_df["object"].map(y_map)
+
+        # Plot styling setup
+        fig, ax = plt.subplots(figsize=(12, max(4, len(objects_sorted) * 0.4)))
+        colors = [get_target_color(obj, color_map) for obj in period_df["object"].values]
+
+        ax.scatter(
+            period_df["dt_display"].values,
+            y_vals.values,
+            s=16.0,
+            alpha=1,
+            edgecolor="none",
+            c=colors,
+        )
+
+        ax.set_yticks(list(y_map.values()), list(y_map.keys()))
+        ax.set_xlabel(f"Observing Night ({period_name})", labelpad=10)
+        ax.set_ylabel("Target", labelpad=10)
+
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+        fig.autofmt_xdate()
+
+        # Apply Dark Aesthetics
+        fig.patch.set_facecolor("black")
+        ax.set_facecolor("black")
+        ax.xaxis.label.set_color("white")
+        ax.yaxis.label.set_color("white")
+        ax.tick_params(axis="x", colors="white")
+        ax.tick_params(axis="y", colors="white")
+
+        for spine in ax.spines.values():
+            spine.set_color("white")
+
+        out_png = os.path.join("images", f"{filename}.png")
+        fig.savefig(out_png, dpi=160, bbox_inches="tight")
+        plt.close(fig)
+        print(f"Successfully generated {period_name} timeline plot at: {out_png}")
 
 
 # --- Main Data Sync Execution ---
