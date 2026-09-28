@@ -106,8 +106,18 @@ def generate_timeline_plot(observations):
         print("No valid target observations found for timeline plot.")
         return
 
+    # Determine chronological order by first observation time across ALL data 
+    # This keeps the Y-axis targets consistently ordered in all separate sub-plots
+    global_objects_sorted = (
+        df.groupby("object")["dt_display"]
+        .min()
+        .sort_values(kind="mergesort")
+        .index.astype(str)
+        .tolist()
+    )
+    global_y_map = {obj: i for i, obj in enumerate(global_objects_sorted)}
+
     # Define observing periods (Start Date, End Date, Output Filename)
-    # The general plot uses the original filename "P3_P4_timeline" to replace the old one
     periods = {
         "All Observations": (None, None, "P3_P4_timeline"),
         "Pilot Program": ("2024-10-01", "2025-09-20", "P3_P4_timeline_pilot"),
@@ -124,53 +134,50 @@ def generate_timeline_plot(observations):
         else:
             period_df = df.copy()
 
-        if period_df.empty:
-            print(f"No observations found for {period_name}.")
-            continue
-
-        objects_sorted = (
-            period_df.groupby("object")["dt_display"]
-            .min()
-            .sort_values(kind="mergesort")
-            .index.astype(str)
-            .tolist()
-        )
-
-        y_map = {obj: i for i, obj in enumerate(objects_sorted)}
-        y_vals = period_df["object"].map(y_map)
-
         # Plot styling setup
-        fig, ax = plt.subplots(figsize=(12, max(4, len(objects_sorted) * 0.4)))
-        colors = [get_target_color(obj, color_map) for obj in period_df["object"].values]
-
-        ax.scatter(
-            period_df["dt_display"].values,
-            y_vals.values,
-            s=16.0,
-            alpha=1,
-            edgecolor="none",
-            c=colors,
-        )
-
-        ax.set_yticks(list(y_map.values()), list(y_map.keys()))
-        ax.set_xlabel(f"Observing Night ({period_name})", labelpad=10)
-        ax.set_ylabel("Target", labelpad=10)
-
-        ax.xaxis.set_major_locator(mdates.MonthLocator())
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-        fig.autofmt_xdate()
-
-        # Apply Dark Aesthetics
+        fig, ax = plt.subplots(figsize=(12, max(4, len(global_objects_sorted) * 0.4)))
+        
+        # Apply Dark Aesthetics Base First
         fig.patch.set_facecolor("black")
         ax.set_facecolor("black")
         ax.xaxis.label.set_color("white")
         ax.yaxis.label.set_color("white")
         ax.tick_params(axis="x", colors="white")
         ax.tick_params(axis="y", colors="white")
-
         for spine in ax.spines.values():
             spine.set_color("white")
 
+        if period_df.empty:
+            # If no data exists yet for this period, generate an empty labeled plot
+            print(f"No observations found for {period_name}. Generating placeholder image.")
+            ax.text(0.5, 0.5, "No observations yet for this period", 
+                    color="white", ha="center", va="center", transform=ax.transAxes, fontsize=12)
+            ax.set_yticks(list(global_y_map.values()), list(global_y_map.keys()))
+            ax.set_xticks([]) # Hide date ticks since there's no data
+        else:
+            # Generate the actual scatter plot
+            y_vals = period_df["object"].map(global_y_map)
+            colors = [get_target_color(obj, color_map) for obj in period_df["object"].values]
+
+            ax.scatter(
+                period_df["dt_display"].values,
+                y_vals.values,
+                s=16.0,
+                alpha=1,
+                edgecolor="none",
+                c=colors,
+            )
+
+            ax.set_yticks(list(global_y_map.values()), list(global_y_map.keys()))
+            ax.xaxis.set_major_locator(mdates.MonthLocator())
+            ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+            fig.autofmt_xdate()
+
+        # Set final labels
+        ax.set_xlabel(f"Observing Night ({period_name})", labelpad=10)
+        ax.set_ylabel("Target", labelpad=10)
+
+        # Save the figure unconditionally
         out_png = os.path.join("images", f"{filename}.png")
         fig.savefig(out_png, dpi=160, bbox_inches="tight")
         plt.close(fig)
@@ -267,4 +274,3 @@ except Exception as e:
     print(f"Error executing script: {e}")
     traceback.print_exc()
     exit(1)
-    
