@@ -106,84 +106,6 @@ def generate_timeline_plot(observations):
         print("No valid target observations found for timeline plot.")
         return
 
-<<<<<<< Updated upstream
-    # Determine chronological order by first observation time across ALL data 
-    # This keeps the Y-axis targets consistently ordered in all separate sub-plots
-    global_objects_sorted = (
-        df.groupby("object")["dt_display"]
-        .min()
-        .sort_values(kind="mergesort")
-        .index.astype(str)
-        .tolist()
-    )
-    global_y_map = {obj: i for i, obj in enumerate(global_objects_sorted)}
-
-    # Define observing periods (Start Date, End Date, Output Filename)
-    periods = {
-        "All Observations": (None, None, "P3_P4_timeline"),
-        "Pilot Program": ("2024-10-01", "2025-09-20", "P3_P4_timeline_pilot"),
-        "In-Kind Contribution Y1": ("2025-10-01", "2026-09-30", "P3_P4_timeline_inkind1")
-    }
-
-    os.makedirs("images", exist_ok=True)
-
-    for period_name, (start_date, end_date, filename) in periods.items():
-        # Filter data based on date ranges
-        if start_date and end_date:
-            mask = (df["dt_display"] >= pd.to_datetime(start_date)) & (df["dt_display"] <= pd.to_datetime(end_date))
-            period_df = df.loc[mask]
-        else:
-            period_df = df.copy()
-
-        # Plot styling setup
-        fig, ax = plt.subplots(figsize=(12, max(4, len(global_objects_sorted) * 0.4)))
-        
-        # Apply Dark Aesthetics Base First
-        fig.patch.set_facecolor("black")
-        ax.set_facecolor("black")
-        ax.xaxis.label.set_color("white")
-        ax.yaxis.label.set_color("white")
-        ax.tick_params(axis="x", colors="white")
-        ax.tick_params(axis="y", colors="white")
-        for spine in ax.spines.values():
-            spine.set_color("white")
-
-        if period_df.empty:
-            # If no data exists yet for this period, generate an empty labeled plot
-            print(f"No observations found for {period_name}. Generating placeholder image.")
-            ax.text(0.5, 0.5, "No observations yet for this period", 
-                    color="white", ha="center", va="center", transform=ax.transAxes, fontsize=12)
-            ax.set_yticks(list(global_y_map.values()), list(global_y_map.keys()))
-            ax.set_xticks([]) # Hide date ticks since there's no data
-        else:
-            # Generate the actual scatter plot
-            y_vals = period_df["object"].map(global_y_map)
-            colors = [get_target_color(obj, color_map) for obj in period_df["object"].values]
-
-            ax.scatter(
-                period_df["dt_display"].values,
-                y_vals.values,
-                s=16.0,
-                alpha=1,
-                edgecolor="none",
-                c=colors,
-            )
-
-            ax.set_yticks(list(global_y_map.values()), list(global_y_map.keys()))
-            ax.xaxis.set_major_locator(mdates.MonthLocator())
-            ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
-            fig.autofmt_xdate()
-
-        # Set final labels
-        ax.set_xlabel(f"Observing Night ({period_name})", labelpad=10)
-        ax.set_ylabel("Target", labelpad=10)
-
-        # Save the figure unconditionally
-        out_png = os.path.join("images", f"{filename}.png")
-        fig.savefig(out_png, dpi=160, bbox_inches="tight")
-        plt.close(fig)
-        print(f"Successfully generated {period_name} timeline plot at: {out_png}")
-=======
     # Define observing periods (Start Date, End Date, Output Filename)
     periods = {
         "All Observations": (None, None, "P3_P4_timeline"),
@@ -276,7 +198,6 @@ def generate_timeline_plot(observations):
         except Exception as e:
             print(f"Error while creating plot for {period_name}: {e}")
             traceback.print_exc()
->>>>>>> Stashed changes
 
 
 # --- Main Data Sync Execution ---
