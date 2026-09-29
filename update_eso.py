@@ -109,7 +109,7 @@ def generate_timeline_plot(observations):
     # Define observing periods (Start Date, End Date, Output Filename)
     periods = {
         "All Observations": (None, None, "P3_P4_timeline"),
-        "Pilot Program": ("2024-10-01", "2025-09-20", "P3_P4_timeline_pilot"),
+        "Pilot Program": ("2024-10-01", "2025-09-30", "P3_P4_timeline_pilot"),
         "In-Kind Contribution Y1": ("2025-10-01", "2026-09-30", "P3_P4_timeline_inkind1")
     }
 
@@ -119,7 +119,8 @@ def generate_timeline_plot(observations):
         try:
             # Filter data based on date ranges
             if start_date and end_date:
-                mask = (df["dt_display"] >= pd.to_datetime(start_date)) & (df["dt_display"] <= pd.to_datetime(end_date))
+                # Compare observing nights (YYYY-MM-DD) so the last night of a period is included
+                mask = (df["obs_night"] >= start_date) & (df["obs_night"] <= end_date)
                 period_df = df.loc[mask]
             else:
                 period_df = df.copy()
@@ -179,6 +180,12 @@ def generate_timeline_plot(observations):
                     c=colors,
                 )
 
+                # "All" plot: dashed line where each programme period starts
+                # (keep in sync with BOUNDARIES in index.html)
+                if start_date is None:
+                    for boundary in ["2025-10-01", "2026-10-01"]:
+                        ax.axvline(pd.to_datetime(boundary), color="white", alpha=0.45, lw=1, ls="--")
+
                 ax.set_yticks(list(local_y_map.values()))
                 ax.set_yticklabels(list(local_y_map.keys()))
                 ax.xaxis.set_major_locator(mdates.MonthLocator())
@@ -201,11 +208,15 @@ def generate_timeline_plot(observations):
 
 
 # --- Main Data Sync Execution ---
-query = (
-    f"SELECT target, instrument, exp_start, tel_airm_start, tel_ambi_fwhm_start "
+BASE_COLUMNS = "target, instrument, exp_start, tel_airm_start, tel_ambi_fwhm_start"
+WHERE = (
     f"FROM dbo.raw WHERE (prog_id LIKE '%{clean_id}%' OR prog_id LIKE '%{PROGRAM_ID}%') "
     f"AND dp_cat = 'SCIENCE' ORDER BY exp_start ASC"
 )
+# 'exposure' (seconds) is used for the "hours on source" in the page captions.
+# If ESO ever rejects it, we fall back to the query without it.
+query = f"SELECT {BASE_COLUMNS}, exposure {WHERE}"
+fallback_query = f"SELECT {BASE_COLUMNS} {WHERE}"
 
 print(f"Connecting to ESO TAP service for program {PROGRAM_ID}...")
 url = "https://archive.eso.org/tap_obs/sync"
@@ -216,70 +227,76 @@ params = {
     "QUERY": query,
 }
 
-data_bytes = urllib.parse.urlencode(params).encode("utf-8")
-req = urllib.request.Request(
-    url,
-    data=data_bytes,
-    headers={
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-        ),
-        "Content-Type": "application/x-www-form-urlencoded",
-    },
-)
+def run_tap_query(adql):
+    params["QUERY"] = adql
+    data_bytes = urllib.parse.urlencode(params).encode("utf-8")
+    req = urllib.request.Request(
+        url,
+        data=data_bytes,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            ),
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    )
+    with urllib.request.urlopen(req, timeout=60) as response:
+        return json.loads(response.read().decode("utf-8"))
+
 
 try:
-    with urllib.request.urlopen(req, timeout=60) as response:
-        content = response.read().decode("utf-8")
-        data = json.loads(content)
+    try:
+        data = run_tap_query(query)
+    except urllib.error.HTTPError as e:
+        print(f"Query with exposure times failed (HTTP {e.code}); retrying without them.")
+        data = run_tap_query(fallback_query)
+    raw_observations = data.get("data", [])
+    cleaned_observations = []
 
-        raw_observations = data.get("data", [])
-        cleaned_observations = []
+    kept_targets = set()
+    dropped_targets = set()
 
-        kept_targets = set()
-        dropped_targets = set()
+    # --- Filter Placeholders, Rename Targets & Assign Observing Night ---
+    for row in raw_observations:
+        if not row[0]:
+            continue
 
-        # --- Filter Placeholders, Rename Targets & Assign Observing Night ---
-        for row in raw_observations:
-            if not row[0]:
-                continue
+        target_name = str(row[0]).strip()
 
-            target_name = str(row[0]).strip()
+        # Rename COOL 1330 -> SDSS 1330
+        target_name = target_name.replace("COOL 1330", "SDSS 1330").replace("COOL J1330", "SDSS J1330")
 
-            # Rename COOL 1330 -> SDSS 1330
-            target_name = target_name.replace("COOL 1330", "SDSS 1330").replace("COOL J1330", "SDSS J1330")
+        if not is_valid_science_target(target_name):
+            dropped_targets.add(target_name)
+            continue
 
-            if not is_valid_science_target(target_name):
-                dropped_targets.add(target_name)
-                continue
+        row[0] = target_name
+        
+        # Compute observing night (YYYY-MM-DD of evening start)
+        obs_night = get_observing_night(row[2])
+        
+        # Append observing night to the record row
+        updated_row = row[:5] + [obs_night] + row[5:]
+        cleaned_observations.append(updated_row)
+        kept_targets.add(target_name)
 
-            row[0] = target_name
-            
-            # Compute observing night (YYYY-MM-DD of evening start)
-            obs_night = get_observing_night(row[2])
-            
-            # Append observing night to the record row
-            updated_row = row + [obs_night]
-            cleaned_observations.append(updated_row)
-            kept_targets.add(target_name)
+    print(f"Kept Targets ({len(kept_targets)}): {sorted(list(kept_targets))}")
+    if dropped_targets:
+        print(f"Filtered Out Non-Science / Placeholder Targets ({len(dropped_targets)}): {sorted(list(dropped_targets))}")
 
-        print(f"Kept Targets ({len(kept_targets)}): {sorted(list(kept_targets))}")
-        if dropped_targets:
-            print(f"Filtered Out Non-Science / Placeholder Targets ({len(dropped_targets)}): {sorted(list(dropped_targets))}")
+    # Update fields header and JSON dataset
+    if "fields" in data:
+        data["fields"].insert(5, {"name": "obs_night", "datatype": "char"})
+    data["data"] = cleaned_observations
 
-        # Update fields header and JSON dataset
-        if "fields" in data:
-            data["fields"].append({"name": "obs_night", "datatype": "char"})
-        data["data"] = cleaned_observations
+    # 1. Save cleaned JSON dataset with observing night association
+    with open("data.json", "w") as f:
+        json.dump(data, f, indent=2)
 
-        # 1. Save cleaned JSON dataset with observing night association
-        with open("data.json", "w") as f:
-            json.dump(data, f, indent=2)
+    print(f"Saved {len(cleaned_observations)} valid observation records to data.json.")
 
-        print(f"Saved {len(cleaned_observations)} valid observation records to data.json.")
-
-        # 2. Generate updated timeline plot
-        generate_timeline_plot(cleaned_observations)
+    # 2. Generate updated timeline plot
+    generate_timeline_plot(cleaned_observations)
 
 except urllib.error.HTTPError as e:
     print(f"HTTP Error {e.code}: {e.reason}")

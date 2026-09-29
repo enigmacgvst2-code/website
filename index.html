@@ -566,6 +566,7 @@ async function loadData() {
             const expStart = isArray ? row[2] : (row.expStart || row.exp_start);
             const airmass = isArray ? row[3] : row.tel_airm_start;
             const seeing = isArray ? row[4] : row.tel_ambi_fwhm_start;
+            const exposure = isArray ? row[6] : row.exposure;
 
             return { 
                 target: target, 
@@ -573,6 +574,7 @@ async function loadData() {
                 expStart: expStart, 
                 airmass: (typeof airmass === 'number') ? airmass : null,
                 seeing: (typeof seeing === 'number' && seeing > 0) ? seeing : null,
+                exposure: (typeof exposure === 'number' && exposure > 0) ? exposure : null,
                 filter: 'r_SDSS', 
                 observingNight: expStart ? getObservingNight(expStart) : 'N/A' 
             };
@@ -752,12 +754,32 @@ const PERIODS = {
              caption: 'Targets observed from 01/10/2024 to ...',
              png: 'images/P3_P4_timeline.png' },
     pilot: { start: '2024-10-01', end: '2025-09-30',
-             caption: 'Pilot Program (01/10/2024 - 20/09/2025)',
+             caption: 'Pilot Program (01/10/2024 - 30/09/2025)',
              png: 'images/P3_P4_timeline_pilot.png' },
     y1:    { start: '2025-10-01', end: '2026-09-30',
              caption: 'In-Kind Contribution Y1 (01/10/2025 - 30/09/2026)',
              png: 'images/P3_P4_timeline_inkind1.png' },
 };
+
+// Programme period boundaries, drawn as dashed lines in the "All periods" view.
+// To add a new year, append one line here.
+const BOUNDARIES = [
+    { date: '2025-10-01', before: 'Pilot',      after: 'In-Kind Y1' },
+    { date: '2026-10-01', before: 'In-Kind Y1', after: 'In-Kind Y2' },
+];
+
+// Caption text for a tab, plus total hours on source when data.json has exposure times
+function captionFor(key) {
+    const p = PERIODS[key];
+    const end = p.end || '9999-12-31';
+    let seconds = 0, found = false;
+    rawObservations.forEach(o => {
+        if (o.exposure !== null && o.observingNight >= p.start && o.observingNight <= end) {
+            seconds += o.exposure; found = true;
+        }
+    });
+    return found ? `${p.caption} · ${(seconds / 3600).toFixed(1)} h on source` : p.caption;
+}
 
 let currentPeriod = 'all';
 let nightlyPoints = [];   // one point per target per observing night
@@ -801,13 +823,14 @@ function buildTimeline() {
 function drawTimeline(periodKey) {
     currentPeriod = periodKey;
     const p = PERIODS[periodKey];
-    document.getElementById('timeline-caption').textContent = p.caption;
+    document.getElementById('timeline-caption').textContent = captionFor(periodKey);
 
     if (typeof Plotly === 'undefined') { showFallback(); return; }
     if (nightlyPoints.length === 0) return;
 
     const lastNight = nightlyPoints.reduce((m, pt) => pt.night > m ? pt.night : m, '0000');
-    const end = p.end || lastNight;
+    const lastBoundary = BOUNDARIES[BOUNDARIES.length - 1].date;
+    const end = p.end || (lastNight > lastBoundary ? lastNight : lastBoundary);
     const pts = nightlyPoints.filter(pt => pt.night >= p.start && pt.night <= end);
 
     // Rows: only targets observed in this tab, in the same order as every other tab:
@@ -850,16 +873,23 @@ function drawTimeline(periodKey) {
     const maxTicks = Math.max(3, Math.floor((el.clientWidth - (narrow ? 110 : 190)) / 60));
     const monthStep = [1, 2, 3, 6, 12].find(m => spanMonths / m <= maxTicks) || 12;
 
-    // In the "all" view, mark the switch from the Pilot to In-Kind Y1
+    // In the "all" view, mark where each programme period starts
     const shapes = [], annotations = [];
     if (periodKey === 'all') {
-        shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: '2025-10-01', x1: '2025-10-01', y0: 0, y1: 1,
-                      line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } });
-        if (!narrow) annotations.push(
-            { x: '2025-10-01', y: 1, xref: 'x', yref: 'paper', text: 'Pilot ◂ ', xanchor: 'right', yanchor: 'bottom',
-              showarrow: false, font: { color: '#cbd5e1', size: 11 } },
-            { x: '2025-10-01', y: 1, xref: 'x', yref: 'paper', text: ' ▸ In-Kind Y1', xanchor: 'left', yanchor: 'bottom',
-              showarrow: false, font: { color: '#cbd5e1', size: 11 } });
+        const rangeEnd = shiftDays(end, 10);
+        const labelFont = { color: '#cbd5e1', size: 11 };
+        BOUNDARIES.forEach((bd, i) => {
+            shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: bd.date, x1: bd.date, y0: 0, y1: 1,
+                          line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } });
+            if (narrow) return;
+            const base = { x: bd.date, y: 1, xref: 'x', yref: 'paper', yanchor: 'bottom', showarrow: false, font: labelFont };
+            if (i === 0) annotations.push(Object.assign({}, base, { text: bd.before + ' ◂ ', xanchor: 'right' }));
+            // Too close to the right edge for the label to fit after the line? Put it before.
+            const daysLeft = (new Date(rangeEnd) - new Date(bd.date)) / 864e5;
+            annotations.push(daysLeft < 45
+                ? Object.assign({}, base, { text: bd.after + ' ▸ ', xanchor: 'right' })
+                : Object.assign({}, base, { text: ' ▸ ' + bd.after, xanchor: 'left' }));
+        });
     }
 
     const layout = {
@@ -940,7 +970,7 @@ document.querySelectorAll('.tab-bar .tab').forEach(tab => {
         tab.classList.add('active');
         currentPeriod = tab.dataset.period;
         if (typeof Plotly === 'undefined' || nightlyPoints.length === 0) {
-            document.getElementById('timeline-caption').textContent = PERIODS[currentPeriod].caption;
+            document.getElementById('timeline-caption').textContent = captionFor(currentPeriod);
             showFallback();
         } else {
             drawTimeline(currentPeriod);

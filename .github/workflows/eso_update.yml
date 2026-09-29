@@ -29,5 +29,5 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add data.json images/P3_P4_timeline.png
+          git add data.json images/P3_P4_timeline*.png
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update ESO observation data and timeline image" && git push)
