@@ -2,7 +2,7 @@ name: ESO Data Auto-Sync
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Daily at 08:00 UTC = 10:00 in Italy in summer (CEST), 09:00 in winter (CET)
+    - cron: '37 7 * * *' # Daily at 07:37 UTC = 09:37 in Italy in summer (CEST), 08:37 in winter (CET). Off the hour: GitHub delays on-the-hour runs most
   workflow_dispatch: # Allows manual trigger from GitHub Actions tab
 
 jobs:
