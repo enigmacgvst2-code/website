@@ -837,7 +837,8 @@ function drawTimeline(periodKey) {
 
     const lastNight = nightlyPoints.reduce((m, pt) => pt.night > m ? pt.night : m, '0000');
     const lastBoundary = BOUNDARIES[BOUNDARIES.length - 1].date;
-    const end = p.end || (lastNight > lastBoundary ? lastNight : lastBoundary);
+    const minEnd = shiftDays(lastBoundary, 75);
+    const end = p.end || (lastNight > minEnd ? lastNight : minEnd);
     const pts = nightlyPoints.filter(pt => pt.night >= p.start && pt.night <= end);
 
     // Rows: only targets observed in this tab, in the same order as every other tab:
@@ -880,22 +881,21 @@ function drawTimeline(periodKey) {
     const maxTicks = Math.max(3, Math.floor((el.clientWidth - (narrow ? 110 : 190)) / 60));
     const monthStep = [1, 2, 3, 6, 12].find(m => spanMonths / m <= maxTicks) || 12;
 
-    // In the "all" view, mark where each programme period starts
+    // In the "all" view: dashed line where each programme period starts, and every
+    // period's name centred above its own section of the plot (same style for all)
     const shapes = [], annotations = [];
     if (periodKey === 'all') {
         const rangeEnd = shiftDays(end, 10);
         const labelFont = { color: '#cbd5e1', size: 11 };
-        BOUNDARIES.forEach((bd, i) => {
-            shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: bd.date, x1: bd.date, y0: 0, y1: 1,
-                          line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } });
-            if (narrow) return;
-            const base = { x: bd.date, y: 1, xref: 'x', yref: 'paper', yanchor: 'bottom', showarrow: false, font: labelFont };
-            if (i === 0) annotations.push(Object.assign({}, base, { text: bd.before + ' ◂ ', xanchor: 'right' }));
-            // Too close to the right edge for the label to fit after the line? Put it before.
-            const daysLeft = (new Date(rangeEnd) - new Date(bd.date)) / 864e5;
-            annotations.push(daysLeft < 45
-                ? Object.assign({}, base, { text: bd.after + ' ▸ ', xanchor: 'right' })
-                : Object.assign({}, base, { text: ' ▸ ' + bd.after, xanchor: 'left' }));
+        const midDate = (a, b) => new Date((new Date(a).getTime() + new Date(b).getTime()) / 2).toISOString().split('T')[0];
+        const sections = [{ start: p.start, label: BOUNDARIES[0].before }]
+            .concat(BOUNDARIES.map(bd => ({ start: bd.date, label: bd.after })));
+        BOUNDARIES.forEach(bd => shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: bd.date, x1: bd.date, y0: 0, y1: 1,
+                                               line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } }));
+        if (!narrow) sections.forEach((sec, k) => {
+            const secEnd = k + 1 < sections.length ? sections[k + 1].start : rangeEnd;
+            annotations.push({ x: midDate(sec.start, secEnd < rangeEnd ? secEnd : rangeEnd), y: 1, xref: 'x', yref: 'paper',
+                               xanchor: 'center', yanchor: 'bottom', showarrow: false, font: labelFont, text: sec.label });
         });
     }
 
