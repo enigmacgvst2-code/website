@@ -71,6 +71,8 @@
             width: fit-content;
             max-width: 100%;
             margin: 0 auto 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         /* Scoped + !important to override the theme's global button styles (main.css) */
         .tab-bar .tab {
@@ -97,6 +99,7 @@
         .tab-bar .tab:focus-visible { outline: 2px solid var(--primary-accent) !important; outline-offset: 2px; }
         @media (max-width: 480px) {
             .tab-bar .tab { padding: 6px 11px !important; font-size: 0.82rem !important; }
+            .tab-bar .tab-long { display: none; }  /* phones: "All · Pilot · Y1 · Y2" */
             .timeline-plot { min-height: 0; }
         }
 
@@ -420,9 +423,10 @@
                             <!-- Observing Timeline: one card, period tabs, interactive plot -->
                             <figure class="timeline-card">
                                 <div class="tab-bar" role="tablist" aria-label="Observing period">
-                                    <button class="tab active" role="tab" data-period="all">All periods</button>
+                                    <button class="tab active" role="tab" data-period="all">All<span class="tab-long"> periods</span></button>
                                     <button class="tab" role="tab" data-period="pilot">Pilot</button>
-                                    <button class="tab" role="tab" data-period="y1">In-Kind Y1</button>
+                                    <button class="tab" role="tab" data-period="y1"><span class="tab-long">In-Kind </span>Y1</button>
+                                    <button class="tab" role="tab" data-period="y2"><span class="tab-long">In-Kind </span>Y2</button>
                                 </div>
 
                                 <!-- Interactive plot (Plotly), drawn from data.json -->
@@ -759,6 +763,9 @@ const PERIODS = {
     y1:    { start: '2025-10-01', end: '2026-09-30',
              caption: 'In-Kind Contribution Y1 (01/10/2025 - 30/09/2026)',
              png: 'images/P3_P4_timeline_inkind1.png' },
+    y2:    { start: '2026-10-01', end: '2027-09-30',
+             caption: 'In-Kind Contribution Y2 (01/10/2026 - 30/09/2027)',
+             png: 'images/P3_P4_timeline_inkind2.png' },
 };
 
 // Programme period boundaries, drawn as dashed lines in the "All periods" view.
