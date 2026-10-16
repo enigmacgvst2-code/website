@@ -1,92 +1,155 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>VST P3-P4 - Time Delays</title>
+        <title>VST P3-P5 - Time Delays (J0542-2125)</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="assets/css/main.css" />
         <style>
-            .lowercase {
-                text-transform: lowercase;
+            .lowercase { text-transform: lowercase; }
+
+            .td-page { max-width: 1040px; margin: 0 auto; padding: 40px 20px; color: #334155; }
+
+            /* Header */
+            .td-header { text-align: center; margin-bottom: 36px; }
+            .td-header .badge {
+                display: inline-block; padding: 4px 14px; margin-bottom: 12px;
+                background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; border-radius: 20px;
+                font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+            }
+            .td-header h3 { font-size: 2.1rem; color: #0f172a; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.02em; }
+            .td-page .td-header .subtitle { font-size: 0.95rem; color: #64748b; margin: 0; letter-spacing: 0; text-transform: none; font-weight: 400; }
+
+            /* Card shell */
+            .td-card {
+                background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+                box-shadow: 0 4px 20px -2px rgba(0,0,0,0.04); padding: 24px;
+            }
+            .td-card h4 {
+                font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+                color: #64748b; margin: 0 0 16px;
+            }
+            .td-page .td-card h4 { font-size: 0.8rem !important; letter-spacing: 0.06em !important; margin: 0 0 16px !important; }
+
+            /* Summary: cutout + delay values */
+            .td-summary { display: grid; grid-template-columns: 320px 1fr; gap: 24px; margin-bottom: 28px; }
+            .td-cutout { margin: 0; }
+            .td-cutout img { width: 100%; height: auto; display: block; border-radius: 8px; background: #000; cursor: zoom-in; }
+            .td-cutout figcaption { font-size: 0.85rem; color: #64748b; text-align: center; margin-top: 10px; line-height: 1.5; }
+
+            .td-delays { display: flex; flex-direction: column; }
+            .delay-list { display: grid; gap: 12px; flex: 1; align-content: center; }
+            .delay-row {
+                display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+                padding: 16px 20px; border: 1px solid #f1f5f9; border-radius: 10px; background: #f8fafc;
+            }
+            .delay-row .pair { font-weight: 700; color: #0f172a; font-size: 1.05rem; white-space: nowrap; }
+            .delay-row .pair span { color: #94a3b8; font-weight: 400; margin: 0 2px; }
+            .delay-row .value { font-variant-numeric: tabular-nums; font-size: 1.6rem; font-weight: 700; color: #0f172a; white-space: nowrap; }
+            .delay-row .value .err { font-size: 1rem; font-weight: 400; color: #64748b; margin-left: 4px; }
+            .delay-row .value .unit { font-size: 0.9rem; font-weight: 400; color: #64748b; margin-left: 4px; }
+            .td-note { font-size: 0.85rem; color: #64748b; margin: 16px 0 0; line-height: 1.5; }
+
+            /* Tabbed figure viewer */
+            .tab-bar { display: flex; gap: 6px; border-bottom: 1px solid #e2e8f0; margin: -4px 0 20px; flex-wrap: wrap; }
+            /* reset the theme's global button style */
+            .td-page .tab-bar button {
+                -webkit-appearance: none; appearance: none;
+                background: none; background-image: none; box-shadow: none; text-shadow: none;
+                border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+                height: auto; line-height: 1.4; min-width: 0;
+                padding: 10px 14px; margin-bottom: -1px;
+                font-family: inherit; font-size: 0.95rem; font-weight: 600;
+                text-transform: none; letter-spacing: 0;
+                color: #64748b !important; cursor: pointer;
+            }
+            .td-page .tab-bar button:hover { color: #0f172a !important; background: none; }
+            .td-page .tab-bar button[aria-selected="true"] { color: #2563eb !important; border-bottom-color: #2563eb; }
+            .tab-panel { margin: 0; }
+            .tab-panel[hidden] { display: none; }
+            .tab-panel img { width: 100%; height: auto; display: block; border-radius: 6px; cursor: zoom-in; }
+            .tab-panel figcaption {
+                display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+                font-size: 0.95rem; color: #475569; line-height: 1.6; padding-top: 16px; margin-top: 16px; border-top: 1px solid #f1f5f9;
+            }
+            .tab-panel figcaption strong { color: #0f172a; }
+            .fullres { font-size: 0.85rem; color: #2563eb; text-decoration: none; white-space: nowrap; border: 0; }
+            .fullres:hover { text-decoration: underline; }
+
+            /* Lightbox */
+            .lightbox {
+                position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center;
+                background: rgba(15,23,42,0.88); padding: 24px; cursor: zoom-out;
+            }
+            .lightbox.open { display: flex; }
+            .lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+            .lightbox .close {
+                position: absolute; top: 14px; right: 20px; color: #fff; font-size: 2rem; line-height: 1;
+                background: none; border: 0; cursor: pointer;
             }
 
-            /* Light Academic Style Overrides */
-            .academic-container {
-                max-width: 960px;
-                margin: 0 auto;
-                padding: 40px 20px;
+            @media (max-width: 760px) {
+                .td-summary { grid-template-columns: 1fr; }
+                .td-cutout { max-width: 360px; margin: 0 auto; }
+                .td-header h3 { font-size: 1.6rem; }
+                .delay-row .value { font-size: 1.3rem; }
             }
 
-            .academic-header {
-                text-align: center;
-                margin-bottom: 40px;
+            /* Two-solution layout */
+            .solution-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; align-content: center; }
+            .td-page .solution {
+                -webkit-appearance: none; appearance: none; text-align: left; cursor: pointer;
+                background: #f8fafc; background-image: none; box-shadow: none; text-shadow: none;
+                border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 18px;
+                height: auto; line-height: 1.4; min-width: 0; text-transform: none; letter-spacing: 0;
+                font-family: inherit; font-weight: 400; font-size: 1rem; color: #334155 !important;
+                transition: border-color .15s ease, background-color .15s ease;
+            }
+            .td-page .solution:hover { border-color: #cbd5e1; background: #f1f5f9; }
+            .td-page .solution[aria-pressed="true"] { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 1px #2563eb inset; }
+            .solution .sol-name { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #64748b; margin-bottom: 10px; }
+            .solution[aria-pressed="true"] .sol-name { color: #2563eb; }
+            .solution .sol-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+            .solution .sol-row + .sol-row { margin-top: 6px; }
+            .solution .pair { font-weight: 700; color: #0f172a; white-space: nowrap; }
+            .solution .pair span { color: #94a3b8; font-weight: 400; margin: 0 2px; }
+            .solution .value { font-variant-numeric: tabular-nums; font-size: 1.5rem; font-weight: 700; color: #0f172a; white-space: nowrap; }
+            .solution .value .err, .solution .value .unit { font-size: 0.9rem; font-weight: 400; color: #64748b; margin-left: 4px; }
+
+            .viewer-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid #e2e8f0; margin: -4px 0 20px; }
+            .viewer-head .tab-bar { border-bottom: 0; margin: 0; }
+            .segmented { display: inline-flex; background: #f1f5f9; border-radius: 8px; padding: 3px; margin-bottom: 8px; }
+            .td-page .segmented button {
+                -webkit-appearance: none; appearance: none; background: none; background-image: none; box-shadow: none; text-shadow: none;
+                border: 0; border-radius: 6px; padding: 6px 12px; height: auto; line-height: 1.4; min-width: 0;
+                font-family: inherit; font-size: 0.85rem; font-weight: 600; text-transform: none; letter-spacing: 0;
+                color: #64748b !important; cursor: pointer;
+            }
+            .td-page .segmented button[aria-pressed="true"] { background: #fff; color: #0f172a !important; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+            @media (max-width: 760px) {
+                .solution-list { grid-template-columns: 1fr; }
+                .viewer-head { flex-direction: column-reverse; align-items: stretch; }
+                .segmented { align-self: flex-start; margin: 0 0 4px; }
             }
 
-            .academic-header .badge {
-                display: inline-block;
-                padding: 4px 14px;
-                background-color: #eff6ff;
-                color: #2563eb;
-                font-size: 0.8rem;
-                font-weight: 600;
-                letter-spacing: 0.5px;
-                border-radius: 20px;
-                text-transform: uppercase;
-                margin-bottom: 12px;
-                border: 1px solid #dbeafe;
-            }
+            /* Disabled tab (view not available for the selected solution) */
+            .td-page .tab-bar button[disabled] { color: #cbd5e1 !important; cursor: not-allowed; }
 
-            .academic-header h3 {
-                font-size: 2.1rem;
-                color: #0f172a;
-                font-weight: 700;
-                margin: 0 0 8px 0;
-                letter-spacing: -0.02em;
+            /* Placeholder shown when a plot file is missing */
+            .plot-missing {
+                display: none; align-items: center; justify-content: center; min-height: 220px;
+                border: 1px dashed #cbd5e1; border-radius: 8px; background: #f8fafc;
+                color: #94a3b8; font-size: 0.95rem;
             }
+            .tab-panel.missing img, .tab-panel.missing .fullres { display: none; }
+            .tab-panel.missing .plot-missing { display: flex; }
 
-            .academic-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 36px;
-            }
-
-            .figure-card {
-                background: #ffffff;
-                border: 1px solid #e2e8f0;
-                border-radius: 12px;
-                box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
-                padding: 28px;
-                margin: 0;
-                transition: border-color 0.2s ease, box-shadow 0.2s ease;
-            }
-
-            .figure-card:hover {
-                border-color: #cbd5e1;
-                box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.07);
-            }
-
-            .figure-card img {
-                width: 100%;
-                max-width: 100%;
-                height: auto;
-                display: block;
-                margin: 0 auto 20px auto;
-                border-radius: 6px;
-            }
-
-            .figure-card figcaption {
-                font-size: 0.95rem;
-                color: #475569;
-                line-height: 1.6;
-                padding-top: 16px;
-                border-top: 1px solid #f1f5f9;
-                text-align: center;
-            }
-
-            .figure-card figcaption strong {
-                color: #0f172a;
-                font-weight: 600;
-            }
+            .solution .sol-sub { display: block; font-size: 0.8rem; color: #64748b; margin: -6px 0 10px; line-height: 1.4; }
+            .solution .sol-sub a { color: #2563eb; }
+            .err.asym { display: inline-flex; flex-direction: column; vertical-align: middle; line-height: 1.05; font-size: 0.8rem !important; }
+            .err.asym sup, .err.asym sub { position: static; font-size: inherit; vertical-align: baseline; }
+            .solution .value.na { font-size: 1rem; font-weight: 400; color: #94a3b8; }
         </style>
     </head>
     <body class="homepage is-preload">
@@ -181,26 +244,56 @@
                     <div class="wrapper style1">
                         <div class="inner">
 
-                            <section class="academic-container">
-                                <header class="academic-header">
+                            <section class="td-page">
+                                <header class="td-header">
                                     <span class="badge">VST P3-P4 Monitoring</span>
                                     <h3>Time Delay Results for J0542-2125</h3>
+                                    <p class="subtitle">Three lensed images (A, B, C) &middot; delay measured between A and B &middot; PyCS3</p>
                                 </header>
-                                
-                                <div class="academic-grid">
-                                    <figure class="figure-card">
-                                        <img src="images/J0542-2125_VST/marginalisation_spline_sigma_0.50.png"
-                                             alt="Time Delay results for J0542-2125">
+
+                                <div class="td-summary">
+                                    <div class="td-card">
+                                        <h4>Lensed images</h4>
+                                        <figure class="td-cutout">
+                                            <img src="images/J0542-2125_VST/J0542-2125_cutout.png" alt="Image of J0542-2125" loading="lazy" data-zoom>
+                                            <figcaption>HST/F160W cutout with images A, B and C marked.</figcaption>
+                                        </figure>
+                                    </div>
+
+                                    <div class="td-card td-delays">
+                                        <h4>Combined time delays</h4>
+                                        <!-- Values: black "combined" row of the delay plot (tau = 0.50). Update when the analysis is re-run. -->
+                                        <div class="delay-list">
+                                                <div class="delay-row">
+                                                    <span class="pair">A<span>&ndash;</span>B</span>
+                                                    <span class="value">+20.6<span class="err">&plusmn; 0.5</span><span class="unit">days</span></span>
+                                                </div>
+                                        </div>
+                                        <p class="td-note">Combined estimate (&tau; = 0.50) over all PyCS3 spline configurations.</p>
+                                    </div>
+                                </div>
+
+                                <div class="td-card">
+                                    <div class="viewer-head">
+                                        <div class="tab-bar" role="tablist" aria-label="Time delay plots">
+                                            <button role="tab" data-view="delays" aria-selected="true">Time-delay estimates</button>
+                                            <button role="tab" data-view="curves" aria-selected="false" tabindex="-1">Matched light curves</button>
+                                        </div>
+                                    </div>
+                                    <figure class="tab-panel" data-sol="1" data-view="delays" role="tabpanel">
+                                        <img src="images/J0542-2125_VST/marginalisation_spline_sigma_0.50.png" alt="Time-delay estimates for J0542-2125" loading="lazy" data-zoom onerror="this.parentNode.classList.add('missing')">
+                                        <div class="plot-missing">Plot not available yet</div>
                                         <figcaption>
-                                            <strong>Figure 1:</strong> Time Delay measurements for J0542-2125.
+                                            <span><strong>Figure 1:</strong> Time delay measurements for each PyCS3 configuration; black is the combined estimate.</span>
+                                            <a class="fullres" href="images/J0542-2125_VST/marginalisation_spline_sigma_0.50.png" target="_blank">Full resolution &#8599;</a>
                                         </figcaption>
                                     </figure>
-
-                                    <figure class="figure-card">
-                                        <img src="images/J0542-2125_VST/plot_ab.png"
-                                             alt="Matched light curves">
+                                    <figure class="tab-panel" data-sol="1" data-view="curves" role="tabpanel" hidden>
+                                        <img src="images/J0542-2125_VST/plot_ab.png" alt="Matched light curves for J0542-2125" loading="lazy" data-zoom onerror="this.parentNode.classList.add('missing')">
+                                        <div class="plot-missing">Plot not available yet</div>
                                         <figcaption>
-                                            <strong>Figure 2:</strong> Matched light curves for J0542-2125 with the above time delay.
+                                            <span><strong>Figure 2:</strong> Light curves shifted by the combined time delay.</span>
+                                            <a class="fullres" href="images/J0542-2125_VST/plot_ab.png" target="_blank">Full resolution &#8599;</a>
                                         </figcaption>
                                     </figure>
                                 </div>
@@ -242,6 +335,69 @@
         <script src="assets/js/breakpoints.min.js"></script>
         <script src="assets/js/util.js"></script>
         <script src="assets/js/main.js"></script>
+
+    
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+            <button class="close" aria-label="Close">&times;</button>
+            <img alt="">
+        </div>
+        <script>
+            (function () {
+                var panels = Array.prototype.slice.call(document.querySelectorAll('.tab-panel'));
+                var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab-bar [role="tab"]'));
+                var solBtns = Array.prototype.slice.call(document.querySelectorAll('.solution[data-sol], .segmented [data-sol]'));
+                var state = { sol: panels.length ? panels[0].dataset.sol : '1', view: 'delays' };
+
+                function has(sol, view) {
+                    return panels.some(function (p) { return p.dataset.sol === sol && p.dataset.view === view; });
+                }
+                function render() {
+                    if (!has(state.sol, state.view)) {
+                        var t = tabs.filter(function (t) { return has(state.sol, t.dataset.view); })[0];
+                        if (t) state.view = t.dataset.view;
+                    }
+                    tabs.forEach(function (t) {
+                        var on = t.dataset.view === state.view;
+                        t.disabled = !has(state.sol, t.dataset.view);
+                        t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
+                    });
+                    solBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.sol === state.sol); });
+                    panels.forEach(function (p) { p.hidden = !(p.dataset.sol === state.sol && p.dataset.view === state.view); });
+                }
+
+                tabs.forEach(function (t, i) {
+                    t.addEventListener('click', function () { state.view = t.dataset.view; render(); });
+                    t.addEventListener('keydown', function (e) {
+                        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                            var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+                            if (!n.disabled) { state.view = n.dataset.view; render(); n.focus(); }
+                        }
+                    });
+                });
+                solBtns.forEach(function (b) {
+                    b.addEventListener('click', function (e) {
+                        if (e.target.closest('a')) return;   // let links inside a card work
+                        state.sol = b.dataset.sol; render();
+                    });
+                    b.addEventListener('keydown', function (e) {
+                        if ((e.key === 'Enter' || e.key === ' ') && b.classList.contains('solution')) { e.preventDefault(); state.sol = b.dataset.sol; render(); }
+                    });
+                });
+                render();
+
+                // Click-to-enlarge
+                var box = document.getElementById('lightbox'), big = box.querySelector('img');
+                document.querySelectorAll('img[data-zoom]').forEach(function (img) {
+                    img.addEventListener('click', function () {
+                        big.src = img.src; big.alt = img.alt;
+                        box.classList.add('open'); box.setAttribute('aria-hidden', 'false');
+                    });
+                });
+                function close() { box.classList.remove('open'); box.setAttribute('aria-hidden', 'true'); }
+                box.addEventListener('click', close);
+                document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+            })();
+        </script>
 
     </body>
 </html>
