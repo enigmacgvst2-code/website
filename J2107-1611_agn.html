@@ -6,8 +6,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <style>
-      .app-frame { width: 100%; height: 90vh; border: 0; background: #fff; border-radius: 8px; }
       #main-wrapper .wrapper .inner { padding-top: 1.5rem; }
+      .agn-page { max-width: 1180px; margin: 0 auto; padding: 32px 20px 40px; color: #334155; }
+
+      .agn-header { text-align: center; margin-bottom: 28px; }
+      .agn-header .badge {
+        display: inline-block; padding: 4px 14px; margin-bottom: 12px;
+        background: #eff6ff; color: #2563eb; border: 1px solid #dbeafe; border-radius: 20px;
+        font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+      }
+      .agn-header h3 { font-size: 2.1rem; color: #0f172a; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.02em; }
+      .agn-page .agn-header .subtitle { font-size: 0.95rem; color: #64748b; margin: 0; letter-spacing: 0; text-transform: none; font-weight: 400; }
+
+      /* Toolbar */
+      .agn-toolbar {
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px;
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.04);
+      }
+      .agn-toolbar .group { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+      .agn-page .agn-toolbar input[type="search"] {
+        width: 240px; max-width: 100%; height: auto; padding: 8px 12px; margin: 0;
+        border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; font-size: 0.9rem; color: #0f172a; background: #fff;
+        box-shadow: none;
+      }
+      .agn-page .agn-toolbar label { display: inline-flex; align-items: center; gap: 6px; margin: 0;
+        font-size: 0.85rem; font-weight: 600; color: #64748b; text-transform: none; letter-spacing: 0; }
+      .agn-page .agn-toolbar select {
+        height: auto; padding: 7px 10px; margin: 0; border: 1px solid #cbd5e1; border-radius: 8px;
+        font: inherit; font-size: 0.85rem; color: #0f172a; background: #fff; box-shadow: none; -webkit-appearance: auto; appearance: auto;
+      }
+      .agn-page .agn-toolbar input[type="checkbox"] { -webkit-appearance: auto; appearance: auto; display: inline-block; opacity: 1; position: static; margin: 0; width: 15px; height: 15px; }
+      .agn-count { font-size: 0.85rem; color: #64748b; white-space: nowrap; }
+
+      .segmented { display: inline-flex; background: #f1f5f9; border-radius: 8px; padding: 3px; }
+      .agn-page .segmented button {
+        -webkit-appearance: none; appearance: none; background: none; background-image: none; box-shadow: none; text-shadow: none;
+        border: 0; border-radius: 6px; padding: 5px 11px; height: auto; line-height: 1.4; min-width: 0;
+        font-family: inherit; font-size: 0.85rem; font-weight: 600; text-transform: none; letter-spacing: 0;
+        color: #64748b !important; cursor: pointer;
+      }
+      .agn-page .segmented button[aria-pressed="true"] { background: #fff; color: #0f172a !important; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+
+      /* Grid of cards */
+      .agn-grid { display: grid; gap: 16px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
+      .agn-card {
+        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 16px 8px;
+        box-shadow: 0 4px 20px -2px rgba(0,0,0,0.04); transition: border-color .2s ease, box-shadow .2s ease; min-width: 0;
+      }
+      .agn-card:hover { border-color: #cbd5e1; box-shadow: 0 8px 25px -4px rgba(0,0,0,0.07); }
+      .agn-card[hidden] { display: none; }
+      .agn-page .agn-card { margin: 0; }
+      .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+      .card-title { font-weight: 700; color: #0f172a; font-size: 0.95rem; font-variant-numeric: tabular-nums; line-height: 1.35; }
+      .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; }
+      .card-id { font-size: 0.75rem; color: #94a3b8; word-break: break-all; margin-top: 2px; padding-left: 18px; }
+      .agn-page .expand {
+        -webkit-appearance: none; appearance: none; flex: none; background: #f8fafc; background-image: none; box-shadow: none; text-shadow: none;
+        border: 1px solid #e2e8f0; border-radius: 8px; width: 32px; height: 32px; padding: 0; min-width: 0; line-height: 1;
+        color: #64748b !important; font-size: 1rem; cursor: pointer;
+      }
+      .agn-page .expand:hover { color: #2563eb !important; border-color: #bfdbfe; background: #eff6ff; }
+      .stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 4px; }
+      .stat { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 6px; padding: 3px 8px; font-size: 0.75rem; color: #64748b; font-variant-numeric: tabular-nums; }
+      .stat b { color: #0f172a; font-weight: 600; }
+      .agn-plot { width: 100%; height: 260px; }
+      .agn-grid[style*="--cols: 1"] .agn-plot { height: 320px; }
+      .agn-grid[style*="--cols: 3"] .agn-plot { height: 220px; }
+
+      .agn-empty { text-align: center; padding: 60px 20px; color: #94a3b8; background: #fff; border: 1px dashed #cbd5e1; border-radius: 12px; }
+      .agn-note { font-size: 0.8rem; color: #94a3b8; text-align: center; margin-top: 20px; }
+
+      /* Expanded view */
+      .agn-modal { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(15,23,42,0.75); padding: 24px; }
+      .agn-modal.open { display: flex; }
+      .agn-modal .panel { background: #fff; border-radius: 12px; width: min(1100px, 100%); padding: 20px 20px 10px; position: relative; }
+      .agn-modal .panel .card-title { font-size: 1.05rem; padding-right: 40px; }
+      .agn-modal #modal-plot { width: 100%; height: min(70vh, 560px); }
+      .agn-page .agn-modal .close {
+        -webkit-appearance: none; appearance: none; position: absolute; top: 12px; right: 12px; background: none; background-image: none; box-shadow: none; text-shadow: none;
+        border: 0; width: 36px; height: 36px; padding: 0; min-width: 0; font-size: 1.6rem; line-height: 1; color: #64748b !important; cursor: pointer;
+      }
+
+      @media (max-width: 980px) { .agn-grid { grid-template-columns: repeat(min(var(--cols, 2), 2), minmax(0, 1fr)); } }
+      @media (max-width: 680px) {
+        .agn-grid { grid-template-columns: 1fr; }
+        .agn-header h3 { font-size: 1.6rem; }
+        .cols-control { display: none; }
+        .agn-page .agn-toolbar input[type="search"] { width: 100%; }
+      }
     </style>
   </head>
   <body class="homepage is-preload">
@@ -98,95 +185,178 @@
       <div id="main-wrapper">
         <div class="wrapper style1">
           <div class="inner">
-            <section class="container box feature1">
-              
-<div id="app" class="container">
-    <style>
-        /* Standard responsive grid for smaller samples */
-        .lc-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
-            gap: 15px; 
-            padding: 20px 0;
-        }
+            <section class="agn-page">
+              <header class="agn-header">
+                <span class="badge">AGN light curves</span>
+                <h3>AGN in the J2107-1611 field</h3>
+                <p class="subtitle" id="agn-subtitle"></p>
+              </header>
 
-        /* Automatic Two-Column Layout for large samples (e.g., 30+ AGNs) */
-        .lc-grid.large-collection {
-            grid-template-columns: 1fr 1fr;
-        }
+              <div class="agn-toolbar">
+                <div class="group">
+                  <input type="search" id="agn-search" placeholder="Filter by name or coordinates" aria-label="Filter AGN">
+                  <label>Sort
+                    <select id="agn-sort">
+                      <option value="ra">RA</option>
+                      <option value="dec">Dec</option>
+                      <option value="rms">Variability (rms)</option>
+                      <option value="mag">Brightness</option>
+                      <option value="n">Number of epochs</option>
+                    </select>
+                  </label>
+                  <label><input type="checkbox" id="agn-errors" checked> Error bars</label>
+                </div>
+                <div class="group">
+                  <div class="segmented cols-control" role="group" aria-label="Columns">
+                    <button data-cols="1" aria-pressed="false">1</button>
+                    <button data-cols="2" aria-pressed="true">2</button>
+                    <button data-cols="3" aria-pressed="false">3</button>
+                  </div>
+                  <span class="agn-count" id="agn-count"></span>
+                </div>
+              </div>
 
-        .lc-card { 
-            border: 1px solid #e0e0e0; 
-            padding: 10px; 
-            border-radius: 8px; 
-            background: #ffffff; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+              <div class="agn-grid" id="agn-grid" style="--cols: 2"></div>
+              <div class="agn-empty" id="agn-empty" hidden>No AGN light curves available yet.</div>
+              <p class="agn-note">All panels share the same MJD range. Use the &#x2922; button to open a larger, zoomable view.</p>
 
-        /* Plots are taller in two-column mode to maintain detail */
-        .lc-plot { width: 100%; height: 300px; }
-        .large-collection .lc-plot { height: 350px; }
-
-        .lc-title { 
-            font-size: 0.9rem; 
-            font-weight: bold; 
-            margin-bottom: 8px; 
-            text-align: center; 
-            color: #444;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 4px;
-        }
-
-        /* Ensure responsiveness on mobile even in large-collection mode */
-        @media (max-width: 800px) {
-            .lc-grid.large-collection { grid-template-columns: 1fr; }
-        }
-    </style>
-
-    <div :class="['lc-grid', { 'large-collection': allDatasets.length > 15 }]">
-        <div v-for="(ds, index) in allDatasets" :key="index" class="lc-card">
-            <div class="lc-title">{{ ds.title }}</div>
-            <div :id="'plot-' + index" class="lc-plot"></div>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.min.js"></script>
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
-
-<script>
-new Vue({
-    el: '#app',
-    data: { allDatasets: [] },
-    mounted() {
-        this.allDatasets.forEach((data, i) => this.renderPlot(i, data));
-    },
-    methods: {
-        renderPlot(index, data) {
-            const traces = data.curves.map(c => ({
-                x: c.x, y: c.y, name: c.name,
-                type: 'scatter', mode: 'markers',
-                marker: { size: 4, color: c.color },
-                error_y: c.showErrors ? { type: 'data', array: c.err, visible: true, thickness: 1, width: 0 } : {},
-                hovertemplate: '<b>%{name}</b><br>MJD: %{x}<br>Mag: %{y:.3f}<extra></extra>'
-            }));
-
-            const layout = {
-                margin: { t: 10, r: 10, b: 35, l: 45 },
-                xaxis: { title: 'MJD', tickfont: {size: 10}, gridcolor: '#f0f0f0' },
-                yaxis: { title: 'Mag', autorange: 'reversed', tickfont: {size: 10}, gridcolor: '#f0f0f0' },
-                showlegend: false,
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: '#fdfdfd'
-            };
-
-            Plotly.newPlot('plot-' + index, traces, layout, {responsive: true, displaylogo: false});
-        }
-    }
-});
-</script>
-
+              <div class="agn-modal" id="agn-modal" aria-hidden="true">
+                <div class="panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                  <button class="close" aria-label="Close">&times;</button>
+                  <div class="card-title" id="modal-title"></div>
+                  <div class="card-id" id="modal-id"></div>
+                  <div class="stats" id="modal-stats"></div>
+                  <div id="modal-plot"></div>
+                </div>
+              </div>
             </section>
+
+<!-- AGN data: same structure as before ({title, curves:[{name,x,y,err,...}]}). Replace this block to update. -->
+<script type="application/json" id="agn-data">[]</script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('agn-data').textContent);
+  var COLOR = '#4169e1';   // fallback only; each AGN keeps its own colour from the data
+  function alpha(c, a) { var m = /^hsl\(([^)]*)\)$/.exec(c || ''); return m ? 'hsla(' + m[1] + ', ' + a + ')' : (c || COLOR); }
+  var grid = document.getElementById('agn-grid');
+
+  function quantile(a, q) { var s = a.slice().sort(function (x, y) { return x - y; }); var i = (s.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i); return s[lo] + (s[hi] - s[lo]) * (i - lo); }
+  function fmtCoord(v, dec) { return (v < 0 ? '−' : (dec ? '+' : '')) + Math.abs(v).toFixed(4) + '°'; }
+
+  // Prepare records + stats
+  var xmin = Infinity, xmax = -Infinity;
+  var items = data.map(function (d, i) {
+    var m = d.title.match(/_(-?\d+\.\d+)_(-?\d+\.\d+)$/);
+    var ra = m ? parseFloat(m[1]) : null, dec = m ? parseFloat(m[2]) : null;
+    var ys = [], n = 0;
+    d.curves.forEach(function (c) { c.x.forEach(function (x) { if (x < xmin) xmin = x; if (x > xmax) xmax = x; }); ys = ys.concat(c.y); n += c.x.length; });
+    var mean = ys.reduce(function (a, b) { return a + b; }, 0) / ys.length;
+    var rms = Math.sqrt(ys.reduce(function (a, b) { return a + (b - mean) * (b - mean); }, 0) / ys.length);
+    return { i: i, d: d, ra: ra, dec: dec, n: n, mag: quantile(ys, 0.5), rms: rms, amp: quantile(ys, 0.95) - quantile(ys, 0.05),
+             label: (ra !== null ? 'RA ' + fmtCoord(ra) + ' · Dec ' + fmtCoord(dec, true) : d.title) };
+  });
+  var pad = (xmax - xmin) * 0.02; var XR = [xmin - pad, xmax + pad];
+
+  // Subtitle
+  var sub = items.length + ' AGN';
+  if (items.length) sub += ' · VST monitoring · MJD ' + Math.floor(xmin) + '–' + Math.ceil(xmax);
+  document.getElementById('agn-subtitle').textContent = sub;
+
+  function statsHTML(it) {
+    return '<span class="stat"><b>' + it.n + '</b> epochs</span>' +
+           '<span class="stat">median <b>' + it.mag.toFixed(2) + '</b> mag</span>' +
+           '<span class="stat">rms <b>' + it.rms.toFixed(3) + '</b> mag</span>' +
+           '<span class="stat">amplitude <b>' + it.amp.toFixed(2) + '</b> mag</span>';
+  }
+
+  // Cards
+  items.forEach(function (it) {
+    var c = document.createElement('article');
+    c.className = 'agn-card';
+    c.innerHTML = '<div class="card-head"><div><div class="card-title"><span class="swatch"></span><span class="t"></span></div><div class="card-id"></div></div>' +
+                  '<button class="expand" title="Open larger view" aria-label="Open larger view">&#x2922;</button></div>' +
+                  '<div class="stats">' + statsHTML(it) + '</div><div class="agn-plot"></div>';
+    c.querySelector('.card-title .t').textContent = it.label;
+    c.querySelector('.swatch').style.background = it.d.curves[0] && it.d.curves[0].color || COLOR;
+    c.querySelector('.card-id').textContent = it.d.title;
+    c.querySelector('.expand').addEventListener('click', function () { openModal(it); });
+    it.card = c; it.plot = c.querySelector('.agn-plot');
+    it.search = (it.d.title + ' ' + it.label + ' ' + (it.ra || '') + ' ' + (it.dec || '')).toLowerCase();
+    grid.appendChild(c);
+  });
+  if (!items.length) { document.getElementById('agn-empty').hidden = false; document.querySelector('.agn-toolbar').style.display = 'none'; document.querySelector('.agn-note').style.display = 'none'; }
+
+  var showErr = true;
+  function traces(it, big) {
+    return it.d.curves.map(function (c) {
+      return { x: c.x, y: c.y, name: c.name, type: 'scatter', mode: 'markers',
+               marker: { size: big ? 6 : 4, color: c.color || COLOR },
+               error_y: showErr ? { type: 'data', array: c.err, visible: true, thickness: 1, width: 0, color: alpha(c.color, 0.4) } : { visible: false },
+               hovertemplate: 'MJD %{x:.2f}<br>%{y:.3f} mag<extra></extra>' };
+    });
+  }
+  function layout(big) {
+    return { margin: { t: 6, r: 8, b: 38, l: 52 }, showlegend: false,
+             xaxis: { title: { text: 'MJD', font: { size: 11, color: '#64748b' } }, range: XR, tickformat: 'd', nticks: big ? 10 : 6, tickfont: { size: 10, color: '#64748b' }, gridcolor: '#f1f5f9', zeroline: false, linecolor: '#e2e8f0', showline: true },
+             yaxis: { title: { text: 'Mag', font: { size: 11, color: '#64748b' } }, autorange: 'reversed', tickfont: { size: 10, color: '#64748b' }, gridcolor: '#f1f5f9', zeroline: false, linecolor: '#e2e8f0', showline: true },
+             paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: '#fff', font: { family: 'Open Sans, sans-serif' }, hoverlabel: { bgcolor: '#0f172a', font: { color: '#fff', size: 11 } },
+             modebar: { bgcolor: 'rgba(0,0,0,0)', color: '#94a3b8', activecolor: '#2563eb' } };
+  }
+  var CFG = { responsive: true, displaylogo: false, modeBarButtonsToRemove: ['select2d', 'lasso2d', 'autoScale2d', 'toggleSpikelines'] };
+  var CFG_SMALL = { responsive: true, displayModeBar: false, staticPlot: false };
+
+  // Draw plots only when they scroll into view (faster with many AGN)
+  function draw(it) { it.drawn = true; Plotly.react(it.plot, traces(it), layout(), CFG_SMALL); }
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { var it = items[+e.target.dataset.i]; if (!it.drawn) draw(it); io.unobserve(e.target); } });
+  }, { rootMargin: '300px' }) : null;
+  items.forEach(function (it) { it.plot.dataset.i = it.i; if (io) io.observe(it.plot); else draw(it); });
+  function redrawAll() { items.forEach(function (it) { if (it.drawn) Plotly.react(it.plot, traces(it), layout(), CFG_SMALL); }); }
+
+  // Filter / sort
+  var sortKey = 'ra';
+  function apply() {
+    var q = document.getElementById('agn-search').value.trim().toLowerCase();
+    var keyf = { ra: function (a) { return a.ra; }, dec: function (a) { return a.dec; }, rms: function (a) { return -a.rms; }, mag: function (a) { return a.mag; }, n: function (a) { return -a.n; } }[sortKey];
+    var shown = 0;
+    items.slice().sort(function (a, b) { return keyf(a) - keyf(b); }).forEach(function (it) {
+      var ok = !q || it.search.indexOf(q) !== -1;
+      it.card.hidden = !ok; if (ok) shown++;
+      grid.appendChild(it.card);
+    });
+    document.getElementById('agn-count').textContent = shown === items.length ? items.length + ' shown' : shown + ' of ' + items.length + ' shown';
+    setTimeout(function () { items.forEach(function (it) { if (it.drawn) Plotly.Plots.resize(it.plot); }); }, 0);
+  }
+  document.getElementById('agn-search').addEventListener('input', apply);
+  document.getElementById('agn-sort').addEventListener('change', function (e) { sortKey = e.target.value; apply(); });
+  document.getElementById('agn-errors').addEventListener('change', function (e) { showErr = e.target.checked; redrawAll(); if (current) openModal(current); });
+  document.querySelectorAll('.cols-control button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.cols-control button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+      grid.style.setProperty('--cols', b.dataset.cols); grid.setAttribute('style', '--cols: ' + b.dataset.cols);
+      setTimeout(function () { items.forEach(function (it) { if (it.drawn) Plotly.Plots.resize(it.plot); }); }, 0);
+    });
+  });
+  apply();
+
+  // Expanded view
+  var modal = document.getElementById('agn-modal'), current = null;
+  function openModal(it) {
+    current = it;
+    document.getElementById('modal-title').innerHTML = '<span class="swatch" style="background:' + (it.d.curves[0] && it.d.curves[0].color || COLOR) + '"></span>';
+    document.getElementById('modal-title').appendChild(document.createTextNode(it.label));
+    document.getElementById('modal-id').textContent = it.d.title;
+    document.getElementById('modal-stats').innerHTML = statsHTML(it);
+    modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false');
+    Plotly.react('modal-plot', traces(it, true), layout(true), CFG);
+  }
+  function closeModal() { current = null; modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); }
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+  modal.querySelector('.close').addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+})();
+</script>
           </div>
         </div>
       </div>
