@@ -307,7 +307,7 @@
                                 <!-- Targets & Coordinates Section -->
                                 <div class="data-section">
                                     <h3>Target Coordinates</h3>
-                                    <p>Below is the summary of the targets monitored in our campaign along with their Right Ascension (RA) and Declination (Dec) coordinates.</p>
+                                    <p>Below is the summary of the targets monitored in our campaign, with their J2000 coordinates and monitoring periods.</p>
                                     
                                     <div class="table-responsive-wrapper">
                                         <table class="data-table">
@@ -319,53 +319,82 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td><span class="target-badge">J0123-0455</span></td>
-                                                    <td>01h 23m</td>
-                                                    <td>-04° 55'</td>
+                                                <tr data-target="J0123-0455">
+                                                    <td><span class="target-badge">J0123-0455</span><span class="period-badge">P4-P5</span></td>
+                                                    <td>01<sup>h</sup>23<sup>m</sup>21.80<sup>s</sup><span class="deg">20.84084°</span></td>
+                                                    <td>−04°55′57.6″<span class="deg">−4.93266°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J0335-1927</span></td>
-                                                    <td>03h 35m</td>
-                                                    <td>-19° 27'</td>
+                                                <tr data-target="J0335-1927">
+                                                    <td><span class="target-badge">J0335-1927</span><span class="period-badge">P3-P5</span></td>
+                                                    <td>03<sup>h</sup>35<sup>m</sup>04.04<sup>s</sup><span class="deg">53.76683°</span></td>
+                                                    <td>−19°27′50.0″<span class="deg">−19.46390°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J0501-0733</span></td>
-                                                    <td>05h 01m</td>
-                                                    <td>-07° 33'</td>
+                                                <tr data-target="J0501-0733">
+                                                    <td><span class="target-badge">J0501-0733</span><span class="period-badge">P3</span></td>
+                                                    <td>05<sup>h</sup>01<sup>m</sup>29.50<sup>s</sup><span class="deg">75.37290°</span></td>
+                                                    <td>−07°33′09.0″<span class="deg">−7.55250°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J0542-2125</span></td>
-                                                    <td>05h 42m</td>
-                                                    <td>-21° 25'</td>
+                                                <tr data-target="J0542-2125">
+                                                    <td><span class="target-badge">J0542-2125</span><span class="period-badge">P3-P4</span></td>
+                                                    <td>05<sup>h</sup>42<sup>m</sup>57.41<sup>s</sup><span class="deg">85.73920°</span></td>
+                                                    <td>−21°25′34.0″<span class="deg">−21.42610°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J0722-3901</span></td>
-                                                    <td>07h 22m</td>
-                                                    <td>-39° 01'</td>
+                                                <tr data-target="J0722-3901">
+                                                    <td><span class="target-badge">J0722-3901</span><span class="period-badge">P3</span></td>
+                                                    <td>07<sup>h</sup>22<sup>m</sup>42.57<sup>s</sup><span class="deg">110.67737°</span></td>
+                                                    <td>−39°01′59.2″<span class="deg">−39.03310°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J1029+2623</span></td>
-                                                    <td>10h 29m</td>
-                                                    <td>+26° 23'</td>
+                                                <tr data-target="J1029+2623">
+                                                    <td><span class="target-badge">J1029+2623</span><span class="period-badge">P3-P4</span></td>
+                                                    <td>10<sup>h</sup>29<sup>m</sup>12.64<sup>s</sup><span class="deg">157.30266°</span></td>
+                                                    <td>+26°23′32.6″<span class="deg">+26.39240°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J1330+1810</span></td>
-                                                    <td>13h 30m</td>
-                                                    <td>+18° 10'</td>
+                                                <tr data-target="J1330+1810">
+                                                    <td><span class="target-badge">J1330+1810</span><span class="period-badge">P4</span></td>
+                                                    <td>13<sup>h</sup>30<sup>m</sup>18.65<sup>s</sup><span class="deg">202.57772°</span></td>
+                                                    <td>+18°10′32.9″<span class="deg">+18.17581°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J2107-1611</span></td>
-                                                    <td>21h 07m</td>
-                                                    <td>-16° 11'</td>
+                                                <tr data-target="J2107-1611">
+                                                    <td><span class="target-badge">J2107-1611</span><span class="period-badge">P3</span></td>
+                                                    <td>21<sup>h</sup>07<sup>m</sup>52.44<sup>s</sup><span class="deg">316.96850°</span></td>
+                                                    <td>−16°11′31.6″<span class="deg">−16.19210°</span></td>
                                                 </tr>
-                                                <tr>
-                                                    <td><span class="target-badge">J2329-1258</span></td>
-                                                    <td>23h 29m</td>
-                                                    <td>-12° 58'</td>
+                                                <tr data-target="J2329-1258">
+                                                    <td><span class="target-badge">J2329-1258</span><span class="period-badge">P4-P5</span></td>
+                                                    <td>23<sup>h</sup>29<sup>m</sup>57.87<sup>s</sup><span class="deg">352.49114°</span></td>
+                                                    <td>−12°58′59.0″<span class="deg">−12.98306°</span></td>
                                                 </tr>
                                             </tbody>
                                         </table>
+<style>
+  .data-table .deg { display: block; font-size: 0.8em; color: #94a3b8; font-variant-numeric: tabular-nums; }
+  .data-table td { font-variant-numeric: tabular-nums; }
+  .period-badge { display: inline-block; margin-left: 8px; padding: 1px 8px; border-radius: 10px; background: #eff6ff; color: #2563eb;
+    border: 1px solid #dbeafe; font-size: 0.72em; font-weight: 600; vertical-align: 1px; }
+</style>
+<script>
+/* Monitoring periods from data.json: P3 = up to 30 Sep 2025, P4 = Oct 2025 - Sep 2026, P5 = from Oct 2026 */
+function vstPeriods(cb) {
+  fetch('data.json').then(function (r) { return r.json(); }).then(function (j) {
+    var out = {};
+    (j.data || []).forEach(function (row) {
+      var m = /(\d{4}[+-]\d{4})/.exec(row[0] || ''); if (!m) return;
+      var night = row[5] || (row[2] || '').slice(0, 10), p = night <= '2025-09-30' ? 3 : (night <= '2026-09-30' ? 4 : 5);
+      var k = 'J' + m[1], o = out[k] || (out[k] = { pmin: 9, pmax: 0, nights: {}, last: '' });
+      o.pmin = Math.min(o.pmin, p); o.pmax = Math.max(o.pmax, p); o.nights[night] = 1; if (night > o.last) o.last = night;
+    });
+    Object.keys(out).forEach(function (k) { var o = out[k]; o.label = 'P' + o.pmin + (o.pmax > o.pmin ? '-P' + o.pmax : ''); o.n = Object.keys(o.nights).length; });
+    cb(out);
+  }).catch(function () {});
+}
+</script>
+<script>
+vstPeriods(function (P) {
+  document.querySelectorAll('.data-table tr[data-target]').forEach(function (tr) {
+    var o = P[tr.dataset.target], b = tr.querySelector('.period-badge'); if (o && b) b.textContent = o.label;
+  });
+});
+</script>
                                     </div>
                                 </div>
 
