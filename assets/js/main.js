@@ -65,3 +65,17 @@
 				});
 
 })(jQuery);
+// Home header: labels and credit for the VST + Rubin banner (Oct 2026).
+(function () {
+	var w = document.getElementById('header-wrapper-home');
+	if (!w || w.querySelector('.hero-credit')) return;
+	w.setAttribute('role', 'img');
+	w.setAttribute('aria-label', 'VST and Vera C. Rubin Observatory');
+	w.insertAdjacentHTML('beforeend',
+		'<span class="hero-label" style="left:22.2%">VST<small>VLT Survey Telescope</small></span>' +
+		'<span class="hero-label" style="left:67.3%">Rubin Observatory</span>' +
+		'<p class="hero-credit">COOL J0542&minus;2125<span class="bands"> &middot; ' +
+		'<b style="color:#c4aaff">u</b> DECam &middot; ' +
+		'<b style="color:#6ebeff">g</b>, <b style="color:#ffb95a">i</b>, <b style="color:#ff786e">z</b> Legacy Surveys DR10 &middot; ' +
+		'<b style="color:#82e682">r</b> VST/OmegaCAM</span><br>Image: M. Annunziatella</p>');
+})();

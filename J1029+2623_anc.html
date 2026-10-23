@@ -183,6 +183,76 @@
                 color: #718096;
                 margin-top: 8px;
             }
+            /* anc-extra-css:start */
+            .card-indigo {
+                border-left: 6px solid #4338ca;
+                background: linear-gradient(135deg, rgba(67, 56, 202, 0.05) 0%, #ffffff 100%);
+            }
+            .card-indigo .dataset-header h2 { color: #3730a3; }
+            .card-indigo .dataset-header { border-bottom-color: rgba(67, 56, 202, 0.2); }
+            .card-indigo .button { background-color: #4338ca !important; color: #ffffff !important; border: none; }
+            .card-indigo .button:hover { background-color: #3730a3 !important; }
+            .card-cyan {
+                border-left: 6px solid #0891b2;
+                background: linear-gradient(135deg, rgba(8, 145, 178, 0.05) 0%, #ffffff 100%);
+            }
+            .card-cyan .dataset-header h2 { color: #0e7490; }
+            .card-cyan .dataset-header { border-bottom-color: rgba(8, 145, 178, 0.2); }
+            .card-cyan .button { background-color: #0891b2 !important; color: #ffffff !important; border: none; }
+            .card-cyan .button:hover { background-color: #0e7490 !important; }
+            .card-vermilion {
+                border-left: 6px solid #ea580c;
+                background: linear-gradient(135deg, rgba(234, 88, 12, 0.05) 0%, #ffffff 100%);
+            }
+            .card-vermilion .dataset-header h2 { color: #c2410c; }
+            .card-vermilion .dataset-header { border-bottom-color: rgba(234, 88, 12, 0.2); }
+            .card-vermilion .button { background-color: #ea580c !important; color: #ffffff !important; border: none; }
+            .card-vermilion .button:hover { background-color: #c2410c !important; }
+            .card-stone {
+                border-left: 6px solid #78716c;
+                background: linear-gradient(135deg, rgba(120, 113, 108, 0.05) 0%, #ffffff 100%);
+            }
+            .card-stone .dataset-header h2 { color: #57534e; }
+            .card-stone .dataset-header { border-bottom-color: rgba(120, 113, 108, 0.2); }
+            .card-stone .button { background-color: #78716c !important; color: #ffffff !important; border: none; }
+            .card-stone .button:hover { background-color: #57534e !important; }
+            .card-slate {
+                border-left: 6px solid #475569;
+                background: linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%);
+            }
+            .card-slate .dataset-header h2 { color: #334155; }
+            .card-slate .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .card-slate .button { background-color: #475569 !important; color: #ffffff !important; border: none; }
+            .card-slate .button:hover { background-color: #334155 !important; }
+            .prog-title { margin: 0 0 6px 0; font-size: 1.2em; font-weight: 600; }
+            .prog-note { font-size: 0.9em; color: #4a5568; margin-bottom: 8px; }
+            .prog-block .meta-grid { margin-top: 8px; }
+            .prog-with-image { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; }
+            @media (max-width: 768px) { .prog-with-image { grid-template-columns: 1fr; } }
+            hr.prog-sep { border: none; border-top: 1px solid #e2e8f0; margin: 25px 0; }
+            .survey-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+            .survey-chip { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; min-width: 150px;
+                background: rgba(255, 255, 255, 0.85); border: 1px solid #e2e8f0; border-radius: 6px;
+                text-decoration: none; color: inherit; transition: border-color 0.2s ease; }
+            .survey-chip:hover { border-color: #475569; }
+            .survey-name { font-weight: 700; color: #334155; font-size: 0.95em; }
+            .survey-bands { font-size: 0.8em; color: #718096; }
+            .arch-wrap { overflow-x: auto; }
+            .arch-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin: 0; }
+            .arch-table th { text-align: left; font-weight: 700; color: #57534e; border-bottom: 2px solid rgba(120, 113, 108, 0.25);
+                padding: 8px 10px; white-space: nowrap; }
+            .arch-table td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; color: #4a5568; }
+            .arch-table tbody tr:last-child td { border-bottom: none; }
+            .arch-table td:first-child { font-weight: 600; color: #334155; white-space: nowrap; }
+            .arch-link { color: #57534e; font-weight: 600; white-space: nowrap; }
+            @media (max-width: 768px) {
+                .arch-table thead { display: none; }
+                .arch-table, .arch-table tbody, .arch-table tr, .arch-table td { display: block; width: 100%; }
+                .arch-table tr { border-bottom: 1px solid #e2e8f0; padding: 8px 0; }
+                .arch-table td { border: none; padding: 2px 0; }
+                .arch-table td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 600; color: #718096; }
+            }
+            /* anc-extra-css:end */
         </style>
     </head>
     <body class="homepage is-preload">
@@ -298,94 +368,117 @@
                             </div>
                         </section>
 
-                        <!-- 2. MUSE Data Card (Blueish) -->
-                        <section class="dataset-card card-blue">
+                        <section class="dataset-card card-blue" data-anc-extra="1">
                             <div class="dataset-header">
                                 <h2>MUSE Data</h2>
                             </div>
-                            <div class="meta-grid">
-                                <div class="meta-item"><span class="meta-label">PID:</span> 0102.A-0642(A)</div>
-                                <div class="meta-item"><span class="meta-label">PI:</span> Grillo</div>
-                                <div class="meta-item"><span class="meta-label">Exposure:</span> 4.8 hrs</div>
-                            </div>
-                            <div class="btn-group">
-                                <a href="https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=0102.A-0642(A)" target="_blank" class="button icon solid fa-search">
-                                    ESO Archive Query (0102.A-0642(A))
-                                </a>
+                            <div class="prog-block">
+                                <h3 class="prog-title">Program 0102.A-0642(A) <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                <div class="meta-grid">
+                                    <div class="meta-item"><span class="meta-label">PID:</span> 0102.A-0642(A)</div>
+                                    <div class="meta-item"><span class="meta-label">PI:</span> Grillo</div>
+                                    <div class="meta-item"><span class="meta-label">Date:</span> Mar &ndash; May 2019</div>
+                                    <div class="meta-item"><span class="meta-label">Exposure:</span> 4.8 h</div>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=0102.A-0642%28A%29" target="_blank" class="button icon solid fa-search">
+                                        ESO Archive Query (0102.A-0642(A))
+                                    </a>
+                                </div>
                             </div>
                         </section>
 
-                        <!-- 3. FORS2 Data Card (Greenish) -->
-                        <section class="dataset-card card-green">
+                        <section class="dataset-card card-green" data-anc-extra="1">
                             <div class="dataset-header">
                                 <h2>FORS2 Data</h2>
                             </div>
-                            <div class="meta-grid">
-                                <div class="meta-item"><span class="meta-label">PIDs:</span> 116.299H</div>
-                                <div class="meta-item"><span class="meta-label">PI:</span> Grillo</div>
-                                <div class="meta-item"><span class="meta-label">Progress:</span> <span class="status-badge progress">48 / 48 hrs executed (100%)</span></div>
-                            </div>
-                            <p>This observing program targets this system in addition to <a href="J0335-1927_anc.html">J0335-1927</a> and <a href="J0542-2125_anc.html">J0542-2125</a>.</p>
-                            <div class="btn-group">
-                                <a href="https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=116.299H" target="_blank" class="button icon solid fa-search">
-                                    ESO Query (116.299H)
-                                </a>
-                                
+                            <div class="prog-block">
+                                <h3 class="prog-title">Program 116.299H <span class="status-badge progress" style="margin-left: 8px;">Proprietary until Dec 2026 &ndash; Mar 2027</span></h3>
+                                <p class="prog-note">This program also targets <a href="J0335-1927_anc.html">J0335-1927</a> and <a href="J0542-2125_anc.html">J0542-2125</a>. The program is completed (48 / 48 h executed).</p>
+                                <div class="meta-grid">
+                                    <div class="meta-item"><span class="meta-label">PID:</span> 116.299H</div>
+                                    <div class="meta-item"><span class="meta-label">PI:</span> Grillo</div>
+                                    <div class="meta-item"><span class="meta-label">Mode:</span> MXU multi-object spectroscopy</div>
+                                    <div class="meta-item"><span class="meta-label">Date:</span> Dec 2025 &ndash; Mar 2026</div>
+                                    <div class="meta-item"><span class="meta-label">Exposure:</span> 25.8 h</div>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=116.299H" target="_blank" class="button icon solid fa-search">
+                                        ESO Archive Query (116.299H)
+                                    </a>
+                                </div>
                             </div>
                         </section>
 
-                        <!-- 4. HST Data Card (Orangish) -->
-                        <section class="dataset-card card-orange">
+                        <section class="dataset-card card-orange" data-anc-extra="1">
                             <div class="dataset-header">
                                 <h2>HST Data</h2>
                             </div>
-                            <div class="grid-2col">
-                                <div>
+                            <div class="prog-block prog-with-image">
+                                <div class="prog-info">
+                                    <h3 class="prog-title">Program 12195 <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                    <p class="prog-note">Understanding the largest quasar lens SDSS J1029+2623.</p>
                                     <div class="meta-grid">
                                         <div class="meta-item"><span class="meta-label">PID:</span> 12195</div>
                                         <div class="meta-item"><span class="meta-label">PI:</span> Oguri</div>
-                                        <div class="meta-item"><span class="meta-label">Filters:</span> F475w, F814w, F160w</div>
-                                        <div style="flex-basis: 100%; grid-column: 1 / -1; height: 0; width: 100%; margin: 0; padding: 0;"></div>
-                                        <div class="meta-item"><span class="meta-label">RA:</span> 157.3026604°</div>
-                                        <div class="meta-item"><span class="meta-label">Dec:</span> +26.3924°</div>
+                                        <div class="meta-item"><span class="meta-label">Instrument:</span> ACS/WFC, WFC3/IR</div>
+                                        <div class="meta-item"><span class="meta-label">Filters:</span> F475W, F814W, F160W</div>
+                                        <div class="meta-item"><span class="meta-label">Date:</span> Apr &ndash; May 2011</div>
                                     </div>
                                     <div class="btn-group">
-                                        <a href="https://archive.stsci.edu/cgi-bin/mastpreview?mission=hst&amp;dataid=IBGZ03010" target="_blank" class="button icon solid fa-search">
-                                            MAST HST SEARCH
+                                        <a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=157.3026604+26.3924&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2&amp;pi_surname=OGURI" target="_blank" class="button icon solid fa-search">
+                                            MAST HST Search
                                         </a>
                                         <a href="https://www.stsci.edu/hst-program-info/program/?program=12195" target="_blank" class="button alt icon solid fa-external-link-alt">
                                             STScI Program 12195
                                         </a>
                                     </div>
                                 </div>
-                                <div>
-                                    <figure class="data-figure">
-                                        <img src="images/J1029+2623_VST/f160w_hst.jpg" alt="HST F160w image for J1029+2623">
-                                        <figcaption>
-                                            HST F160w image for J1029+2623.
-                                        </figcaption>
-                                    </figure>
+                                <figure class="data-figure">
+                                    <img src="images/J1029+2623_VST/f160w_hst.jpg" alt="HST F160W image of J1029+2623">
+                                    <figcaption>HST F160W image of J1029+2623.
+                                    </figcaption>
+                                </figure>
+                            </div>
+                            <hr class="prog-sep">
+                            <div class="prog-block">
+                                <h3 class="prog-title">Program 17912 <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                <p class="prog-note">Narrow-band Ly&alpha; imaging of strongly lensed quasar host galaxies.</p>
+                                <div class="meta-grid">
+                                    <div class="meta-item"><span class="meta-label">PID:</span> 17912</div>
+                                    <div class="meta-item"><span class="meta-label">PI:</span> Bayliss</div>
+                                    <div class="meta-item"><span class="meta-label">Instrument:</span> ACS/WFC</div>
+                                    <div class="meta-item"><span class="meta-label">Filters:</span> FR388N (ramp, Ly&alpha;)</div>
+                                    <div class="meta-item"><span class="meta-label">Date:</span> 19 Nov 2025</div>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=157.3026604+26.3924&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2&amp;pi_surname=BAYLISS" target="_blank" class="button icon solid fa-search">
+                                        MAST HST Search
+                                    </a>
+                                    <a href="https://www.stsci.edu/hst-program-info/program/?program=17912" target="_blank" class="button alt icon solid fa-external-link-alt">
+                                        STScI Program 17912
+                                    </a>
                                 </div>
                             </div>
                         </section>
 
-                        <!-- 5. JWST Data Card (Reddish) -->
-                        <section class="dataset-card card-red">
+                        <section class="dataset-card card-red" data-anc-extra="1">
                             <div class="dataset-header">
                                 <h2>JWST Data</h2>
                             </div>
-                            <div class="grid-2col">
-                                <div>
+                            <div class="prog-block prog-with-image">
+                                <div class="prog-info">
+                                    <h3 class="prog-title">Program 6675 <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                    <p class="prog-note">Time-delay cosmography with strong cluster lenses.</p>
                                     <div class="meta-grid">
                                         <div class="meta-item"><span class="meta-label">PID:</span> 6675</div>
                                         <div class="meta-item"><span class="meta-label">PI:</span> Dahle</div>
-                                        <div class="meta-item"><span class="meta-label">Filters:</span> F115w, F150w, F444w</div>
-                                        <div style="flex-basis: 100%; grid-column: 1 / -1; height: 0; width: 100%; margin: 0; padding: 0;"></div>
-                                        <div class="meta-item"><span class="meta-label">RA:</span> 157.3026604°</div>
-                                        <div class="meta-item"><span class="meta-label">Dec:</span> +26.3924°</div>
+                                        <div class="meta-item"><span class="meta-label">Instrument:</span> NIRCam</div>
+                                        <div class="meta-item"><span class="meta-label">Filters:</span> F115W, F150W, F444W</div>
+                                        <div class="meta-item"><span class="meta-label">Date:</span> Dec 2024</div>
                                     </div>
                                     <div class="btn-group">
-                                        <a href="https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&amp;target=157.3026604+%2B26.3924&amp;radius=3&amp;radius_units=arcminutes&amp;data_types=spectrum,timeseries,image,other&amp;instruments=MIRI,NIRCAM,NIRSPEC,NIRISS,FGS&amp;pi_surname=Dahle" target="_blank" class="button icon solid fa-search">
+                                        <a href="https://mast.stsci.edu/search/ui/#/jwst/results?resolve=true&amp;target=157.3026604+26.3924&amp;radius=3&amp;radius_units=arcminutes&amp;data_types=spectrum,timeseries,image,other&amp;instruments=MIRI,NIRCAM,NIRSPEC,NIRISS,FGS&amp;pi_surname=Dahle" target="_blank" class="button icon solid fa-search">
                                             MAST JWST Search
                                         </a>
                                         <a href="https://www.stsci.edu/jwst-program-info/program/?program=6675" target="_blank" class="button alt icon solid fa-external-link-alt">
@@ -393,16 +486,45 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div>
-                                    <figure class="data-figure">
-                                        <img src="images/J1029+2623_VST/f444w_jwst.png" alt="JWST F444w image for J1029+2623">
-                                        <figcaption>
-                                            JWST F444w image for J1029+2623
+                                <figure class="data-figure">
+                                    <img src="images/J1029+2623_VST/f444w_jwst.png" alt="JWST F444W image of J1029+2623">
+                                    <figcaption>JWST F444W image of J1029+2623.
                                             <br><span class="status-badge credit">Credits to L. Pecoraro</span>
-                                        </figcaption>
-                                    </figure>
-                                </div>
+                                    </figcaption>
+                                </figure>
                             </div>
+                        </section>
+
+                        <section class="dataset-card card-stone" data-anc-extra="1">
+                            <div class="dataset-header">
+                                <h2>Archival Data (&gt; 10 yr)</h2>
+                            </div>
+                            <p class="prog-note">Older programs, observed more than 10 years ago (ordered by wavelength).</p>
+                            <div class="arch-wrap">
+                                <table class="arch-table">
+                                    <thead><tr><th>Telescope / Instrument</th><th>Program (PI)</th><th>Data</th><th>Date</th><th>Archive</th></tr></thead>
+                                    <tbody>
+                                        <tr><td data-label="Telescope / Instrument">Subaru / Suprime-Cam</td><td data-label="Program (PI)">&mdash;</td><td data-label="Data">g, r, i imaging</td><td data-label="Date">Jan 2008</td><td data-label="Archive"><a href="https://smoka.nao.ac.jp/fssearch?object=&amp;resolver=SIMBAD&amp;coordsys=Equatorial&amp;equinox=J2000&amp;fieldofview=auto&amp;RadOrRec=radius&amp;longitudeC=10%3A29%3A12.64&amp;latitudeC=%2B26%3A23%3A32.6&amp;radius=3&amp;asciitable=Table&amp;frameorshot=Frame&amp;instruments=SUP&amp;obs_mod=IMAG&amp;data_typ=OBJECT&amp;obs_cat=Science+Observation&amp;bandwidth_type=FILTER&amp;dispcol=default&amp;orderby=FRAMEID&amp;diff=100&amp;output_equinox=J2000&amp;from=0&amp;action=Search" target="_blank" class="arch-link">SMOKA Search</a></td></tr>
+                                        <tr><td data-label="Telescope / Instrument">HST / WFPC2</td><td data-label="Program (PI)">11289 (Kneib, SL2S)</td><td data-label="Data">F606W imaging</td><td data-label="Date">Nov 2008</td><td data-label="Archive"><a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=157.3026604+26.3924&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2&amp;pi_surname=KNEIB" target="_blank" class="arch-link">MAST HST Search</a></td></tr>
+                                        <tr><td data-label="Telescope / Instrument">Gemini-N / GMOS</td><td data-label="Program (PI)">GN-2010A-C-4 (Oguri)</td><td data-label="Data">Multi-object spectroscopy (R150) + i imaging</td><td data-label="Date">Mar 2010</td><td data-label="Archive"><a href="https://archive.gemini.edu/searchform/GN-2010A-C-4" target="_blank" class="arch-link">Gemini Archive (GN-2010A-C-4)</a></td></tr>
+                                        <tr><td data-label="Telescope / Instrument">Gemini-N / GMOS</td><td data-label="Program (PI)">GN-2015A-C-2 (Wilson)</td><td data-label="Data">Multi-object spectroscopy (R400)</td><td data-label="Date">Feb 2015</td><td data-label="Archive"><a href="https://archive.gemini.edu/searchform/GN-2015A-C-2" target="_blank" class="arch-link">Gemini Archive (GN-2015A-C-2)</a></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-slate" data-anc-extra="1">
+                            <div class="dataset-header">
+                                <h2>Survey Coverage</h2>
+                            </div>
+                            <p class="prog-note">Wide-field optical/NIR surveys that cover this target, with the bands that have catalogue detections within 30&Prime;.</p>
+                            <div class="survey-grid">
+                                <a class="survey-chip" href="https://www.legacysurvey.org/viewer?ra=157.3026604&amp;dec=26.3924&amp;layer=ls-dr10&amp;zoom=16" target="_blank"><span class="survey-name">DESI Legacy Surveys DR10</span><span class="survey-bands">g r i z</span></a>
+                                <a class="survey-chip" href="https://ps1images.stsci.edu/cgi-bin/ps1cutouts?pos=157.3026604+26.3924&amp;filter=color&amp;size=240" target="_blank"><span class="survey-name">Pan-STARRS1</span><span class="survey-bands">g r i z y</span></a>
+                                <a class="survey-chip" href="https://skyserver.sdss.org/dr18/VisualTools/navi?ra=157.3026604&amp;dec=26.3924&amp;scale=0.2" target="_blank"><span class="survey-name">SDSS</span><span class="survey-bands">u g r i z</span></a>
+                                <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&amp;-c=157.3026604%20%2B26.3924&amp;-c.rs=15" target="_blank"><span class="survey-name">Gaia DR3</span><span class="survey-bands">G, BP, RP</span></a>
+                            </div>
+                            <p class="prog-note" style="margin-top: 15px;"><strong>Spectroscopy:</strong> SDSS spectrum (2006) and BOSS spectra (2013&ndash;2018). <a href="https://skyserver.sdss.org/dr18/VisualTools/explore/summary?ra=157.3026604&amp;dec=26.3924" target="_blank">SDSS SkyServer</a></p>
                         </section>
 
                     </div>

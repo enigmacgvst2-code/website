@@ -127,6 +127,104 @@
                 color: #718096;
                 margin-top: 8px;
             }
+            /* anc-extra-css:start */
+            .card-blue {
+                border-left: 6px solid #5e86f7;
+                background: linear-gradient(135deg, rgba(94, 134, 247, 0.05) 0%, #ffffff 100%);
+            }
+            .card-blue .dataset-header h2 { color: #4870e0; }
+            .card-blue .dataset-header { border-bottom-color: rgba(94, 134, 247, 0.2); }
+            .card-blue .button { background-color: #5e86f7 !important; color: #ffffff !important; border: none; }
+            .card-blue .button:hover { background-color: #4870e0 !important; }
+            .card-green {
+                border-left: 6px solid #10b981;
+                background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, #ffffff 100%);
+            }
+            .card-green .dataset-header h2 { color: #059669; }
+            .card-green .dataset-header { border-bottom-color: rgba(16, 185, 129, 0.2); }
+            .card-green .button { background-color: #10b981 !important; color: #ffffff !important; border: none; }
+            .card-green .button:hover { background-color: #059669 !important; }
+            .card-red {
+                border-left: 6px solid #ef4444;
+                background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, #ffffff 100%);
+            }
+            .card-red .dataset-header h2 { color: #dc2626; }
+            .card-red .dataset-header { border-bottom-color: rgba(239, 68, 68, 0.2); }
+            .card-red .button { background-color: #ef4444 !important; color: #ffffff !important; border: none; }
+            .card-red .button:hover { background-color: #dc2626 !important; }
+            .card-indigo {
+                border-left: 6px solid #4338ca;
+                background: linear-gradient(135deg, rgba(67, 56, 202, 0.05) 0%, #ffffff 100%);
+            }
+            .card-indigo .dataset-header h2 { color: #3730a3; }
+            .card-indigo .dataset-header { border-bottom-color: rgba(67, 56, 202, 0.2); }
+            .card-indigo .button { background-color: #4338ca !important; color: #ffffff !important; border: none; }
+            .card-indigo .button:hover { background-color: #3730a3 !important; }
+            .card-cyan {
+                border-left: 6px solid #0891b2;
+                background: linear-gradient(135deg, rgba(8, 145, 178, 0.05) 0%, #ffffff 100%);
+            }
+            .card-cyan .dataset-header h2 { color: #0e7490; }
+            .card-cyan .dataset-header { border-bottom-color: rgba(8, 145, 178, 0.2); }
+            .card-cyan .button { background-color: #0891b2 !important; color: #ffffff !important; border: none; }
+            .card-cyan .button:hover { background-color: #0e7490 !important; }
+            .card-vermilion {
+                border-left: 6px solid #ea580c;
+                background: linear-gradient(135deg, rgba(234, 88, 12, 0.05) 0%, #ffffff 100%);
+            }
+            .card-vermilion .dataset-header h2 { color: #c2410c; }
+            .card-vermilion .dataset-header { border-bottom-color: rgba(234, 88, 12, 0.2); }
+            .card-vermilion .button { background-color: #ea580c !important; color: #ffffff !important; border: none; }
+            .card-vermilion .button:hover { background-color: #c2410c !important; }
+            .card-stone {
+                border-left: 6px solid #78716c;
+                background: linear-gradient(135deg, rgba(120, 113, 108, 0.05) 0%, #ffffff 100%);
+            }
+            .card-stone .dataset-header h2 { color: #57534e; }
+            .card-stone .dataset-header { border-bottom-color: rgba(120, 113, 108, 0.2); }
+            .card-stone .button { background-color: #78716c !important; color: #ffffff !important; border: none; }
+            .card-stone .button:hover { background-color: #57534e !important; }
+            .card-slate {
+                border-left: 6px solid #475569;
+                background: linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%);
+            }
+            .card-slate .dataset-header h2 { color: #334155; }
+            .card-slate .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .card-slate .button { background-color: #475569 !important; color: #ffffff !important; border: none; }
+            .card-slate .button:hover { background-color: #334155 !important; }
+            .status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
+            .status-badge.info { background-color: #e0f2fe; color: #075985; }
+            .status-badge.progress { background-color: #fee2e2; color: #991b1b; }
+            .status-badge.credit { background-color: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+            .prog-title { margin: 0 0 6px 0; font-size: 1.2em; font-weight: 600; }
+            .prog-note { font-size: 0.9em; color: #4a5568; margin-bottom: 8px; }
+            .prog-block .meta-grid { margin-top: 8px; }
+            .prog-with-image { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; }
+            @media (max-width: 768px) { .prog-with-image { grid-template-columns: 1fr; } }
+            hr.prog-sep { border: none; border-top: 1px solid #e2e8f0; margin: 25px 0; }
+            .survey-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+            .survey-chip { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; min-width: 150px;
+                background: rgba(255, 255, 255, 0.85); border: 1px solid #e2e8f0; border-radius: 6px;
+                text-decoration: none; color: inherit; transition: border-color 0.2s ease; }
+            .survey-chip:hover { border-color: #475569; }
+            .survey-name { font-weight: 700; color: #334155; font-size: 0.95em; }
+            .survey-bands { font-size: 0.8em; color: #718096; }
+            .arch-wrap { overflow-x: auto; }
+            .arch-table { width: 100%; border-collapse: collapse; font-size: 0.9em; margin: 0; }
+            .arch-table th { text-align: left; font-weight: 700; color: #57534e; border-bottom: 2px solid rgba(120, 113, 108, 0.25);
+                padding: 8px 10px; white-space: nowrap; }
+            .arch-table td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; color: #4a5568; }
+            .arch-table tbody tr:last-child td { border-bottom: none; }
+            .arch-table td:first-child { font-weight: 600; color: #334155; white-space: nowrap; }
+            .arch-link { color: #57534e; font-weight: 600; white-space: nowrap; }
+            @media (max-width: 768px) {
+                .arch-table thead { display: none; }
+                .arch-table, .arch-table tbody, .arch-table tr, .arch-table td { display: block; width: 100%; }
+                .arch-table tr { border-bottom: 1px solid #e2e8f0; padding: 8px 0; }
+                .arch-table td { border: none; padding: 2px 0; }
+                .arch-table td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 600; color: #718096; }
+            }
+            /* anc-extra-css:end */
         </style>
     </head>
     <body class="homepage is-preload">
@@ -242,40 +340,87 @@
                             </div>
                         </section>
 
-                        <!-- 2. HST Data Card (Orangish) -->
-                        <section class="dataset-card card-orange">
+                        <section class="dataset-card card-cyan" data-anc-extra="1">
+                            <div class="dataset-header">
+                                <h2>DEIMOS Data</h2>
+                            </div>
+                            <div class="prog-block">
+                                <h3 class="prog-title">Program U081 <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                <p class="prog-note">Spectroscopy of the lens environment for time-delay cosmography.</p>
+                                <div class="meta-grid">
+                                    <div class="meta-item"><span class="meta-label">PID:</span> U081</div>
+                                    <div class="meta-item"><span class="meta-label">PI:</span> Fassnacht</div>
+                                    <div class="meta-item"><span class="meta-label">Instrument:</span> Keck II / DEIMOS (multi-object spectroscopy)</div>
+                                    <div class="meta-item"><span class="meta-label">Date:</span> 13&ndash;14 Jun 2021</div>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="https://koa.ipac.caltech.edu/cgi-bin/KOA/nph-KOAlogin" target="_blank" class="button icon solid fa-search">
+                                        KOA Search
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-orange" data-anc-extra="1">
                             <div class="dataset-header">
                                 <h2>HST Data</h2>
                             </div>
-                            <div class="grid-2col">
-                                <div>
+                            <div class="prog-block prog-with-image">
+                                <div class="prog-info">
+                                    <h3 class="prog-title">Program 15320 <span class="status-badge info" style="margin-left: 8px;">Public</span></h3>
+                                    <p class="prog-note">Probing the dark universe with quadruply imaged quasars.</p>
                                     <div class="meta-grid">
                                         <div class="meta-item"><span class="meta-label">PID:</span> 15320</div>
                                         <div class="meta-item"><span class="meta-label">PI:</span> Treu</div>
+                                        <div class="meta-item"><span class="meta-label">Instrument:</span> WFC3/UVIS, WFC3/IR</div>
                                         <div class="meta-item"><span class="meta-label">Filters:</span> F475X, F814W, F160W</div>
-                                        <div class="meta-break">
-                                            <div class="meta-item"><span class="meta-label">RA:</span> 202.57772°</div>
-                                            <div class="meta-item"><span class="meta-label">Dec:</span> +18.17581°</div>
-                                        </div>
+                                        <div class="meta-item"><span class="meta-label">Date:</span> 15 Aug 2018</div>
                                     </div>
                                     <div class="btn-group">
                                         <a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=202.57772+18.17581&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2&amp;pi_surname=TREU" target="_blank" class="button icon solid fa-search">
-                                            MAST HST Search 
+                                            MAST HST Search
                                         </a>
                                         <a href="https://www.stsci.edu/hst-program-info/program/?program=15320" target="_blank" class="button alt icon solid fa-external-link-alt">
                                             STScI Program 15320
                                         </a>
                                     </div>
                                 </div>
-                                <div>
-                                    <figure class="data-figure">
-                                        <img src="images/J1330+1810_VST/f160w_hst.jpg" alt="HST F160w image for J1330+1810">
-                                        <figcaption>
-                                            HST F160w image for J1330+1810.
-                                        </figcaption>
-                                    </figure>
-                                </div>
+                                <figure class="data-figure">
+                                    <img src="images/J1330+1810_VST/f160w_hst.jpg" alt="HST F160W image of J1330+1810">
+                                    <figcaption>HST F160W image of J1330+1810.
+                                    </figcaption>
+                                </figure>
                             </div>
+                        </section>
+
+                        <section class="dataset-card card-stone" data-anc-extra="1">
+                            <div class="dataset-header">
+                                <h2>Archival Data (&gt; 10 yr)</h2>
+                            </div>
+                            <p class="prog-note">Older programs, observed more than 10 years ago (ordered by wavelength).</p>
+                            <div class="arch-wrap">
+                                <table class="arch-table">
+                                    <thead><tr><th>Telescope / Instrument</th><th>Program (PI)</th><th>Data</th><th>Date</th><th>Archive</th></tr></thead>
+                                    <tbody>
+                                        <tr><td data-label="Telescope / Instrument">HST / WFC3-IR</td><td data-label="Program (PI)">13732 (Nierenberg)</td><td data-label="Data">F105W imaging + G102 grism</td><td data-label="Date">Jul 2015</td><td data-label="Archive"><a href="https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&amp;target=202.57772+18.17581&amp;radius=3&amp;radius_units=arcminutes&amp;data_type=all&amp;observations=S&amp;active_instruments=stis,acs,wfc3,cos,fgs&amp;legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2&amp;pi_surname=NIERENBERG" target="_blank" class="arch-link">MAST HST Search</a></td></tr>
+                                        <tr><td data-label="Telescope / Instrument">Keck I / OSIRIS</td><td data-label="Program (PI)">U021OL, U019OL (Treu)</td><td data-label="Data">AO-assisted NIR IFU spectroscopy</td><td data-label="Date">Apr &ndash; May 2015</td><td data-label="Archive"><a href="https://koa.ipac.caltech.edu/cgi-bin/KOA/nph-KOAlogin" target="_blank" class="arch-link">KOA Search</a></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-slate" data-anc-extra="1">
+                            <div class="dataset-header">
+                                <h2>Survey Coverage</h2>
+                            </div>
+                            <p class="prog-note">Wide-field optical/NIR surveys that cover this target, with the bands that have catalogue detections within 30&Prime;.</p>
+                            <div class="survey-grid">
+                                <a class="survey-chip" href="https://www.legacysurvey.org/viewer?ra=202.57772&amp;dec=18.17581&amp;layer=ls-dr10&amp;zoom=16" target="_blank"><span class="survey-name">DESI Legacy Surveys DR10</span><span class="survey-bands">g r i z</span></a>
+                                <a class="survey-chip" href="https://ps1images.stsci.edu/cgi-bin/ps1cutouts?pos=202.57772+18.17581&amp;filter=color&amp;size=240" target="_blank"><span class="survey-name">Pan-STARRS1</span><span class="survey-bands">g r i z y</span></a>
+                                <a class="survey-chip" href="https://skyserver.sdss.org/dr18/VisualTools/navi?ra=202.57772&amp;dec=18.17581&amp;scale=0.2" target="_blank"><span class="survey-name">SDSS</span><span class="survey-bands">u g r i z</span></a>
+                                <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&amp;-c=202.57772%20%2B18.17581&amp;-c.rs=15" target="_blank"><span class="survey-name">Gaia DR3</span><span class="survey-bands">G, BP, RP</span></a>
+                            </div>
+                            <p class="prog-note" style="margin-top: 15px;"><strong>Spectroscopy:</strong> SDSS spectrum (2007). <a href="https://skyserver.sdss.org/dr18/VisualTools/explore/summary?ra=202.57772&amp;dec=18.17581" target="_blank">SDSS SkyServer</a></p>
                         </section>
 
                     </div>

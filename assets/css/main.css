@@ -2587,3 +2587,81 @@ input, select, textarea {
 #header #nav {
   margin-left: 2rem;
 }
+
+/* ---- Home header: VST + Rubin banner with the COOL J0542-2125 sky (Oct 2026) ---- */
+	#header-wrapper-home {
+		position: relative;
+		background:
+			linear-gradient(to bottom, rgba(2, 8, 20, 0.55) 0%, rgba(2, 8, 20, 0) 28%),
+			url("images/VST_Rubin_COOL_J0542-2125_banner.png") center bottom / cover no-repeat,
+			#05070d;
+		aspect-ratio: 2182 / 721;          /* show the whole picture, nothing cropped */
+		min-height: 230px;
+		padding: 1.5em 0 0 0;
+		box-sizing: border-box;
+	}
+
+		#header-wrapper-home #banner { padding: 0; }
+
+		#header-wrapper-home .hero-label {
+			position: absolute; top: 87.4%; transform: translateX(-50%);   /* top-anchored: both names on the same line */
+			font: 700 clamp(11px, 0.95vw, 16px)/1.15 "Source Sans Pro", system-ui, sans-serif;
+			color: #eef2f7; text-align: center; letter-spacing: 0.04em; white-space: nowrap;
+			text-shadow: 0 1px 4px #000, 0 0 10px rgba(0, 0, 0, 0.8); pointer-events: none;
+		}
+			#header-wrapper-home .hero-label small {
+				display: block; font-weight: 400; font-size: 0.78em; letter-spacing: 0.02em; opacity: 0.85;
+			}
+
+		#header-wrapper-home .hero-credit {
+			position: absolute; right: 0.9em; bottom: 0.55em; margin: 0; text-align: right;
+			font: 400 clamp(9px, 0.62vw, 12px)/1.45 "Source Sans Pro", system-ui, sans-serif;
+			color: #d3d8e2; text-shadow: 0 1px 2px #000, 0 0 6px #000;
+		}
+			#header-wrapper-home .hero-credit b { font-weight: 700; }
+
+	@media screen and (max-width: 980px) {
+		#header-wrapper-home { padding-top: 0; min-height: 200px; }
+		#header-wrapper-home .hero-label { display: none; }     /* sides are cropped on narrow screens */
+	}
+	@media screen and (max-width: 600px) {
+		#header-wrapper-home .hero-credit { font-size: 9px; }
+		#header-wrapper-home .hero-credit .bands { display: none; }
+	}
+
+/* ---- Footer restyle: night-sky colours matching the banner (Oct 2026) ---- */
+	#footer-wrapper-logo {
+		position: relative;
+		background: linear-gradient(180deg, #0c1628 0%, #05070d 100%);
+		padding: 2.4em 0 2.1em 0;
+	}
+		#footer-wrapper-logo::before {                     /* thin "horizon glow" line, as in the banner */
+			content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+			background: linear-gradient(90deg, rgba(30, 58, 138, 0.2), #d97706 50%, rgba(30, 58, 138, 0.2));
+		}
+	#footer { text-shadow: none; }
+		#footer .row {
+			display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;
+			gap: 1.4em 2em; margin: 0 auto; max-width: 56em;
+		}
+		#footer .row > [class*="col-"] {
+			flex: 1 1 12em; width: auto !important; max-width: none; padding: 0 !important; margin: 0 !important;
+			text-align: center;
+		}
+		#footer .row > [class*="col-"] section { margin: 0; }
+		#footer .footer-heading {
+			font-size: 0.75rem !important; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+			color: #8ea2bd !important; margin: 0 0 0.45em 0 !important; line-height: 1.4;
+		}
+			#footer .footer-heading i { font-size: 0.95em !important; margin-left: 0.4em !important; color: #8ea2bd; }
+		#footer .footer-subtext, #footer dl.contact, #footer dl.contact a {
+			font-size: 0.98rem !important; color: #e8edf4 !important; margin: 0; line-height: 1.5;
+		}
+		#footer dl.contact a { text-decoration: none; border-bottom: 1px solid rgba(232, 237, 244, 0.3); }
+		#footer dl.contact a:hover { color: #fff !important; border-bottom-color: #fff; }
+
+	@media screen and (max-width: 736px) {
+		#footer-wrapper-logo { padding: 2em 20px 1.8em 20px; }
+		#footer .row { flex-direction: column; align-items: center; gap: 1.2em; }
+		#footer .row > [class*="col-"] { flex: none; width: 100% !important; }
+	}
