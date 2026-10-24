@@ -299,15 +299,17 @@ SDSS_SPEC = {
 BANDS = {
  'J0123-0455': [('des', 'g r i z Y'), ('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('smss', 'g r i z'),
                 ('vhs', 'J H K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
- 'J0335-1927': [('des', 'g r i z Y'), ('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'g r i z'), ('vhs', 'J K<sub>s</sub>'),
-                ('gaia', 'G, BP, RP')],
+ 'J0335-1927': [('des', 'g r i z Y'), ('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'g r i z'), ('atlas', 'u g r i z'),
+                ('vhs', 'J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
  'J0501-0733': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('vhs', 'J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
- 'J0542-2125': [('des', 'g r i z Y'), ('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('gaia', 'G, BP, RP')],
+ 'J0542-2125': [('des', 'g r i z Y'), ('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'),
+                ('vhsraw', 'J K<sub>s</sub> &ndash; raw frames (Dec 2018), not in the public releases'), ('gaia', 'G, BP, RP')],
  'J0722-3901': [('delve', 'g r i z'), ('smss', 'v g r i z'), ('vhs', 'J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
- 'J1029+2623': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('gaia', 'G, BP, RP')],
- 'J1330+1810': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('gaia', 'G, BP, RP')],
+ 'J1029+2623': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('uhs', 'J H K'), ('gaia', 'G, BP, RP')],
+ 'J1330+1810': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('uhs', 'J H K'), ('gaia', 'G, BP, RP')],
  'J2107-1611': [('ls', 'g i'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
- 'J2329-1258': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
+ 'J2329-1258': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('atlas', 'u g r i z'),
+                ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
 }
 
 def SURVEYS(t):
@@ -321,6 +323,12 @@ def SURVEYS(t):
         'smss':  ('SkyMapper DR4', vizier(t, 'II/379/smssdr4', 30)),
         'vhs':   ('VISTA VHS DR5', vizier(t, 'II/367/vhs_dr5', 30)),
         'gaia':  ('Gaia DR3', vizier(t, 'I/355/gaiadr3', 15)),
+        'atlas': ('VST-ATLAS', f'https://archive.eso.org/scienceportal/home?pos={ra},{dec}&r=0.001&sort=-obs_date'),
+        'uhs':   ('UKIRT UHS DR3', 'http://wsa.roe.ac.uk:8080/wsa/WSASQL?database=UHSDR3&programmeID=107&from=source'
+                  f'&formaction=region&ra={ra}&dec={dec}&sys=J&name=&radius=0.5&xSize=&ySize=&boxAlignment=RADec'
+                  '&emailAddress=&format=HTML&compress=NONE&rows=30&select=default&where='),
+        'vhsraw': ('VISTA VHS (raw)', 'https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=179.A-2010'
+                   f'&ra={ra}&dec={dec}&deg_or_hour=degrees&box=01+00+00'),
     }
 
 # ---------------------------------------------------------------- HTML
@@ -399,8 +407,8 @@ def survey_html(t, spec):
     sv = SURVEYS(t)
     s = (f'{I}<section class="dataset-card card-slate" data-anc-extra="1">\n'
          f'{I}    <div class="dataset-header">\n{I}        <h2>Survey Coverage</h2>\n{I}    </div>\n'
-         f'{I}    <p class="prog-note">Wide-field optical/NIR surveys that cover this target, with the bands that have '
-         f'catalogue detections within 30&Prime;.</p>\n'
+         f'{I}    <p class="prog-note">Wide-field optical/NIR surveys that cover this target, with the available bands '
+         f'(catalogue detections within 30&Prime; or survey images).</p>\n'
          f'{I}    <div class="survey-grid">\n')
     for k, bands in BANDS[t]:
         name, url = sv[k]
