@@ -205,7 +205,7 @@ T = {
                plots={'delays':'marginalisation_spline_sigma_0.50.png','curves':'multi_plot_combinations.png'})]),
  'J2329-1258': dict(badge='VST P4-P5 Monitoring', images='Two lensed images (A, B)',
     cutout=('J2329-1258_cutout.png', 'HST/F814W cutout with images A and B marked.'),
-    sols=[dict(delays=[('A-B','-42.9','4.7')],
+    sols=[dict(delays=[('A-B','-46.9','5.5')],
                plots={'delays':'marginalisation_spline_sigma_0.50.png','curves':'multi_plot.png'})]),
 }
 
