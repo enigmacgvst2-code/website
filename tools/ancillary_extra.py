@@ -56,9 +56,10 @@ WAVE = {
     'JWST Data':        7,    # red     (original)
     ARCHIVE_TITLE:      50,   # grey
     'Survey Coverage':  99,   # grey
+    'Color Image':      100,  # spectrum stripe, after the surveys (tools/ancillary_color.py, kept as it is)
 }
 OLD_YEARS = 10
-REPLACED = [t for t in WAVE if t != 'Discovery Paper']   # hand-written cards with these titles are rebuilt
+REPLACED = [t for t in WAVE if t not in ('Discovery Paper', 'Color Image')]   # hand-written cards with these titles are rebuilt
 
 COLOURS = {  # class: (main, dark, rgb); classes already defined by a page keep the page's definition
     'card-blue':      ('#5e86f7', '#4870e0', '94, 134, 247'),   # MUSE   (original colour)
@@ -341,7 +342,7 @@ def button(b, ind):
             f'{ind}    {escape(label)}\n{ind}</a>\n')
 
 def resolve_image(stem, page, site_dir):
-    m = re.search(r'src="(' + re.escape(stem) + r'\.(?:png|jpg|jpeg))"', page)
+    m = re.search(r'src="(' + re.escape(stem) + r'(?:_nup)?\.(?:png|jpg|jpeg))"', page)   # _nup = north-up version (tools/ancillary_register.py)
     if m:
         return m.group(1)
     for ext in ('png', 'jpg', 'jpeg'):

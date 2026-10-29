@@ -183,6 +183,37 @@
                 color: #718096;
                 margin-top: 8px;
             }
+            /* anc-color-css:start */
+            .card-spectrum {
+                border-left: 6px solid transparent;
+                background: linear-gradient(to bottom, #7c3aed, #2563eb, #10b981, #f59e0b, #dc2626) border-box left top / 6px 100% no-repeat,
+                            linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%) padding-box;
+            }
+            .card-spectrum .dataset-header h2 { color: #334155; }
+            .card-spectrum .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .sky-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 10px 0 18px 0; }
+            @media (max-width: 768px) { .sky-pair { grid-template-columns: 1fr; } }
+            .sky-fig { margin: 0; }
+            .sky-zoom { display: block; border: none; cursor: zoom-in; }
+            .sky-frame { position: relative; display: block; line-height: 0; border-radius: 6px; overflow: hidden; background: #000; }
+            .sky-frame img { display: block; width: 100%; height: auto; border-radius: 0 !important; }
+            .sky-scale { position: absolute; left: 4%; bottom: 5%; height: 2px; background: #fff; }
+            .sky-scale span { position: absolute; left: 0; right: 0; bottom: 6px; text-align: center; color: #fff;
+                font-size: 12px; line-height: 1; font-weight: 600; text-shadow: 0 0 3px #000; white-space: nowrap; }
+            .sky-compass { position: absolute; right: 3%; bottom: 3%; width: 44px; height: 44px; overflow: visible; }
+            .sky-compass text { fill: #fff; font-size: 10px; font-weight: 700; font-family: sans-serif; }
+            .sky-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+                border: 1px dashed rgba(255, 255, 255, 0.8); }
+            .sky-light { position: fixed; inset: 0; z-index: 10000; background: rgba(0, 0, 0, 0.9);
+                display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
+            .sky-light img { max-width: 94vw; max-height: 94vh; border-radius: 4px; }
+            .band-list { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+            .band-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 2px; border-radius: 14px;
+                border: 1px solid var(--band); color: #334155; font-size: 0.92em; white-space: nowrap; }
+            .band-chip b { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+                border-radius: 50%; background: var(--band); color: #fff; font-weight: 700;
+                font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
+            /* anc-color-css:end */
             /* anc-extra-css:start */
             .card-indigo {
                 border-left: 6px solid #4338ca;
@@ -505,7 +536,7 @@
                                     </div>
                                 </div>
                                 <figure class="data-figure">
-                                    <img src="images/J0542-2125_VST/f444w_jwst.png" alt="JWST F444W image of J0542-2125">
+                                    <img src="images/J0542-2125_VST/f444w_jwst.jpg" alt="JWST F444W image of J0542-2125">
                                     <figcaption>JWST F444W image of J0542-2125.
                                             <br><span class="status-badge credit">Credits to L. Pecoraro</span>
                                     </figcaption>
@@ -525,6 +556,40 @@
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=II/379/smssdr4&amp;-c=85.7392%20-21.4261&amp;-c.rs=30" target="_blank"><span class="survey-name">SkyMapper DR4</span><span class="survey-bands">u v g r i z</span></a>
                                 <a class="survey-chip" href="https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=179.A-2010&amp;ra=85.7392&amp;dec=-21.4261&amp;deg_or_hour=degrees&amp;box=01+00+00" target="_blank"><span class="survey-name">VISTA VHS (raw)</span><span class="survey-bands">J K<sub>s</sub> &ndash; raw frames (Dec 2018), not in the public releases</span></a>
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&amp;-c=85.7392%20-21.4261&amp;-c.rs=15" target="_blank"><span class="survey-name">Gaia DR3</span><span class="survey-bands">G, BP, RP</span></a>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-spectrum" data-anc-color="1">
+                            <div class="dataset-header">
+                                <h2>Color Image</h2>
+                            </div>
+                            <p class="prog-note">u g r i z color image of the field; click to enlarge.</p>
+                            <div class="sky-pair">
+                                <figure class="data-figure sky-fig">
+                                    <a class="sky-zoom" href="images/J0542-2125_VST/vst_color_10arcmin.jpg" title="Click to enlarge">
+                                        <span class="sky-frame">
+                                            <img src="images/J0542-2125_VST/vst_color_10arcmin.jpg" width="2814" height="2814" loading="lazy" alt="u g r i z color image of J0542-2125, 10&prime; &times; 10&prime;">
+                                            <span class="sky-box" style="width:30.000%;height:30.000%"></span>
+                                            <span class="sky-scale" style="width:10.000%"><span>1&prime;</span></span>
+                                            <svg class="sky-compass" viewBox="0 0 44 44" aria-hidden="true"><path d="M36 36 V10 M36 36 H10" stroke="#fff" stroke-width="1.6" fill="none"/><path d="M32.5 13 L36 7 L39.5 13 Z M13 32.5 L7 36 L13 39.5 Z" fill="#fff"/><text x="36" y="5" text-anchor="middle">N</text><text x="3" y="40" text-anchor="middle">E</text></svg>
+                                        </span>
+                                    </a>
+                                    <figcaption>10&prime; &times; 10&prime; field.</figcaption>
+                                </figure>
+                                <figure class="data-figure sky-fig">
+                                    <a class="sky-zoom" href="images/J0542-2125_VST/vst_color_3arcmin.jpg" title="Click to enlarge">
+                                        <span class="sky-frame">
+                                            <img src="images/J0542-2125_VST/vst_color_3arcmin.jpg" width="844" height="844" loading="lazy" alt="u g r i z color image of J0542-2125, 3&prime; &times; 3&prime;">
+                                            <span class="sky-scale" style="width:16.667%"><span>30&Prime;</span></span>
+                                            <svg class="sky-compass" viewBox="0 0 44 44" aria-hidden="true"><path d="M36 36 V10 M36 36 H10" stroke="#fff" stroke-width="1.6" fill="none"/><path d="M32.5 13 L36 7 L39.5 13 Z M13 32.5 L7 36 L13 39.5 Z" fill="#fff"/><text x="36" y="5" text-anchor="middle">N</text><text x="3" y="40" text-anchor="middle">E</text></svg>
+                                        </span>
+                                    </a>
+                                    <figcaption>3&prime; &times; 3&prime; zoom on the lens.</figcaption>
+                                </figure>
+                            </div>
+                            <div class="meta-grid">
+                                <div class="meta-item band-list"><span class="meta-label">Images:</span> <span class="band-chip" style="--band:#1d4ed8" title="u band: blue channel"><b>u</b>DECam</span> <span class="band-chip" style="--band:#0369a1" title="g band: blue + green channel"><b>g</b>Legacy Surveys DR10</span> <span class="band-chip" style="--band:#15803d" title="r band: green channel"><b>r</b>VST/OmegaCAM</span> <span class="band-chip" style="--band:#b45309" title="i band: red + green channel"><b>i</b>Legacy Surveys DR10</span> <span class="band-chip" style="--band:#991b1b" title="z band: red channel"><b>z</b>Legacy Surveys DR10</span></div>
+                                <div class="meta-item"><span class="meta-label">Pixel scale:</span> 0.21&Prime;</div>
                             </div>
                         </section>
 
@@ -565,5 +630,24 @@
         <script src="assets/js/breakpoints.min.js"></script>
         <script src="assets/js/util.js"></script>
         <script src="assets/js/main.js"></script>
+<!-- anc-color-js:start -->
+<script>
+document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a.sky-zoom');
+    if (!a) return;
+    e.preventDefault();
+    var box = document.createElement('div');
+    box.className = 'sky-light';
+    var img = document.createElement('img');
+    img.src = a.getAttribute('href'); img.alt = '';
+    box.appendChild(img);
+    function close() { box.remove(); document.removeEventListener('keydown', esc); }
+    function esc(ev) { if (ev.key === 'Escape') close(); }
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', esc);
+    document.body.appendChild(box);
+});
+</script>
+<!-- anc-color-js:end -->
     </body>
 </html>
