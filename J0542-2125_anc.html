@@ -214,6 +214,40 @@
                 border-radius: 50%; background: var(--band); color: #fff; font-weight: 700;
                 font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
             /* anc-color-css:end */
+            /* anc-depth-css:start */
+            .card-depth {   /* = .card-spectrum of the Color Image card (tools/ancillary_color.py) */
+                border-left: 6px solid transparent;
+                background: linear-gradient(to bottom, #7c3aed, #2563eb, #10b981, #f59e0b, #dc2626) border-box left top / 6px 100% no-repeat,
+                            linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%) padding-box;
+            }
+            .card-depth .dataset-header h2 { color: #334155; }
+            .card-depth .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .cmp-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 2px; border-radius: 14px;
+                border: 1px solid var(--band); color: #334155; font-size: 0.92em; white-space: nowrap; }
+            .cmp-chip b { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
+                padding: 0 4px; box-sizing: border-box; border-radius: 11px; background: var(--band); color: #fff;
+                font-weight: 700; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
+            .cmp-chip b sub { font-size: 9px; vertical-align: baseline; position: relative; top: 2px; }
+            .cmp-wrap { overflow-x: auto; }
+            .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88em; margin: 0; font-variant-numeric: tabular-nums; }
+            .cmp-table th { text-align: left; font-weight: 700; color: #334155; border-bottom: 2px solid rgba(71, 85, 105, 0.25);
+                padding: 7px 9px; white-space: nowrap; }
+            .cmp-table td { padding: 6px 9px; border-bottom: 1px solid #e2e8f0; color: #4a5568; white-space: nowrap; }
+            .cmp-table tbody tr:last-child td { border-bottom: none; }
+            .cmp-table td.cmp-key { font-weight: 700; color: #334155; }
+            .cmp-table small { color: #94a3b8; font-weight: 400; }
+            .cmp-zp { font-size: 0.85em; color: #64748b; }
+            .cmp-zp-hdr { color: #991b1b; font-weight: 600; }
+            @media (max-width: 768px) {
+                .cmp-table thead { display: none; }
+                .cmp-table, .cmp-table tbody, .cmp-table tr, .cmp-table td { display: block; width: 100%; }
+                .cmp-table tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px;
+                    border-bottom: 1px solid #e2e8f0; padding: 8px 0; }
+                .cmp-table td { border: none; padding: 2px 0; white-space: normal; width: auto; }
+                .cmp-table td:first-child, .cmp-table td:last-child { grid-column: 1 / -1; }
+                .cmp-table td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 600; color: #718096; }
+            }
+            /* anc-depth-css:end */
             /* anc-extra-css:start */
             .card-indigo {
                 border-left: 6px solid #4338ca;
@@ -593,6 +627,24 @@
                             <div class="meta-grid">
                                 <div class="meta-item band-list"><span class="meta-label">Images:</span> <span class="band-chip" style="--band:#1d4ed8" title="u band: blue channel"><b>u</b>DECam</span> <span class="band-chip" style="--band:#0369a1" title="g band: blue + green channel"><b>g</b>Legacy Surveys DR10</span> <span class="band-chip" style="--band:#15803d" title="r band: green channel"><b>r</b>VST/OmegaCAM</span> <span class="band-chip" style="--band:#b45309" title="i band: red + green channel"><b>i</b>Legacy Surveys DR10</span> <span class="band-chip" style="--band:#991b1b" title="z band: red channel"><b>z</b>Legacy Surveys DR10</span></div>
                                 <div class="meta-item"><span class="meta-label">Pixel scale:</span> 0.21&Prime;</div>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-spectrum card-depth" data-anc-depth="1">
+                            <div class="dataset-header">
+                                <h2>Zeropoint and Completeness</h2>
+                            </div>
+                            <div class="cmp-wrap">
+                                <table class="cmp-table">
+                                    <thead><tr><th>Band</th><th>PSF FWHM</th><th>90%</th><th>80%</th><th>5&sigma; depth</th><th>Zeropoint</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span class="cmp-chip" style="--band:#1d4ed8"><b>u</b>DECam</span></td><td data-label="PSF FWHM">1.52&Prime;</td><td data-label="90%" class="cmp-key">21.68 <small>&plusmn; 0.04</small></td><td data-label="80%">22.10</td><td data-label="5&sigma; depth">22.45</td><td data-label="Zeropoint">30.00 <span class="cmp-zp" title="calibrated on Gaia XP (GSPC) stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#0369a1"><b>g</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">1.21&Prime;</td><td data-label="90%" class="cmp-key">23.90 <small>&plusmn; 0.08</small></td><td data-label="80%">24.07</td><td data-label="5&sigma; depth">24.78</td><td data-label="Zeropoint">22.47 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#b45309"><b>i</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">0.97&Prime;</td><td data-label="90%" class="cmp-key">23.03 <small>&plusmn; 0.12</small></td><td data-label="80%">23.54</td><td data-label="5&sigma; depth">24.18</td><td data-label="Zeropoint">22.49 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#991b1b"><b>z</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">0.87&Prime;</td><td data-label="90%" class="cmp-key">22.76 <small>&plusmn; 0.08</small></td><td data-label="80%">23.10</td><td data-label="5&sigma; depth">23.67</td><td data-label="Zeropoint">22.49 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#a16207"><b>Y</b>DES DR2</span></td><td data-label="PSF FWHM">0.83&Prime;</td><td data-label="90%" class="cmp-key">21.52 <small>&plusmn; 0.04</small></td><td data-label="80%">21.68</td><td data-label="5&sigma; depth">22.27</td><td data-label="Zeropoint">30.03 <span class="cmp-zp" title="calibrated on DES DR2 stars">measured</span></td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
 

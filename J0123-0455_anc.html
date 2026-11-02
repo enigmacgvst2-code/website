@@ -191,6 +191,40 @@
                 color: #718096;
                 margin-top: 8px;
             }
+            /* anc-depth-css:start */
+            .card-depth {   /* = .card-spectrum of the Color Image card (tools/ancillary_color.py) */
+                border-left: 6px solid transparent;
+                background: linear-gradient(to bottom, #7c3aed, #2563eb, #10b981, #f59e0b, #dc2626) border-box left top / 6px 100% no-repeat,
+                            linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%) padding-box;
+            }
+            .card-depth .dataset-header h2 { color: #334155; }
+            .card-depth .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .cmp-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 2px; border-radius: 14px;
+                border: 1px solid var(--band); color: #334155; font-size: 0.92em; white-space: nowrap; }
+            .cmp-chip b { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
+                padding: 0 4px; box-sizing: border-box; border-radius: 11px; background: var(--band); color: #fff;
+                font-weight: 700; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
+            .cmp-chip b sub { font-size: 9px; vertical-align: baseline; position: relative; top: 2px; }
+            .cmp-wrap { overflow-x: auto; }
+            .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88em; margin: 0; font-variant-numeric: tabular-nums; }
+            .cmp-table th { text-align: left; font-weight: 700; color: #334155; border-bottom: 2px solid rgba(71, 85, 105, 0.25);
+                padding: 7px 9px; white-space: nowrap; }
+            .cmp-table td { padding: 6px 9px; border-bottom: 1px solid #e2e8f0; color: #4a5568; white-space: nowrap; }
+            .cmp-table tbody tr:last-child td { border-bottom: none; }
+            .cmp-table td.cmp-key { font-weight: 700; color: #334155; }
+            .cmp-table small { color: #94a3b8; font-weight: 400; }
+            .cmp-zp { font-size: 0.85em; color: #64748b; }
+            .cmp-zp-hdr { color: #991b1b; font-weight: 600; }
+            @media (max-width: 768px) {
+                .cmp-table thead { display: none; }
+                .cmp-table, .cmp-table tbody, .cmp-table tr, .cmp-table td { display: block; width: 100%; }
+                .cmp-table tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px;
+                    border-bottom: 1px solid #e2e8f0; padding: 8px 0; }
+                .cmp-table td { border: none; padding: 2px 0; white-space: normal; width: auto; }
+                .cmp-table td:first-child, .cmp-table td:last-child { grid-column: 1 / -1; }
+                .cmp-table td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 600; color: #718096; }
+            }
+            /* anc-depth-css:end */
             /* anc-extra-css:start */
             .card-indigo {
                 border-left: 6px solid #4338ca;
@@ -424,6 +458,26 @@
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=II/379/smssdr4&amp;-c=20.84084%20-4.93266&amp;-c.rs=30" target="_blank"><span class="survey-name">SkyMapper DR4</span><span class="survey-bands">g r i z</span></a>
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=II/367/vhs_dr5&amp;-c=20.84084%20-4.93266&amp;-c.rs=30" target="_blank"><span class="survey-name">VISTA VHS DR5</span><span class="survey-bands">J H K<sub>s</sub></span></a>
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&amp;-c=20.84084%20-4.93266&amp;-c.rs=15" target="_blank"><span class="survey-name">Gaia DR3</span><span class="survey-bands">G, BP, RP</span></a>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-spectrum card-depth" data-anc-depth="1">
+                            <div class="dataset-header">
+                                <h2>Zeropoint and Completeness</h2>
+                            </div>
+                            <div class="cmp-wrap">
+                                <table class="cmp-table">
+                                    <thead><tr><th>Band</th><th>PSF FWHM</th><th>90%</th><th>80%</th><th>5&sigma; depth</th><th>Zeropoint</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span class="cmp-chip" style="--band:#1d4ed8"><b>u</b>SDSS</span></td><td data-label="PSF FWHM">1.24&Prime;</td><td data-label="90%" class="cmp-key">21.74 <small>&plusmn; 0.05</small></td><td data-label="80%">21.96</td><td data-label="5&sigma; depth">21.86</td><td data-label="Zeropoint">30.01 <span class="cmp-zp" title="calibrated on SDSS DR17 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#0369a1"><b>g</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">1.28&Prime;</td><td data-label="90%" class="cmp-key">23.93 <small>&plusmn; 0.03</small></td><td data-label="80%">24.03</td><td data-label="5&sigma; depth">24.76</td><td data-label="Zeropoint">22.47 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#b45309"><b>i</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">0.91&Prime;</td><td data-label="90%" class="cmp-key">23.40 <small>&plusmn; 0.06</small></td><td data-label="80%">23.56</td><td data-label="5&sigma; depth">24.24</td><td data-label="Zeropoint">22.49 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#991b1b"><b>z</b>Legacy Surveys DR10</span></td><td data-label="PSF FWHM">0.97&Prime;</td><td data-label="90%" class="cmp-key">22.61 <small>&plusmn; 0.02</small></td><td data-label="80%">22.77</td><td data-label="5&sigma; depth">23.42</td><td data-label="Zeropoint">22.49 <span class="cmp-zp" title="calibrated on LS DR10 stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#7c2d12"><b>J</b>VISTA VHS</span></td><td data-label="PSF FWHM">1.24&Prime;</td><td data-label="90%" class="cmp-key">20.69 <small>&plusmn; 0.06</small></td><td data-label="80%">20.87</td><td data-label="5&sigma; depth">21.04</td><td data-label="Zeropoint">29.99 <span class="cmp-zp" title="calibrated on VHS stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#57534e"><b>H</b>VISTA VHS</span></td><td data-label="PSF FWHM">1.16&Prime;</td><td data-label="90%" class="cmp-key">20.53 <small>&plusmn; 0.05</small></td><td data-label="80%">20.65</td><td data-label="5&sigma; depth">20.70</td><td data-label="Zeropoint">29.99 <span class="cmp-zp" title="calibrated on VHS stars">measured</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#1f2937"><b>K<sub>s</sub></b>VISTA VHS</span></td><td data-label="PSF FWHM">1.11&Prime;</td><td data-label="90%" class="cmp-key">20.37 <small>&plusmn; 0.05</small></td><td data-label="80%">20.52</td><td data-label="5&sigma; depth">20.58</td><td data-label="Zeropoint">30.00 <span class="cmp-zp" title="calibrated on VHS stars">measured</span></td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
 

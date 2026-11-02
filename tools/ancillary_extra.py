@@ -57,9 +57,10 @@ WAVE = {
     ARCHIVE_TITLE:      50,   # grey
     'Survey Coverage':  99,   # grey
     'Color Image':      100,  # spectrum stripe, after the surveys (tools/ancillary_color.py, kept as it is)
+    'Zeropoint and Completeness': 101,  # spectrum stripe, after the colour image (tools/ancillary_completeness.py, kept as it is)
 }
 OLD_YEARS = 10
-REPLACED = [t for t in WAVE if t not in ('Discovery Paper', 'Color Image')]   # hand-written cards with these titles are rebuilt
+REPLACED = [t for t in WAVE if t not in ('Discovery Paper', 'Color Image', 'Zeropoint and Completeness')]   # hand-written cards with these titles are rebuilt
 
 COLOURS = {  # class: (main, dark, rgb); classes already defined by a page keep the page's definition
     'card-blue':      ('#5e86f7', '#4870e0', '94, 134, 247'),   # MUSE   (original colour)
