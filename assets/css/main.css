@@ -2034,7 +2034,7 @@ input, select, textarea {
 }
 
 .hero-logo {
-    max-width: 280px;
+    max-width: 340px;
     height: auto;
     margin: 0 auto 1.5rem auto;
     display: block;
@@ -2061,7 +2061,7 @@ input, select, textarea {
         font-size: 1.4rem !important;
     }
     .hero-logo {
-        max-width: 200px;
+        max-width: 240px;
     }
 }
 		#header h1 {
