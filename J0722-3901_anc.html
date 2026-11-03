@@ -191,6 +191,43 @@
                 color: #718096;
                 margin-top: 8px;
             }
+            /* anc-depth-css:start */
+            .card-depth {   /* = .card-spectrum of the Color Image card (tools/ancillary_color.py) */
+                border-left: 6px solid transparent;
+                background: linear-gradient(to bottom, #7c3aed, #2563eb, #10b981, #f59e0b, #dc2626) border-box left top / 6px 100% no-repeat,
+                            linear-gradient(135deg, rgba(71, 85, 105, 0.05) 0%, #ffffff 100%) padding-box;
+            }
+            .card-depth .dataset-header h2 { color: #334155; }
+            .card-depth .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
+            .cmp-chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px 2px 2px; border-radius: 14px;
+                border: 1px solid var(--band); color: #334155; font-size: 0.92em; white-space: nowrap; }
+            .cmp-chip b { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
+                padding: 0 4px; box-sizing: border-box; border-radius: 11px; background: var(--band); color: #fff;
+                font-weight: 700; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
+            .cmp-chip b.w { padding: 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+                font-family: inherit; -webkit-font-smoothing: antialiased; }
+            .cmp-chip b { text-shadow: none; }   /* the page wrapper adds a white text-shadow: blurs white-on-colour text */
+            .cmp-chip b sub { font-size: 9px; vertical-align: baseline; position: relative; top: 2px; }
+            .cmp-wrap { overflow-x: auto; }
+            .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88em; margin: 0; font-variant-numeric: tabular-nums; }
+            .cmp-table th { text-align: left; font-weight: 700; color: #334155; border-bottom: 2px solid rgba(71, 85, 105, 0.25);
+                padding: 7px 9px; white-space: nowrap; }
+            .cmp-table td { padding: 6px 9px; border-bottom: 1px solid #e2e8f0; color: #4a5568; white-space: nowrap; }
+            .cmp-table tbody tr:last-child td { border-bottom: none; }
+            .cmp-table td.cmp-key { font-weight: 700; color: #334155; }
+            .cmp-table small { color: #94a3b8; font-weight: 400; }
+            .cmp-zp { font-size: 0.85em; color: #64748b; }
+            .cmp-zp-hdr { color: #991b1b; font-weight: 600; }
+            @media (max-width: 768px) {
+                .cmp-table thead { display: none; }
+                .cmp-table, .cmp-table tbody, .cmp-table tr, .cmp-table td { display: block; width: 100%; }
+                .cmp-table tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px;
+                    border-bottom: 1px solid #e2e8f0; padding: 8px 0; }
+                .cmp-table td { border: none; padding: 2px 0; white-space: normal; width: auto; }
+                .cmp-table td:first-child, .cmp-table td:last-child { grid-column: 1 / -1; }
+                .cmp-table td:not(:first-child)::before { content: attr(data-label) ": "; font-weight: 600; color: #718096; }
+            }
+            /* anc-depth-css:end */
             /* anc-extra-css:start */
             .card-indigo {
                 border-left: 6px solid #4338ca;
@@ -408,6 +445,20 @@
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=II/379/smssdr4&amp;-c=110.677375%20-39.0331&amp;-c.rs=30" target="_blank"><span class="survey-name">SkyMapper DR4</span><span class="survey-bands">v g r i z</span></a>
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=II/367/vhs_dr5&amp;-c=110.677375%20-39.0331&amp;-c.rs=30" target="_blank"><span class="survey-name">VISTA VHS DR5</span><span class="survey-bands">J K<sub>s</sub></span></a>
                                 <a class="survey-chip" href="https://vizier.cds.unistra.fr/viz-bin/VizieR-4?-source=I/355/gaiadr3&amp;-c=110.677375%20-39.0331&amp;-c.rs=15" target="_blank"><span class="survey-name">Gaia DR3</span><span class="survey-bands">G, BP, RP</span></a>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-spectrum card-depth" data-anc-depth="2">
+                            <div class="dataset-header">
+                                <h2>HST/JWST Zeropoint and Completeness</h2>
+                            </div>
+                            <div class="cmp-wrap">
+                                <table class="cmp-table">
+                                    <thead><tr><th>Band</th><th>PSF FWHM</th><th>90%</th><th>80%</th><th>5&sigma; depth</th><th>Zeropoint</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span class="cmp-chip" style="--band:#6d28d9"><b class="w">F160W</b>HST/WFC3-IR</span></td><td data-label="PSF FWHM">0.239&Prime;</td><td data-label="90%" class="cmp-key">24.94 <small>&plusmn; 0.15</small></td><td data-label="80%">25.11</td><td data-label="5&sigma; depth">26.60</td><td data-label="Zeropoint">25.93 <span class="cmp-zp" title="from PHOTFLAM/PHOTPLAM in the header">PHOTFLAM</span></td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </section>
 

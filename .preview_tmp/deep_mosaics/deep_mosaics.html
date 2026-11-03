@@ -1,0 +1,563 @@
+<!DOCTYPE HTML><!DOCTYPE HTML>
+
+<html>  
+<head>
+<base href="../../"> 
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>VST P3-P5 - Deep Mosaics</title>
+    <!-- head-meta:start -->
+    <meta name="description" content="Data products, access and target coordinates of the (VST)² monitoring campaign. (VST)²: Variable Source Time delays with the VST" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <!-- head-meta:end --> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+
+    <style> 
+        /* --- Modern ESO Target Inspector Custom Styles --- */
+        :root {
+            --primary-navy: #002b49;
+            --primary-accent: #0284c7;
+            --primary-accent-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #e0f2fe;
+            --badge-text: #0369a1;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .lowercase { 
+            text-transform: lowercase; 
+        } 
+
+        /* Footer Adjustments */
+        .footer-heading {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-subtext {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+
+        /* --- Refined Scientific Styles for the Data Page --- */
+        .data-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .data-section {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Accent bar */
+        .data-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--primary-accent);
+        }
+
+        .data-section h3 {
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .data-section p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .data-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .data-section a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .data-section a:hover {
+            color: var(--primary-accent-hover);
+            border-bottom-color: var(--primary-accent-hover);
+        }
+
+        /* Highlight Box for Access Rules */
+        .access-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #10b981; /* Emerald Accent */
+            padding: 1.5rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 1.5rem 0;
+        }
+
+        .access-box h4 {
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-size: 1.1rem;
+        }
+
+        /* Table Styles for Targets */
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            background: #ffffff;
+            margin-top: 1rem;
+        }
+
+        .data-table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+        } 
+
+        .data-table th, .data-table td { 
+            padding: 14px 20px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color);
+        } 
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table th { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; 
+            background-color: var(--primary-navy) !important; 
+            color: #ffffff !important; 
+            font-size: 0.9rem !important; 
+            font-weight: 600 !important; 
+            letter-spacing: 0.5px !important; 
+            text-transform: uppercase !important; 
+        } 
+
+        .data-table tr:nth-child(even) { 
+            background-color: #f8fafc; 
+        } 
+
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .target-badge {
+            background: var(--badge-bg); 
+            color: var(--badge-text); 
+            padding: 4px 12px; 
+            border-radius: 9999px; 
+            font-size: 0.85rem; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            font-weight: 600; 
+            display: inline-block; 
+        }
+    </style> 
+</head> 
+<body class="homepage is-preload"> 
+<div id="page-wrapper"> 
+
+    <!-- Header Wrapper --> 
+    <div id="header-wrapper-home"> 
+        <div class="container"> 
+            <header id="header">
+                <div class="inner">
+
+                   <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div> 
+
+                    <nav id="nav">
+                        <ul>
+                            <li class=""><a href="index.html">Home</a></li>
+                            <li ><a href="people.html">People</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN </a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li class="current_page_item"><a href="deep_mosaics.html">Deep Mosaics</a></li>
+                            <li><a href="data.html">Data</a></li>                        </ul>
+                    </nav>
+                </div>
+            </header> 
+            <div id="banner"></div> 
+        </div> 
+    </div> 
+
+    <!-- Main Wrapper --> 
+    <div id="main-wrapper"> 
+        <div class="wrapper style1"> 
+            <div class="inner"> 
+                <section class="container box feature1"> 
+                    <div class="row"> 
+                        <div class="col-12"> 
+
+                            <!-- Hero Section -->
+<div class="hero-brand-section"><h1 class="hero-title"><span class="dark-text">Deep Mosaics</span></h1></div>
+<style>
+.dm-intro { color:#475569; margin-bottom:1.2em; text-align:left; }
+.dm-jump { justify-content:flex-start; display:flex; flex-wrap:wrap; gap:6px; margin:0 0 1.6em; }
+.dm-jump a { padding:3px 10px; border:1px solid #e2e8f0; border-radius:14px; font-size:.82em; color:#334155; text-decoration:none; background:#fff; }
+.dm-jump a { border-left:5px solid var(--tc); }
+.dm-jump a:hover { border-color:var(--tc); color:#0f172a; background:color-mix(in srgb, var(--tc) 18%, #fff); }
+.dm-card { text-align:left; border:1px solid #e2e8f0; border-left:8px solid var(--tc); border-radius:10px; padding:18px 20px; margin:0 0 22px;
+  background:linear-gradient(135deg, color-mix(in srgb, var(--tc) 16%, #fff) 0%, #fff 60%); scroll-margin-top:90px; }
+.dm-empty { background:#f8fafc; }
+.dm-none { margin:8px 0 0; color:#94a3b8; font-style:italic; }
+.dm-head { display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding-bottom:10px; margin-bottom:14px; border-bottom:1px solid color-mix(in srgb, var(--tc) 55%, #fff); }
+.dm-head .target-badge { font-size:1em; background:color-mix(in srgb, var(--tc) 30%, #fff) !important; color:var(--tcd) !important; }
+.period-badge { display:inline-block; padding:1px 8px; border-radius:10px; background:#eff6ff; color:#2563eb; border:1px solid #dbeafe; font-size:.72em; font-weight:600; }
+.dm-band { display:inline-flex; align-items:center; gap:6px; padding:2px 10px 2px 2px; border-radius:14px; border:1px solid #15803d; color:#334155; font-size:.82em; }
+.dm-band b { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:11px; background:#15803d; color:#fff; font-size:13px; }
+.dm-link { margin-left:auto; font-size:.82em; color:#0369a1; text-decoration:none; }
+.dm-body { display:grid; grid-template-columns: 1.15fr 1fr; gap:20px; align-items:start; }
+.dm-imgs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.dm-imgs figure { margin:0; }
+.dm-frame { position:relative; display:block; aspect-ratio:1/1; background:#000; border-radius:6px; overflow:hidden; }
+.dm-frame img { width:100%; height:100%; object-fit:cover; display:block; }
+.dm-imgs figure:first-child .dm-frame { aspect-ratio:auto; } .dm-imgs figure:first-child .dm-frame img { height:auto; }
+.dm-lens { position:absolute; width:14px; height:14px; margin:-7px 0 0 -7px; border:2px solid var(--tc); border-radius:50%; }
+.dm-sq { position:absolute; transform:translate(-50%,-50%); border:1px dashed rgba(255,255,255,.7); }
+.dm-scale { position:absolute; left:6%; bottom:6%; height:2px; background:#fff; }
+.dm-scale span { position:absolute; bottom:4px; left:0; right:0; text-align:center; color:#fff; font-size:11px; text-shadow:0 0 3px #000; }
+.dm-imgs figcaption { font-size:.75em; color:#64748b; margin-top:4px; line-height:1.3; }
+.stk-tiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.stk-tile { text-align:left; border:1px solid color-mix(in srgb, var(--tc) 50%, #fff); border-radius:9px; padding:8px 11px; background:#fff; }
+.stk-tile.key { border:2px solid var(--tc); background:color-mix(in srgb, var(--tc) 14%, #fff); }
+.stk-tile .v { display:block; font-size:1.35em; font-weight:700; color:#14532d; line-height:1.2; font-variant-numeric:tabular-nums; }
+.stk-tile .v { color:var(--tcd); }
+.stk-tile .v small { font-size:.55em; font-weight:400; color:#64748b; }
+.stk-tile .v.pend { font-size:1em; color:#94a3b8; font-weight:600; padding:.15em 0; }
+.stk-tile .sub { display:block; font-size:.72em; color:#94a3b8; }
+.stk-tile .l { display:block; font-size:.78em; color:#64748b; }
+.dm-meta { display:grid; grid-template-columns:auto 1fr; gap:3px 14px; margin:0; font-size:.86em; }
+.dm-meta dt { font-weight:600; color:#475569; } .dm-meta dd { margin:0; color:#334155; font-variant-numeric:tabular-nums; }
+.dm-dim { color:#94a3b8; }
+@media (max-width: 900px) { .dm-body { grid-template-columns:1fr; } }
+@media (max-width: 480px) { .dm-card { padding:14px 12px; } .dm-link { margin-left:0; width:100%; } }
+</style>
+<p class="dm-intro">Deep r-band stacks of all VST/OmegaCAM monitoring epochs, one per field. Images north up, east left; click to enlarge.</p>
+<div class="dm-jump"><a href="#J0501-0733" style="--tc:#c8a6f5;--tcd:#451683">J0501-0733</a><a href="#J0542-2125" style="--tc:#88bef7;--tcd:#104b89">J0542-2125</a><a href="#J0722-3901" style="--tc:#88f7dd;--tcd:#10896c">J0722-3901</a><a href="#J1029+2623" style="--tc:#88f78e;--tcd:#108917">J1029+2623</a><a href="#J2107-1611" style="--tc:#f5f1a6;--tcd:#837e16">J2107-1611</a><a href="#J0335-1927" style="--tc:#ffc185;--tcd:#914b08">J0335-1927</a><a href="#J1330+1810" style="--tc:#ff9f7a;--tcd:#912e08">J1330+1810</a><a href="#J2329-1258" style="--tc:#ff7f66;--tcd:#911e08">J2329-1258</a><a href="#J0123-0455" style="--tc:#e4574f;--tcd:#7f1f1a">J0123-0455</a></div>
+<section class="dm-card" id="J0501-0733" style="--tc:#c8a6f5;--tcd:#451683">
+<div class="dm-head"><span class="target-badge">J0501-0733</span><span class="period-badge">P3</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J0501-0733_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J0501-0733_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0501-0733_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J0501-0733 field">
+<span class="dm-lens" style="left:55.34%;top:39.40%"></span></span></a>
+<figcaption>Full mosaic, 65&prime; &times; 67&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J0501-0733_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0501-0733_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J0501-0733">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v">22.62</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">25.54</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.80&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">40 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>143 nights &middot; 447 exposures</dd>
+<dt>Date</dt><dd>Oct 2024 &ndash; Apr 2025</dd>
+<dt>Area</dt><dd>1.12 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.825 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 3106 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card" id="J0542-2125" style="--tc:#88bef7;--tcd:#104b89">
+<div class="dm-head"><span class="target-badge">J0542-2125</span><span class="period-badge">P3&ndash;P4</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J0542-2125_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J0542-2125_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0542-2125_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J0542-2125 field">
+<span class="dm-lens" style="left:56.19%;top:41.75%"></span></span></a>
+<figcaption>Full mosaic, 67&prime; &times; 75&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J0542-2125_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0542-2125_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J0542-2125">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v pend">not reached</span><span class="sub">max 81%</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">26.13</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.76&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">160 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>223 nights &middot; 1804 exposures</dd>
+<dt>Date</dt><dd>Oct 2024 &ndash; Dec 2025</dd>
+<dt>Area</dt><dd>1.28 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.806 &plusmn; 0.001 <span class="dm-dim">(LS DR10, 5225 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card dm-empty" id="J0722-3901" style="--tc:#88f7dd;--tcd:#10896c"><div class="dm-head"><span class="target-badge">J0722-3901</span></div>
+<p class="dm-none">Deep mosaic not available yet.</p></section><section class="dm-card" id="J1029+2623" style="--tc:#88f78e;--tcd:#108917">
+<div class="dm-head"><span class="target-badge">J1029+2623</span><span class="period-badge">P3&ndash;P4</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J1029+2623_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J1029+2623_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J1029+2623_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J1029+2623 field">
+<span class="dm-lens" style="left:56.06%;top:41.78%"></span></span></a>
+<figcaption>Full mosaic, 67&prime; &times; 75&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J1029+2623_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J1029+2623_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J1029+2623">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v">23.76</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">25.98</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.87&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">137 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>197 nights &middot; 1547 exposures</dd>
+<dt>Date</dt><dd>Jan 2025 &ndash; May 2026</dd>
+<dt>Area</dt><dd>1.26 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.754 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 1987 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card dm-empty" id="J2107-1611" style="--tc:#f5f1a6;--tcd:#837e16"><div class="dm-head"><span class="target-badge">J2107-1611</span></div>
+<p class="dm-none">Deep mosaic not available yet.</p></section><section class="dm-card" id="J0335-1927" style="--tc:#ffc185;--tcd:#914b08">
+<div class="dm-head"><span class="target-badge">J0335-1927</span><span class="period-badge">P3&ndash;P5</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J0335-1927_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J0335-1927_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0335-1927_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J0335-1927 field">
+<span class="dm-lens" style="left:56.25%;top:41.77%"></span></span></a>
+<figcaption>Full mosaic, 67&prime; &times; 75&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J0335-1927_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0335-1927_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J0335-1927">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v">23.55</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">26.41</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.80&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">165 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>232 nights &middot; 1852 exposures</dd>
+<dt>Date</dt><dd>Jul 2025 &ndash; Oct 2026</dd>
+<dt>Area</dt><dd>1.27 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.793 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 1531 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card" id="J1330+1810" style="--tc:#ff9f7a;--tcd:#912e08">
+<div class="dm-head"><span class="target-badge">J1330+1810</span><span class="period-badge">P4</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J1330+1810_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J1330+1810_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J1330+1810_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J1330+1810 field">
+<span class="dm-lens" style="left:55.62%;top:41.62%"></span></span></a>
+<figcaption>Full mosaic, 67&prime; &times; 75&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J1330+1810_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J1330+1810_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J1330+1810">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v">24.11</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">26.10</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.83&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">99 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>140 nights &middot; 1116 exposures</dd>
+<dt>Date</dt><dd>Feb 2026 &ndash; Jul 2026</dd>
+<dt>Area</dt><dd>1.26 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.649 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 2452 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card" id="J2329-1258" style="--tc:#ff7f66;--tcd:#911e08">
+<div class="dm-head"><span class="target-badge">J2329-1258</span><span class="period-badge">P4&ndash;P5</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J2329-1258_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J2329-1258_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J2329-1258_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J2329-1258 field">
+<span class="dm-lens" style="left:56.09%;top:39.87%"></span></span></a>
+<figcaption>Full mosaic, 65&prime; &times; 67&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J2329-1258_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J2329-1258_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J2329-1258">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v pend">pending</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v pend">pending</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.96&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">31 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>115 nights &middot; 346 exposures</dd>
+<dt>Date</dt><dd>May 2026 &ndash; Oct 2026</dd>
+<dt>Area</dt><dd>1.11 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.754 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 2201 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section><section class="dm-card" id="J0123-0455" style="--tc:#e4574f;--tcd:#7f1f1a">
+<div class="dm-head"><span class="target-badge">J0123-0455</span><span class="period-badge">P4&ndash;P5</span><span class="dm-band"><b>r</b>VST/OmegaCAM</span>
+<a class="dm-link" href="J0123-0455_anc.html">Ancillary data &rarr;</a></div>
+<div class="dm-body">
+<div class="dm-imgs">
+<figure><a href=".preview_tmp/deep_mosaics/img/J0123-0455_mosaic.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0123-0455_mosaic.jpg" loading="lazy" alt="VST r-band deep mosaic of the J0123-0455 field">
+<span class="dm-lens" style="left:55.88%;top:40.36%"></span></span></a>
+<figcaption>Full mosaic, 65&prime; &times; 70&prime;. Circle = lens.</figcaption></figure>
+<figure><a href=".preview_tmp/deep_mosaics/img/J0123-0455_zoom4.jpg" class="dm-zoom" title="Click to enlarge"><span class="dm-frame"><img src=".preview_tmp/deep_mosaics/img/J0123-0455_zoom4.jpg" loading="lazy" alt="4 arcmin zoom on J0123-0455">
+<span class="dm-scale" style="width:25%"><span>1&prime;</span></span></span></a>
+<figcaption>4&prime; &times; 4&prime; on the lens.</figcaption></figure>
+</div>
+<div class="dm-props">
+<div class="stk-tiles">
+<div class="stk-tile key"><span class="v">24.02</span><span class="l">90% completeness</span></div>
+<div class="stk-tile"><span class="v">25.54</span><span class="l">5&sigma; depth</span></div>
+<div class="stk-tile"><span class="v">0.96&Prime;</span><span class="l">PSF FWHM</span></div>
+<div class="stk-tile"><span class="v">34 <small>h</small></span><span class="l">total exposure</span></div>
+</div>
+<dl class="dm-meta">
+<dt>Epochs</dt><dd>78 nights &middot; 382 exposures</dd>
+<dt>Date</dt><dd>Jun 2026 &ndash; Oct 2026</dd>
+<dt>Area</dt><dd>1.16 deg&sup2;</dd>
+<dt>Zeropoint</dt><dd>30.741 &plusmn; 0.002 <span class="dm-dim">(LS DR10, 1864 stars)</span></dd>
+<dt>Pixel scale</dt><dd>0.21&Prime;</dd>
+<dt>Combine</dt><dd>SWarp, clipped</dd>
+</dl>
+</div></div></section>
+<!-- End Data Sections -->
+
+                        </div> 
+                    </div> 
+                </section> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- Footer Wrapper --> 
+    <div id="footer-wrapper-logo"> 
+        <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer> 
+    </div> 
+
+</div> 
+
+<!-- Scripts --> 
+<script src="assets/js/jquery.min.js"></script> 
+<script src="assets/js/jquery.dropotron.min.js"></script> 
+<script src="assets/js/browser.min.js"></script> 
+<script src="assets/js/breakpoints.min.js"></script> 
+<script src="assets/js/util.js"></script> 
+<script src="assets/js/main.js"></script> 
+
+</body> 
+</html>

@@ -227,6 +227,9 @@
             .cmp-chip b { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px;
                 padding: 0 4px; box-sizing: border-box; border-radius: 11px; background: var(--band); color: #fff;
                 font-weight: 700; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-size: 13px; line-height: 1; }
+            .cmp-chip b.w { padding: 0 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em;
+                font-family: inherit; -webkit-font-smoothing: antialiased; }
+            .cmp-chip b { text-shadow: none; }   /* the page wrapper adds a white text-shadow: blurs white-on-colour text */
             .cmp-chip b sub { font-size: 9px; vertical-align: baseline; position: relative; top: 2px; }
             .cmp-wrap { overflow-x: auto; }
             .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88em; margin: 0; font-variant-numeric: tabular-nums; }
@@ -632,7 +635,7 @@
 
                         <section class="dataset-card card-spectrum card-depth" data-anc-depth="1">
                             <div class="dataset-header">
-                                <h2>Zeropoint and Completeness</h2>
+                                <h2>Ground-based Images Zeropoint and Completeness</h2>
                             </div>
                             <div class="cmp-wrap">
                                 <table class="cmp-table">
@@ -645,6 +648,25 @@
                                         <tr><td><span class="cmp-chip" style="--band:#7c2d12"><b>J</b>UKIRT UHS</span></td><td data-label="PSF FWHM">0.91&Prime;</td><td data-label="90%" class="cmp-key">20.45 <small>&plusmn; 0.03</small></td><td data-label="80%">20.67</td><td data-label="5&sigma; depth">20.67</td><td data-label="Zeropoint">30.00 <span class="cmp-zp cmp-zp-hdr" title="from the image header, not checked">header</span></td></tr>
                                         <tr><td><span class="cmp-chip" style="--band:#57534e"><b>H</b>UKIRT UHS</span></td><td data-label="PSF FWHM">0.84&Prime;</td><td data-label="90%" class="cmp-key">20.13 <small>&plusmn; 0.06</small></td><td data-label="80%">20.30</td><td data-label="5&sigma; depth">20.38</td><td data-label="Zeropoint">30.00 <span class="cmp-zp cmp-zp-hdr" title="from the image header, not checked">header</span></td></tr>
                                         <tr><td><span class="cmp-chip" style="--band:#1f2937"><b>K</b>UKIRT UHS</span></td><td data-label="PSF FWHM">0.74&Prime;</td><td data-label="90%" class="cmp-key">20.26 <small>&plusmn; 0.11</small></td><td data-label="80%">20.78</td><td data-label="5&sigma; depth">20.63</td><td data-label="Zeropoint">30.00 <span class="cmp-zp cmp-zp-hdr" title="from the image header, not checked">header</span></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <section class="dataset-card card-spectrum card-depth" data-anc-depth="2">
+                            <div class="dataset-header">
+                                <h2>HST/JWST Zeropoint and Completeness</h2>
+                            </div>
+                            <div class="cmp-wrap">
+                                <table class="cmp-table">
+                                    <thead><tr><th>Band</th><th>PSF FWHM</th><th>90%</th><th>80%</th><th>5&sigma; depth</th><th>Zeropoint</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><span class="cmp-chip" style="--band:#6d28d9"><b class="w">F475W</b>HST/ACS</span></td><td data-label="PSF FWHM">0.117&Prime;</td><td data-label="90%" class="cmp-key">27.52 <small>&plusmn; 0.03</small></td><td data-label="80%">27.59</td><td data-label="5&sigma; depth">28.44</td><td data-label="Zeropoint">26.05 <span class="cmp-zp" title="from PHOTFLAM/PHOTPLAM in the header">PHOTFLAM</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#1d4ed8"><b class="w">F814W</b>HST/ACS</span></td><td data-label="PSF FWHM">0.099&Prime;</td><td data-label="90%" class="cmp-key">27.14 <small>&plusmn; 0.03</small></td><td data-label="80%">27.37</td><td data-label="5&sigma; depth">28.44</td><td data-label="Zeropoint">25.94 <span class="cmp-zp" title="from PHOTFLAM/PHOTPLAM in the header">PHOTFLAM</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#0f766e"><b class="w">F115W</b>JWST/NIRCam</span></td><td data-label="PSF FWHM">0.067&Prime;</td><td data-label="90%" class="cmp-key">26.59 <small>&plusmn; 0.04</small></td><td data-label="80%">27.22</td><td data-label="5&sigma; depth">27.24</td><td data-label="Zeropoint">28.03 <span class="cmp-zp" title="from the pixel area in the header (PIXAR_SR), MJy/sr to AB">PIXAR_SR</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#4d7c0f"><b class="w">F150W</b>JWST/NIRCam</span></td><td data-label="PSF FWHM">0.083&Prime;</td><td data-label="90%" class="cmp-key">26.05 <small>&plusmn; 0.06</small></td><td data-label="80%">26.38</td><td data-label="5&sigma; depth">26.84</td><td data-label="Zeropoint">28.00 <span class="cmp-zp" title="from the pixel area in the header (PIXAR_SR), MJy/sr to AB">PIXAR_SR</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#c2410c"><b class="w">F160W</b>HST/WFC3-IR</span></td><td data-label="PSF FWHM">0.244&Prime;</td><td data-label="90%" class="cmp-key">24.44 <small>&plusmn; 0.12</small></td><td data-label="80%">25.30</td><td data-label="5&sigma; depth">26.75</td><td data-label="Zeropoint">25.94 <span class="cmp-zp" title="from PHOTFLAM/PHOTPLAM in the header">PHOTFLAM</span></td></tr>
+                                        <tr><td><span class="cmp-chip" style="--band:#7f1d1d"><b class="w">F444W</b>JWST/NIRCam</span></td><td data-label="PSF FWHM">0.192&Prime;</td><td data-label="90%" class="cmp-key">25.97 <small>&plusmn; 0.03</small></td><td data-label="80%">26.16</td><td data-label="5&sigma; depth">27.47</td><td data-label="Zeropoint">28.00 <span class="cmp-zp" title="from the pixel area in the header (PIXAR_SR), MJy/sr to AB">PIXAR_SR</span></td></tr>
                                     </tbody>
                                 </table>
                             </div>
