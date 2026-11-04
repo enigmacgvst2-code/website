@@ -17,12 +17,12 @@ HTML = '''<!-- programs:start -->
         <div class="ptl-ticks" aria-hidden="true"><span style="left: 0"><b>Oct </b>2024</span><span style="left: 12.5%"><b>Oct </b>2025</span><span style="right: 0">2032</span></div>
         <div class="ptl-cols">
             <div class="ptl-col ptl-c-pilot">
-                <h4>Pilot program <small>VST P3 &middot; Oct 2024 &ndash; Sep 2025</small></h4>
+                <h4>Pilot program <small>P3 &middot; Oct 2024 &ndash; Sep 2025</small></h4>
                 <p>Proprietary VST program designed to target recently studied lensed quasars.</p>
                 <p class="ptl-facts">ESO 114.27U3 &middot; PI C. Grillo<br>606 h allocated, 491 h observed</p>
             </div>
             <div class="ptl-col ptl-c-inkind">
-                <h4><a class="ptl-h-link" href="https://sites.google.com/inaf.it/rubin-lsst-italy/italian-in-kind-contributions" target="_blank" rel="noopener">Rubin-LSST Italian In-kind contribution<span class="ptl-arrow" aria-hidden="true"> &#8599;</span></a> <small>VST P4 &ndash; P10 &middot; from Oct 2025</small></h4>
+                <h4><a class="ptl-h-link" href="https://sites.google.com/inaf.it/rubin-lsst-italy/italian-in-kind-contributions" target="_blank" rel="noopener">Rubin-LSST Italian In-kind contribution<span class="ptl-arrow" aria-hidden="true"> &#8599;</span></a> <small>P4 &ndash; P10 &middot; from Oct 2025</small></h4>
                 <p>&ldquo;Exploiting the synergy between LSST and VST to investigate the cosmos: the expansion rate and the geometry of the Universe measured through the time delays of strongly lensed variable sources&rdquo;</p>
                 <p class="ptl-facts">PI C. Grillo &middot; 4620 VST hours over the first seven years of LSST</p>
             </div>

@@ -1,0 +1,1065 @@
+<!DOCTYPE HTML>
+<html>  
+<head> 
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>VST P3-P5</title>
+    <!-- head-meta:start -->
+    <meta name="description" content="VST monitoring of strongly lensed quasars to measure time delays. (VST)²: Variable Source Time delays with the VST" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <!-- head-meta:end --> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+
+    <style> 
+        /* --- Modern ESO Target Inspector Custom Styles --- */
+        :root {
+            --primary-navy: #002b49;
+            --primary-accent: #0284c7;
+            --primary-accent-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #e0f2fe;
+            --badge-text: #0369a1;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+        }
+
+        .lowercase { 
+            text-transform: lowercase; 
+        } 
+
+        .eso-inspector-container { 
+            margin-top: 3em; 
+            padding-top: 2.5em; 
+            border-top: 1px solid var(--border-color); 
+        } 
+
+        /* Visual Timeline Section */
+        figure.timeline-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 2.5rem;
+        }
+
+        figure.timeline-card img {
+            border-radius: var(--radius-sm);
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        figure.timeline-card figcaption {
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* --- Period Tabs --- */
+        .tab-bar {
+            display: flex;
+            gap: 4px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 9999px;
+            padding: 4px;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        /* Scoped + !important to override the theme's global button styles (main.css) */
+        .tab-bar .tab {
+            background: transparent !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            text-shadow: none !important;
+            border: none !important;
+            color: #334155 !important;
+            font-weight: 600 !important;
+            font-size: 0.9rem !important;
+            letter-spacing: 0.2px !important;
+            text-transform: none !important;
+            line-height: 1.2 !important;
+            padding: 8px 18px !important;
+            border-radius: 9999px !important;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            white-space: nowrap;
+        }
+        .tab-bar .tab:hover { background: #e2e8f0 !important; color: var(--primary-navy) !important; }
+        .tab-bar .tab.active,
+        .tab-bar .tab.active:hover { background: var(--primary-navy) !important; color: #ffffff !important; }
+        .tab-bar .tab:focus-visible { outline: 2px solid var(--primary-accent) !important; outline-offset: 2px; }
+        @media (max-width: 480px) {
+            .tab-bar .tab { padding: 6px 11px !important; font-size: 0.82rem !important; }
+            .tab-bar .tab-long { display: none; }  /* phones: "All · Pilot · Y1 · Y2" */
+            .timeline-plot { min-height: 0; }
+        }
+
+        /* --- Interactive Timeline --- */
+        .timeline-plot {
+            width: 100%;
+            min-height: 380px;
+            background: #000000;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        /* The theme adds a text-shadow to all text; keep plot labels crisp */
+        .timeline-plot text { text-shadow: none !important; }
+
+        /* Controls Grid */
+        .controls-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 1.25rem; 
+            background: var(--bg-light); 
+            padding: 1.5rem; 
+            border-radius: var(--radius-md); 
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem; 
+            box-shadow: var(--shadow-subtle);
+        } 
+
+        .form-group { 
+            display: flex; 
+            flex-direction: column; 
+        } 
+
+        .form-group label { 
+            font-weight: 600; 
+            font-size: 0.825rem; 
+            margin-bottom: 0.4rem; 
+            color: var(--text-muted); 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        } 
+
+        .form-group select, .form-group input { 
+            padding: 9px 12px; 
+            border: 1px solid #cbd5e1; 
+            border-radius: var(--radius-sm); 
+            font-size: 0.9rem; 
+            width: 100%; 
+            box-sizing: border-box; 
+            height: auto; 
+            background: #ffffff; 
+            color: var(--text-dark);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        } 
+
+        .form-group select:focus, .form-group input:focus { 
+            outline: none;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        } 
+
+        /* Modern Status Badge */ 
+        .status-msg { 
+            margin-bottom: 1.25rem; 
+            font-style: normal; 
+            font-weight: 600; 
+            font-size: 0.875rem; 
+            color: var(--primary-navy); 
+            background: #e2e8f0; 
+            padding: 8px 16px; 
+            border-radius: 9999px; 
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        } 
+
+        .status-msg::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-accent);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Responsive Table Wrapper */
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            background: #ffffff;
+        }
+
+        .eso-table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+        } 
+
+        .eso-table th, .eso-table td { 
+            padding: 12px 16px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color);
+        } 
+
+        .eso-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .eso-table th { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; 
+            background-color: var(--primary-navy) !important; 
+            color: #ffffff !important; 
+            font-size: 0.875rem !important; 
+            font-weight: 600 !important; 
+            letter-spacing: 0.5px !important; 
+            line-height: 1.4 !important; 
+            text-transform: uppercase !important; 
+            -webkit-font-smoothing: antialiased !important; 
+        } 
+
+        .eso-table tr:nth-child(even) { 
+            background-color: #f8fafc; 
+        } 
+
+        .eso-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Modernized Badges */
+        .badge { 
+            background: var(--badge-bg); 
+            color: var(--badge-text); 
+            padding: 4px 10px; 
+            border-radius: 9999px; 
+            font-size: 0.825rem; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            font-weight: 600; 
+            display: inline-block; 
+            margin: 2px; 
+            text-decoration: none;
+            transition: all 0.2s ease;
+        } 
+
+        a.badge-link {
+            border: 1px solid transparent;
+        }
+
+        a.badge-link:hover {
+            background: var(--primary-accent);
+            color: #ffffff;
+            transform: translateY(-1px);
+            text-decoration: none;
+        }
+
+        .eso-log-link {
+            color: var(--primary-accent);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s ease;
+        }
+
+        .eso-log-link:hover {
+            color: var(--primary-accent-hover);
+            text-decoration: underline;
+        }
+
+        /* Table Pagination Controls */
+        .table-footer-controls { 
+            margin-top: 1rem; 
+            padding: 0.75rem 0;
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            gap: 12px; 
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        } 
+
+        .btn-toggle { 
+            background-color: var(--primary-navy) !important; 
+            color: #ffffff !important; 
+            border: none; 
+            padding: 8px 20px; 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.875rem; 
+            box-shadow: var(--shadow-subtle); 
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        } 
+
+        .btn-toggle:hover { 
+            background-color: var(--primary-accent) !important; 
+        }
+
+        .btn-toggle:active {
+            transform: scale(0.98);
+        }
+
+        /* Footer Adjustments */
+        .footer-heading {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-subtext {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+        /* programs-css:start */
+        .programs-block { margin: 0 0 2.5rem; padding-bottom: 2.2rem; border-bottom: 1px solid var(--border-color); }
+        .ptl { text-align: left; }
+        .ptl-bar { display: flex; gap: 4px; height: 34px; border-radius: 9999px; overflow: hidden; }
+        .ptl-seg { display: flex; align-items: center; padding: 0 14px; font-weight: 700; font-size: 0.85rem; line-height: 1; text-shadow: none; white-space: nowrap; overflow: hidden;
+            background: rgba(var(--rgb), 0.14); box-shadow: inset 0 0 0 1px rgba(var(--rgb), 0.30); border-radius: 9999px; }
+        .ptl-pilot { --rgb: 163, 165, 236; color: #6366c9; }
+        .ptl-bar .ptl-pilot { background: rgba(var(--rgb), 0.22); box-shadow: inset 0 0 0 1px rgba(var(--rgb), 0.7); }
+        .ptl-bar .ptl-inkind { background: rgba(var(--rgb), 0.42); box-shadow: inset 0 0 0 1px rgba(var(--rgb), 0.7); }
+        .ptl-inkind { --rgb: 76, 29, 149; color: #3b0f80; }
+        .ptl-short { display: none; }
+        .ptl-ticks { position: relative; height: 1.6em; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-top: 6px; }
+        .ptl-ticks span { position: absolute; top: 0; white-space: nowrap; }
+        .ptl-ticks b { font-weight: inherit; color: inherit; }
+        .ptl-cols { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 0.8rem; }
+        .ptl-col h4 { font-size: 1.05rem; text-transform: none; letter-spacing: 0; margin: 0 0 0.35rem; line-height: 1.35; }
+        .ptl-c-pilot h4 { color: #6366c9; }
+        .ptl-c-inkind h4 { color: #3b0f80; }
+        .ptl-col h4 small { display: block; color: var(--text-muted); font-weight: 600; font-size: 0.78rem; margin-top: 2px; }
+        .ptl-col p { font-size: 0.92rem; line-height: 1.55; color: #334155; margin: 0 0 0.5rem; }
+        .ptl-col p.ptl-facts { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+        .ptl-col h4 a.ptl-h-link { color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+        .ptl-col h4 a.ptl-h-link:hover { border-bottom-color: currentColor; }
+        .ptl-arrow { font-size: 0.8em; opacity: 0.7; }
+        @media (max-width: 768px) {
+            .ptl-cols { grid-template-columns: 1fr; gap: 1.2rem; }
+            .ptl-long { display: none; }
+            .ptl-short { display: inline; }
+            .ptl-ticks b { display: none; }
+        }
+        /* programs-css:end */
+    </style> 
+</head> 
+<body class="homepage is-preload"> 
+<div id="page-wrapper"> 
+
+    <!-- Header Wrapper --> 
+    <div id="header-wrapper-home"> 
+        <div class="container"> 
+            <header id="header">
+                <div class="inner">
+
+                   <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div> 
+
+                    <nav id="nav">
+                        <ul>
+                            <li class="current_page_item"><a href="index.html">Home</a></li>
+                            <li ><a href="people.html">People</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN </a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="data.html">Data</a></li>                        </ul>
+                    </nav>
+                </div>
+            </header> 
+            <div id="banner"></div> 
+        </div> 
+    </div> 
+
+    <!-- Main Wrapper --> 
+    <div id="main-wrapper"> 
+        <div class="wrapper style1"> 
+            <div class="inner"> 
+                <section class="container box feature1"> 
+                    <div class="row"> 
+                        <div class="col-12"> 
+
+                            <!-- Hero Section (Centered Logo + Title) -->
+                            <div class="hero-brand-section">
+                                <img src="images/logo.png" alt="VST2 Logo" class="hero-logo">
+                                <h1 class="hero-title">
+                                    <p>(VST)<sup>2</sup>:<br>
+                                    <span class="dark-text">Variable Source Time delays with the VST</span>
+                                </h1>
+                            </div>
+
+
+
+
+
+
+
+
+                            <!-- programs:start -->
+                            <section class="programs-block" aria-labelledby="programs-heading">
+                                <h3 id="programs-heading">Observing Programs</h3>
+                                <div class="ptl">
+                                    <div class="ptl-bar" aria-hidden="true">
+                                        <div class="ptl-seg ptl-pilot" style="flex: 1"><span>Pilot</span></div>
+                                        <div class="ptl-seg ptl-inkind" style="flex: 7"><span class="ptl-long">Rubin-LSST Italian In-kind contribution</span><span class="ptl-short">In-Kind</span></div>
+                                    </div>
+                                    <div class="ptl-ticks" aria-hidden="true"><span style="left: 0"><b>Oct </b>2024</span><span style="left: 12.5%"><b>Oct </b>2025</span><span style="right: 0">2032</span></div>
+                                    <div class="ptl-cols">
+                                        <div class="ptl-col ptl-c-pilot">
+                                            <h4>Pilot program <small>VST P3 &middot; Oct 2024 &ndash; Sep 2025</small></h4>
+                                            <p>Proprietary VST program designed to target recently studied lensed quasars.</p>
+                                            <p class="ptl-facts">ESO 114.27U3 &middot; PI C. Grillo<br>606 h allocated, 491 h observed</p>
+                                        </div>
+                                        <div class="ptl-col ptl-c-inkind">
+                                            <h4><a class="ptl-h-link" href="https://sites.google.com/inaf.it/rubin-lsst-italy/italian-in-kind-contributions" target="_blank" rel="noopener">Rubin-LSST Italian In-kind contribution<span class="ptl-arrow" aria-hidden="true"> &#8599;</span></a> <small>VST P4 &ndash; P10 &middot; from Oct 2025</small></h4>
+                                            <p>&ldquo;Exploiting the synergy between LSST and VST to investigate the cosmos: the expansion rate and the geometry of the Universe measured through the time delays of strongly lensed variable sources&rdquo;</p>
+                                            <p class="ptl-facts">PI C. Grillo &middot; 4620 VST hours over the first seven years of LSST</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <!-- programs:end -->
+
+                            <h3 style="margin-top: 1rem;">Targets Overview</h3> 
+
+                            <!-- Observing Timeline: one card, period tabs, interactive plot -->
+                            <figure class="timeline-card">
+                                <div class="tab-bar" role="tablist" aria-label="Observing period">
+                                    <button class="tab active" role="tab" data-period="all">All<span class="tab-long"> periods</span></button>
+                                    <button class="tab" role="tab" data-period="pilot">Pilot</button>
+                                    <button class="tab" role="tab" data-period="y1"><span class="tab-long">In-Kind </span>Y1</button>
+                                    <button class="tab" role="tab" data-period="y2"><span class="tab-long">In-Kind </span>Y2</button>
+                                </div>
+
+                                <!-- Interactive plot (Plotly), drawn from data.json -->
+                                <div id="timeline-plot" class="timeline-plot"></div>
+
+                                <!-- Static fallback, shown only if the plot library fails to load -->
+                                <img id="timeline-fallback" src="images/P3_P4_timeline.png" alt="Targets observed timeline" style="display:none;">
+
+                                <figcaption id="timeline-caption">Targets observed from 01/10/2024 to ...</figcaption>
+                            </figure>
+
+                            <!-- ESO Target Inspector Section --> 
+                            <div class="eso-inspector-container"> 
+                                <h3>Observed Targets by Night (Program 114.27U3.001)</h3> 
+
+                                <div class="controls-grid"> 
+                                    <div class="form-group"> 
+                                        <label for="night-select">Select Specific Night</label> 
+                                        <select id="night-select"> 
+                                            <option value="ALL">Loading observing nights...</option> 
+                                        </select> 
+                                    </div> 
+
+                                    <div class="form-group"> 
+                                        <label for="start-date">From Date</label> 
+                                        <input type="date" id="start-date"> 
+                                    </div> 
+
+                                    <div class="form-group"> 
+                                        <label for="end-date">To Date</label> 
+                                        <input type="date" id="end-date"> 
+                                    </div> 
+
+                                    <div class="form-group"> 
+                                        <label for="sort-order">Sort Nights</label> 
+                                        <select id="sort-order"> 
+                                            <option value="ASC">Oldest First</option> 
+                                            <option value="DESC">Newest First</option> 
+                                        </select> 
+                                    </div> 
+                                </div> 
+
+                                <div id="status" class="status-msg">Loading data from archive...</div> 
+                                <div id="table-container"></div> 
+                            </div> 
+
+                        </div> 
+                    </div> 
+                </section> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- Footer Wrapper --> 
+    <div id="footer-wrapper-logo"> 
+        <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer> 
+    </div> 
+
+</div> 
+
+<!-- Scripts --> 
+<script src="assets/js/jquery.min.js"></script> 
+<script src="assets/js/jquery.dropotron.min.js"></script> 
+<script src="assets/js/browser.min.js"></script> 
+<script src="assets/js/breakpoints.min.js"></script> 
+<script src="assets/js/util.js"></script> 
+<script src="assets/js/main.js"></script> 
+<!-- Plotly (basic bundle: scatter/line/bar only, ~1 MB) for the interactive timeline -->
+<script src="https://cdn.plot.ly/plotly-basic-2.35.2.min.js" charset="utf-8"></script>
+
+<!-- ESO Data Loader Script --> 
+<script> 
+let rawObservations = []; 
+let showAllRows = false; 
+
+// Program ID constant for generating direct ESO Archive / Nightlog links
+const PROGRAM_ID = "114.27U3.001";
+
+// Subtracts 12 hours so post-midnight exposures match the observing night 
+function getObservingNight(utcDateString) { 
+    const d = new Date(utcDateString); 
+    const offsetDate = new Date(d.getTime() - (12 * 60 * 60 * 1000)); 
+    return offsetDate.toISOString().split('T')[0]; 
+} 
+
+// Helper to generate ESO Archive / Night Log URL restricted to target & specific observing night
+function getEsoNightLogUrl(displayTarget, night) {
+    let linkTarget = displayTarget;
+    if (linkTarget.includes('1330')) {
+        linkTarget = linkTarget.replace(/SDSS/gi, 'COOL');
+    }
+    return `https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=${PROGRAM_ID}&target=${encodeURIComponent(linkTarget)}&night=${night}`;
+}
+
+async function loadData() { 
+    const statusEl = document.getElementById('status'); 
+    const nightSelect = document.getElementById('night-select'); 
+    const captionEl = document.getElementById('timeline-caption');
+
+    try { 
+        const response = await fetch('./data.json?v=' + new Date().getTime()); 
+        if (!response.ok) throw new Error("data.json not ready yet."); 
+
+        const result = await response.json(); 
+
+        if (!result.data || result.data.length === 0) { 
+            statusEl.textContent = `No observations found for Program ID ${PROGRAM_ID}.`; 
+            nightSelect.innerHTML = `<option value="ALL">-- No Nights Available --</option>`; 
+            return; 
+        } 
+
+        rawObservations = result.data.map(row => {
+            const isArray = Array.isArray(row);
+            let target = isArray ? row[0] : (row.target || row.target_name);
+            target = target ? target.trim() : 'Unknown Target';
+
+            if (target.includes('1330')) {
+                target = target.replace(/COOL/gi, 'SDSS');
+            }
+
+            const instrument = isArray ? row[1] : row.instrument;
+            const expStart = isArray ? row[2] : (row.expStart || row.exp_start);
+            const airmass = isArray ? row[3] : row.tel_airm_start;
+            const seeing = isArray ? row[4] : row.tel_ambi_fwhm_start;
+            const exposure = isArray ? row[6] : row.exposure;
+
+            return { 
+                target: target, 
+                instrument: instrument || 'N/A', 
+                expStart: expStart, 
+                airmass: (typeof airmass === 'number') ? airmass : null,
+                seeing: (typeof seeing === 'number' && seeing > 0) ? seeing : null,
+                exposure: (typeof exposure === 'number' && exposure > 0) ? exposure : null,
+                filter: 'r_SDSS', 
+                observingNight: expStart ? getObservingNight(expStart) : 'N/A' 
+            };
+        }); 
+
+        const uniqueNights = [...new Set(rawObservations.map(o => o.observingNight))].sort(); 
+        nightSelect.innerHTML = `<option value="ALL">All Nights (${uniqueNights.length})</option>`; 
+        uniqueNights.forEach(night => { 
+            const opt = document.createElement('option'); 
+            opt.value = night; 
+            opt.textContent = night; 
+            nightSelect.appendChild(opt); 
+        }); 
+        
+        if (uniqueNights.length > 0 && captionEl) { 
+            const lastNight = uniqueNights[uniqueNights.length - 1]; 
+            const [yyyy, mm, dd] = lastNight.split('-'); 
+            PERIODS.all.caption = `Targets observed from 01/10/2024 to ${dd}/${mm}/${yyyy}`; 
+        } 
+
+        statusEl.textContent = `${uniqueNights.length} observing night(s) loaded.`; 
+        renderTable(); 
+        buildTimeline(); 
+
+    } catch (err) { 
+        console.error(err); 
+        showFallback(); 
+        statusEl.textContent = "Data is generating in the cloud. Run the GitHub Action or wait 1 minute and refresh."; 
+    } 
+} 
+
+function toggleRowsDisplay() { 
+    showAllRows = !showAllRows; 
+    renderTable(); 
+} 
+
+function renderTable() { 
+    const selectedNight = document.getElementById('night-select').value; 
+    const startDate = document.getElementById('start-date').value; 
+    const endDate = document.getElementById('end-date').value; 
+    const sortOrder = document.getElementById('sort-order').value; 
+    const tableContainer = document.getElementById('table-container'); 
+
+    let filtered = rawObservations.filter(obs => { 
+        if (selectedNight !== 'ALL' && obs.observingNight !== selectedNight) return false; 
+        if (startDate && obs.observingNight < startDate) return false; 
+        if (endDate && obs.observingNight > endDate) return false; 
+        return true; 
+    }); 
+
+    if (filtered.length === 0) { 
+        tableContainer.innerHTML = "<p style='padding:1rem; color:var(--text-muted);'>No target observations match the selected criteria.</p>"; 
+        return; 
+    } 
+
+    // SPECIFIC NIGHT SELECTED: Detailed exposure breakdown
+    if (selectedNight !== 'ALL') { 
+        let html = ` 
+        <h4 style="margin-bottom:0.75rem;">Observing Night: ${selectedNight}</h4> 
+        <div class="table-responsive-wrapper">
+            <table class="eso-table"> 
+            <thead> 
+                <tr> 
+                    <th>Target</th> 
+                    <th>Instrument</th> 
+                    <th>Filter</th> 
+                    <th>Start Time (UTC)</th> 
+                    <th>ESO Log / Archive</th> 
+                </tr> 
+            </thead> 
+            <tbody> 
+        `; 
+
+        filtered.forEach(obs => { 
+            const timeOnly = obs.expStart ? obs.expStart.replace('T', ' ').substring(0, 19) : 'N/A'; 
+            const esoUrl = getEsoNightLogUrl(obs.target, obs.observingNight);
+            html += ` 
+            <tr> 
+                <td><a href="${esoUrl}" target="_blank" rel="noopener noreferrer" class="badge badge-link">${obs.target}</a></td> 
+                <td>${obs.instrument}</td> 
+                <td><strong>r_SDSS</strong></td> 
+                <td>${timeOnly}</td> 
+                <td><a href="${esoUrl}" target="_blank" rel="noopener noreferrer" class="eso-log-link">View ESO Log &rarr;</a></td> 
+            </tr> 
+            `; 
+        }); 
+
+        html += `</tbody></table></div>`; 
+        tableContainer.innerHTML = html; 
+        return; 
+    } 
+
+    // ALL NIGHTS SELECTED: Aggregated summary table 
+    const nightGroups = {}; 
+    filtered.forEach(obs => { 
+        if (!nightGroups[obs.observingNight]) { 
+            nightGroups[obs.observingNight] = { targets: new Set(), instruments: new Set() }; 
+        } 
+        nightGroups[obs.observingNight].targets.add(obs.target); 
+        nightGroups[obs.observingNight].instruments.add(obs.instrument); 
+    }); 
+
+    let nightKeys = Object.keys(nightGroups).sort(); 
+    if (sortOrder === 'DESC') { 
+        nightKeys.reverse(); 
+    } 
+
+    const totalNights = nightKeys.length; 
+    const displayKeys = showAllRows ? nightKeys : nightKeys.slice(0, 10); 
+
+    let html = ` 
+    <div class="table-responsive-wrapper">
+        <table class="eso-table"> 
+        <thead> 
+            <tr> 
+                <th>Observing Night</th> 
+                <th>Targets Observed (Click to view ESO Log)</th> 
+                <th>Instrument(s)</th> 
+                <th>Filter</th> 
+            </tr> 
+        </thead> 
+        <tbody> 
+    `; 
+
+    displayKeys.forEach(night => { 
+        const data = nightGroups[night]; 
+        const targetList = Array.from(data.targets).map(target => {
+            const esoUrl = getEsoNightLogUrl(target, night);
+            return `<a href="${esoUrl}" target="_blank" rel="noopener noreferrer" class="badge badge-link" title="View ESO Archive log for ${target} on night ${night}">${target}</a>`;
+        }).join(' '); 
+
+        html += ` 
+        <tr> 
+            <td><strong>${night}</strong></td> 
+            <td>${targetList}</td> 
+            <td>${Array.from(data.instruments).join(', ')}</td> 
+            <td><strong>r_SDSS</strong></td> 
+        </tr> 
+        `; 
+    }); 
+
+    html += `</tbody></table></div>`; 
+
+    if (totalNights > 10) { 
+        const buttonText = showAllRows ? `Show First 10 Nights` : `Show All ${totalNights} Nights`; 
+        const rangeText = showAllRows ? `Showing all ${totalNights} observing nights` : `Showing first 10 of ${totalNights} observing nights`; 
+        html += ` 
+        <div class="table-footer-controls"> 
+            <span><strong>${rangeText}</strong></span> 
+            <button class="btn-toggle" onclick="toggleRowsDisplay()">${buttonText}</button> 
+        </div> 
+        `; 
+    } 
+
+    tableContainer.innerHTML = html; 
+} 
+
+/* ================= Interactive Observing Timeline ================= */
+
+// Row order (bottom → top) and colors, matched to the original matplotlib plots.
+// Targets are matched by coordinate string so COOL/SDSS/PS prefixes don't matter.
+const TARGET_STYLE = [
+    { key: '0501', color: '#c8a6f5' },
+    { key: '0542', color: '#88bef7' },
+    { key: '0722', color: '#88f7dd' },
+    { key: '1029', color: '#88f78e' },
+    { key: '2107', color: '#f5f1a6' },
+    { key: '0335', color: '#ffc185' },
+    { key: '1330', color: '#ff9f7a' },
+    { key: '2329', color: '#ff7f66' },
+    { key: '0123', color: '#e4574f' },
+];
+
+// Period windows for the tabs; the "all" caption is filled in by loadData()
+const PERIODS = {
+    all:   { start: '2024-10-01', end: null,
+             caption: 'Targets observed from 01/10/2024 to ...',
+             png: 'images/P3_P4_timeline.png' },
+    pilot: { start: '2024-10-01', end: '2025-09-30',
+             caption: 'Pilot Program (01/10/2024 - 30/09/2025)',
+             png: 'images/P3_P4_timeline_pilot.png' },
+    y1:    { start: '2025-10-01', end: '2026-09-30',
+             caption: 'In-Kind Contribution Y1 (01/10/2025 - 30/09/2026)',
+             png: 'images/P3_P4_timeline_inkind1.png' },
+    y2:    { start: '2026-10-01', end: '2027-09-30',
+             caption: 'In-Kind Contribution Y2 (01/10/2026 - 30/09/2027)',
+             png: 'images/P3_P4_timeline_inkind2.png' },
+};
+
+// Programme period boundaries, drawn as dashed lines in the "All periods" view.
+// To add a new year, append one line here.
+const BOUNDARIES = [
+    { date: '2025-10-01', before: 'Pilot',      after: 'In-Kind Y1' },
+    { date: '2026-10-01', before: 'In-Kind Y1', after: 'In-Kind Y2' },
+];
+
+// Caption text for a tab, plus total hours on source when data.json has exposure times
+function captionFor(key) {
+    const p = PERIODS[key];
+    const end = p.end || '9999-12-31';
+    let seconds = 0, found = false;
+    rawObservations.forEach(o => {
+        if (o.exposure !== null && o.observingNight >= p.start && o.observingNight <= end) {
+            seconds += o.exposure; found = true;
+        }
+    });
+    return found ? `${p.caption} · ${(seconds / 3600).toFixed(1)} h on source` : p.caption;
+}
+
+let currentPeriod = 'all';
+let nightlyPoints = [];   // one point per target per observing night
+
+function styleIndex(target) {
+    const i = TARGET_STYLE.findIndex(s => target.includes(s.key));
+    return i === -1 ? TARGET_STYLE.length : i;
+}
+function targetColor(target) {
+    const s = TARGET_STYLE.find(s => target.includes(s.key));
+    return s ? s.color : '#bbbbbb';
+}
+function shiftDays(isoDate, days) {
+    const d = new Date(isoDate + 'T00:00:00Z');
+    d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().split('T')[0];
+}
+function mean(arr) {
+    const v = arr.filter(x => x !== null);
+    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
+}
+
+function buildTimeline() {
+    // Aggregate exposures into one point per (target, night)
+    const groups = {};
+    rawObservations.forEach(o => {
+        if (o.observingNight === 'N/A') return;
+        const k = o.target + '|' + o.observingNight;
+        if (!groups[k]) groups[k] = { target: o.target, night: o.observingNight, n: 0, airm: [], see: [] };
+        groups[k].n++;
+        groups[k].airm.push(o.airmass);
+        groups[k].see.push(o.seeing);
+    });
+    nightlyPoints = Object.values(groups).map(g => ({
+        target: g.target, night: g.night, n: g.n,
+        airmass: mean(g.airm), seeing: mean(g.see),
+    }));
+    drawTimeline(currentPeriod);
+}
+
+function drawTimeline(periodKey) {
+    currentPeriod = periodKey;
+    const p = PERIODS[periodKey];
+    document.getElementById('timeline-caption').textContent = captionFor(periodKey);
+
+    if (typeof Plotly === 'undefined') { showFallback(); return; }
+    if (nightlyPoints.length === 0) return;
+
+    const lastNight = nightlyPoints.reduce((m, pt) => pt.night > m ? pt.night : m, '0000');
+    const lastBoundary = BOUNDARIES[BOUNDARIES.length - 1].date;
+    const minEnd = shiftDays(lastBoundary, 75);
+    const end = p.end || (lastNight > minEnd ? lastNight : minEnd);
+    const pts = nightlyPoints.filter(pt => pt.night >= p.start && pt.night <= end);
+
+    // Rows: only targets observed in this tab, in the same order as every other tab:
+    // by each target's first-ever observation in the programme (earliest at the bottom).
+    const firstEver = {};
+    nightlyPoints.forEach(pt => { if (!firstEver[pt.target] || pt.night < firstEver[pt.target]) firstEver[pt.target] = pt.night; });
+    const targets = [...new Set(pts.map(pt => pt.target))].sort((a, b) =>
+        firstEver[a].localeCompare(firstEver[b]) || styleIndex(a) - styleIndex(b));
+
+    const traces = targets.map(t => {
+        const tp = pts.filter(pt => pt.target === t);
+        return {
+            type: 'scatter', mode: 'markers', name: t,
+            x: tp.map(pt => pt.night),
+            y: tp.map(() => t),
+            customdata: tp.map(pt => [
+                pt.night, pt.n,
+                pt.airmass !== null ? pt.airmass.toFixed(2) : 'n/a',
+                pt.seeing !== null ? pt.seeing.toFixed(2) + '″' : 'n/a',
+            ]),
+            marker: { color: targetColor(t), size: 8 },
+            hovertemplate:
+                '<b>%{y}</b><br>Night %{customdata[0]}<br>' +
+                'Exposures: %{customdata[1]}<br>' +
+                'Mean airmass: %{customdata[2]}<br>' +
+                'Mean seeing: %{customdata[3]}<extra></extra>',
+            hoverlabel: { bgcolor: '#111111', bordercolor: targetColor(t), font: { color: '#ffffff' } },
+        };
+    });
+
+    const axisStyle = {
+        color: '#ffffff', linecolor: '#ffffff', showline: true, mirror: true,
+        ticks: 'outside', tickcolor: '#ffffff', zeroline: false,
+    };
+
+    // Pick a month spacing that fits the available width
+    const el = document.getElementById('timeline-plot');
+    const narrow = el.clientWidth < 600;
+    const spanMonths = (new Date(end) - new Date(p.start)) / (30.44 * 864e5);
+    const maxTicks = Math.max(3, Math.floor((el.clientWidth - (narrow ? 110 : 190)) / 60));
+    const monthStep = [1, 2, 3, 6, 12].find(m => spanMonths / m <= maxTicks) || 12;
+
+    // In the "all" view: dashed line where each programme period starts, and every
+    // period's name centred above its own section of the plot (same style for all)
+    const shapes = [], annotations = [];
+    if (periodKey === 'all') {
+        const rangeEnd = shiftDays(end, 10);
+        const labelFont = { color: '#cbd5e1', size: 11 };
+        const midDate = (a, b) => new Date((new Date(a).getTime() + new Date(b).getTime()) / 2).toISOString().split('T')[0];
+        const sections = [{ start: p.start, label: BOUNDARIES[0].before }]
+            .concat(BOUNDARIES.map(bd => ({ start: bd.date, label: bd.after })));
+        BOUNDARIES.forEach(bd => shapes.push({ type: 'line', xref: 'x', yref: 'paper', x0: bd.date, x1: bd.date, y0: 0, y1: 1,
+                                               line: { color: 'rgba(255,255,255,0.45)', width: 1, dash: 'dash' } }));
+        if (!narrow) sections.forEach((sec, k) => {
+            const secEnd = k + 1 < sections.length ? sections[k + 1].start : rangeEnd;
+            annotations.push({ x: midDate(sec.start, secEnd < rangeEnd ? secEnd : rangeEnd), y: 1, xref: 'x', yref: 'paper',
+                               xanchor: 'center', yanchor: 'bottom', showarrow: false, font: labelFont, text: sec.label });
+        });
+    }
+
+    const layout = {
+        paper_bgcolor: '#000000', plot_bgcolor: '#000000',
+        font: { color: '#ffffff', size: 13 },
+        height: Math.max(320, 110 + 46 * targets.length),
+        margin: { l: 10, r: narrow ? 10 : 20, t: 30, b: 20 },
+        showlegend: false,
+        hovermode: 'closest',
+        dragmode: 'zoom',
+        xaxis: Object.assign({}, axisStyle, {
+            type: 'date',
+            range: [shiftDays(p.start, -10), shiftDays(end, 10)],
+            showgrid: true, gridcolor: 'rgba(255,255,255,0.08)',
+            tickformat: '%b %Y', dtick: 'M' + monthStep, tickangle: -35,
+            tickfont: { size: narrow ? 11 : 12 },
+            automargin: true,
+            title: { text: 'Observing Night', standoff: 16 },
+        }),
+        yaxis: Object.assign({}, axisStyle, {
+            type: 'category', categoryorder: 'array', categoryarray: targets,
+            tickvals: targets,
+            // On phones show only the coordinate part of the name (full name stays in the tooltip)
+            ticktext: targets.map(t => narrow ? ((t.match(/J?\d{4}[+-]\d{4}/) || [t])[0]) : t),
+            tickfont: { size: narrow ? 11 : 13 },
+            range: [-0.6, targets.length - 0.4],
+            showgrid: false, automargin: true, fixedrange: true,
+            title: narrow ? undefined : { text: 'Target', standoff: 14 },
+        }),
+        shapes, annotations,
+    };
+
+    const config = {
+        responsive: true, displaylogo: false,
+        modeBarButtonsToRemove: ['lasso2d', 'select2d', 'autoScale2d'],
+        toImageButtonOptions: { filename: 'VST2_timeline_' + periodKey, scale: 2 },
+    };
+
+    Plotly.react(el, traces, layout, config);
+
+    // Click a point → open that night in the table below
+    if (!el._clickBound) {
+        el.on('plotly_click', ev => {
+            const night = ev.points[0].customdata[0];
+            const sel = document.getElementById('night-select');
+            if ([...sel.options].some(o => o.value === night)) {
+                sel.value = night;
+                document.getElementById('start-date').value = '';
+                document.getElementById('end-date').value = '';
+                renderTable();
+                document.querySelector('.eso-inspector-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+        el._clickBound = true;
+    }
+}
+
+// Static PNGs if Plotly or data.json isn't available
+function showFallback() {
+    document.getElementById('timeline-plot').style.display = 'none';
+    const img = document.getElementById('timeline-fallback');
+    img.src = PERIODS[currentPeriod].png;
+    img.style.display = 'block';
+}
+
+// Redraw on resize so tick spacing and label length adapt
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        if (typeof Plotly !== 'undefined' && nightlyPoints.length) drawTimeline(currentPeriod);
+    }, 200);
+});
+
+document.querySelectorAll('.tab-bar .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab-bar .tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPeriod = tab.dataset.period;
+        if (typeof Plotly === 'undefined' || nightlyPoints.length === 0) {
+            document.getElementById('timeline-caption').textContent = captionFor(currentPeriod);
+            showFallback();
+        } else {
+            drawTimeline(currentPeriod);
+        }
+    });
+});
+
+document.getElementById('night-select').addEventListener('change', renderTable); 
+document.getElementById('start-date').addEventListener('change', renderTable); 
+document.getElementById('end-date').addEventListener('change', renderTable); 
+document.getElementById('sort-order').addEventListener('change', renderTable); 
+
+window.addEventListener('DOMContentLoaded', loadData); 
+</script> 
+
+</body> 
+</html>

@@ -84,8 +84,11 @@ def eso(pid):
     return ('https://archive.eso.org/wdb/wdb/eso/eso_archive_main/query?prog_id=' + quote(pid),
             f'ESO Archive Query ({pid})', 'search')
 
+MAST_PI = {'Tub&iacute;n-Arenas': 'TUBIN'}   # PI surname as MAST stores it, when it differs from the name shown
+
 def mast_hst(t, pi):
     ra, dec = COORDS[t]
+    pi = MAST_PI.get(pi, pi)
     return ('https://mast.stsci.edu/search/ui/#/hst/results?resolve=true&target='
             f'{ra}+{dec}&radius=3&radius_units=arcminutes&data_type=all&observations=S'
             '&active_instruments=stis,acs,wfc3,cos,fgs&legacy_instruments=foc,fos,ghrs,hsp,nicmos,wfpc,wfpc2'
@@ -207,7 +210,8 @@ CARDS = {
     'MUSE Data': [ESO('114.27CU', 'Treister', 'Nov 2024 &ndash; Jan 2025', 'public', exposure='4.0 h')],
     'HST Data': [
         HST('J0501-0733', '17444', 'Tub&iacute;n-Arenas', 'ACS/WFC', 'F606W, F814W', 'Jul &ndash; Aug 2024', 'public',
-            note='Mapping the geometry of eRASS1 J050129.5-073309 with high-resolution imaging of the lens and quasar host.'),
+            note='Mapping the geometry of eRASS1 J050129.5-073309 with high-resolution imaging of the lens and quasar host.',
+            image=IMG('images/J0501-0733_VST/f814w_hst', 'HST F814W image of J0501-0733.')),
         HST('J0501-0733', '17308', 'Lemon', 'ACS/WFC', 'F814W', '12 Nov 2023', 'public', note=GAP)]},
 
  'J0542-2125': {

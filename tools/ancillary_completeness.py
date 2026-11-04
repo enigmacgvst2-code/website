@@ -11,7 +11,7 @@ zeropoint word: PHOTFLAM for HST, PIXAR_SR for JWST, where the MJy/sr -> AB zero
 Reads ANCILLARY_DATA/completeness.csv (written by measure_completeness.py; nothing is re-measured) and
 builds one table: per band the image source, PSF FWHM, the 90% and 80% completeness limits (AB, point
 sources, +- bootstrap error on m90), the empty-aperture 5-sigma depth and the adopted zeropoint
-(value + "measured" = calibrated on reference stars, or "header" = image header, not checked).
+(value + "measured" = calibrated on reference stars, or "nominal" = image header value, not yet calibrated).
 The card carries data-anc-depth="1"; its CSS sits between /* anc-depth-css:start/end */. It goes after
 the Color Image card (or after Survey Coverage). Idempotent. Before running tools/ancillary_extra.py on a
 page that has this card, add  'Ground-based Images Zeropoint and Completeness': 101  and  'HST/JWST Zeropoint and Completeness': 102  to WAVE there (it stops on unknown titles).
@@ -27,7 +27,7 @@ COLOR = {'u': '#1d4ed8', 'g': '#0369a1', 'r': '#15803d', 'i': '#b45309', 'z': '#
 SURVEY = {'LS': 'Legacy Surveys DR10', 'VHS': 'VISTA VHS', 'UHS': 'UKIRT UHS', 'DES': 'DES DR2', 'SDSS': 'SDSS',
           'ATLAS': 'VST-ATLAS', 'DECAM': 'DECam', 'ADHOC': 'VST/OmegaCAM (ad hoc)'}
 ZPREF = {'vhs': 'VHS', 'ls_dr10': 'LS DR10', 'sdss_dr17': 'SDSS DR17', 'atlas_er5': 'ATLAS ER5',
-         'des_dr2': 'DES DR2', 'gaia_gspc': 'Gaia XP (GSPC)'}
+         'des_dr2': 'DES DR2', 'gaia_gspc': 'Gaia XP (GSPC)', 'uhs_dr3': 'UHS DR3'}
 FILT_LABEL = {'Ks': 'K<sub>s</sub>'}
 
 # ---- second card: HST/JWST images (ANCILLARY_DATA/completeness_hst_jwst.csv, measure_completeness_hst_jwst.py)
@@ -53,7 +53,7 @@ MAIN = {'J0542': 'lens field', 'J2107': '10 May 2024', 'J1330': '1.0 ks'}
 SKIP = {('J2329', 'F814W_ACS_JF56D3DMQ')}
 # fields where only the deepest image (faintest m90) of each filter is shown, whatever the instrument or date (Marianna):
 # J2107 -> F475X 26 Jun 2024, F814W ACS, F160W 26 Jun 2024; J1330 -> F814W ACS, F160W 1.2 ks; J2329 -> F814W 674 s
-DEEPEST = {'J2107', 'J1330', 'J2329', 'J0335', 'J1029'}   # J0335/J1029: duplicates are same-pointing sets (PID 17726, 12195)
+DEEPEST = {'J2107', 'J1330', 'J2329', 'J0335', 'J1029', 'J0501'}   # J0335/J1029: duplicates are same-pointing sets (PID 17726, 12195); J0501: 17308 + 17444 visits
 I = ' ' * 24
 
 def f(x):
@@ -116,7 +116,7 @@ def zp_html(r):
     m = re.match(r'measured \((.*)\)', r['zp_source'])
     if m:
         return f'{v} <span class="cmp-zp" title="calibrated on {ZPREF.get(m.group(1), m.group(1))} stars">measured</span>'
-    return f'{v} <span class="cmp-zp cmp-zp-hdr" title="from the image header, not checked">header</span>'
+    return f'{v} <span class="cmp-zp cmp-zp-hdr" title="nominal zeropoint from the image header, not yet calibrated on reference stars">nominal</span>'
 
 def card(t, rows, title=TITLE, marker='1'):
     trs = ''.join(
