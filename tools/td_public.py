@@ -229,7 +229,7 @@ def main():
     nl = '\r\n' if '\r\n' in src else '\n'
     a, b = src.index('<!-- Hero Section -->'), src.index('<!-- End Data Sections -->') + len('<!-- End Data Sections -->')
     page = src[:a] + content().replace('\n', nl) + src[b:]
-    page = re.sub(r'<title>.*?</title>', '<title>VST P3-P5 - Time Delays</title>', page, count=1)
+    page = re.sub(r'<title>.*?</title>', '<title>(VST)&#178; - Time Delays</title>', page, count=1)
     page = re.sub(r'(<meta name="description" content=")[^"]*', r'\1Status and precision of the time-delay measurements of the (VST)&#178; monitoring campaign (values kept blind). (VST)&#178;: Variable Source Time delays with the VST', page, count=1)
     page = add_nav(page, nl)
     page = page.replace('<li class="current_page_item" ><a href="data.html">Data</a></li>', '<li><a href="data.html">Data</a></li>')

@@ -14,6 +14,7 @@ SITE = '(VST)²: Variable Source Time delays with the VST'
 SECTION_DESC = {
     '_page': 'VST light curves of the lensed quasar {t}.',
     '_shift_page': 'VST light curves of the lensed quasar {t}.',
+    '_lc': 'VST light curves of the lensed quasar {t}.',
     '_td': 'Time-delay measurements for the lensed quasar {t} from VST monitoring.',
     '_agn': 'VST light curves of AGN in the field of {t}.',
     '_anc': 'Ancillary data for the lensed quasar {t}: discovery paper, spectroscopy and HST/JWST imaging.',
@@ -27,7 +28,7 @@ FIXED = {
 def description(name):
     if name in FIXED:
         return FIXED[name]
-    m = re.match(r'(J\d{4}[+-]\d{4})(_shift_page|_page|_td|_agn|_anc)\.html$', name)
+    m = re.match(r'(J\d{4}[+-]\d{4})(_shift_page|_page|_lc|_td|_agn|_anc)\.html$', name)
     return SECTION_DESC[m.group(2)].format(t=m.group(1)) if m else None
 
 def make_icons(site):
