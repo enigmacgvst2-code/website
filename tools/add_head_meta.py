@@ -2,7 +2,7 @@
 """Add a browser-tab icon and a page description to the <head> of every page.
 
   python3 tools/add_head_meta.py            # this site (the folder containing tools/)
-  python3 tools/add_head_meta.py ../VST_P3_P4   # another site folder
+  python3 tools/add_head_meta.py ../vst-squared.github.io   # another site folder
 
 Safe to re-run: the tags sit between <!-- head-meta:start/end --> markers and are replaced, not duplicated.
 Line endings (LF or CRLF) of each file are preserved. *_backup.html and *_app.html (iframe content) are skipped.

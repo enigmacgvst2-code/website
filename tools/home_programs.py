@@ -2,7 +2,7 @@
 
 Inserts/refreshes the block between the hero title and "Targets Overview"
 on index.html of both sites. Idempotent; keeps CRLF.
-Usage: python3 tools/home_programs.py index.html ../VST_P3_P4/index.html
+Usage: python3 tools/home_programs.py index.html ../vst-squared.github.io/index.html
 Text from (VST)^2-I (COOL J0542-2125), Sect. 2.4.
 """
 import sys, re

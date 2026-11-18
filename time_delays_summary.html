@@ -1,0 +1,454 @@
+<!DOCTYPE HTML>
+
+<html>  
+<head> 
+    <meta name="robots" content="noindex, nofollow"> 
+    <title>VST P3-P5 - Time Delays</title>
+    <!-- head-meta:start -->
+    <meta name="description" content="Status and precision of the time-delay measurements of the (VST)&#178; monitoring campaign (values kept blind). (VST)&#178;: Variable Source Time delays with the VST" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+    <!-- head-meta:end --> 
+    <meta charset="utf-8" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" /> 
+
+    <style> 
+        /* --- Modern ESO Target Inspector Custom Styles --- */
+        :root {
+            --primary-navy: #002b49;
+            --primary-accent: #0284c7;
+            --primary-accent-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --badge-bg: #e0f2fe;
+            --badge-text: #0369a1;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .lowercase { 
+            text-transform: lowercase; 
+        } 
+
+        /* Footer Adjustments */
+        .footer-heading {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-subtext {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 0;
+        }
+
+        /* --- Refined Scientific Styles for the Data Page --- */
+        .data-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .data-section {
+            background: #ffffff;
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Accent bar */
+        .data-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--primary-accent);
+        }
+
+        .data-section h3 {
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .data-section p {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .data-section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .data-section a {
+            color: var(--primary-accent);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .data-section a:hover {
+            color: var(--primary-accent-hover);
+            border-bottom-color: var(--primary-accent-hover);
+        }
+
+        /* Highlight Box for Access Rules */
+        .access-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #10b981; /* Emerald Accent */
+            padding: 1.5rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 1.5rem 0;
+        }
+
+        .access-box h4 {
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+            font-size: 1.1rem;
+        }
+
+        /* Table Styles for Targets */
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+            background: #ffffff;
+            margin-top: 1rem;
+        }
+
+        .data-table { 
+            width: 100%; 
+            border-collapse: separate; 
+            border-spacing: 0;
+        } 
+
+        .data-table th, .data-table td { 
+            padding: 14px 20px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color);
+        } 
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table th { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important; 
+            background-color: var(--primary-navy) !important; 
+            color: #ffffff !important; 
+            font-size: 0.9rem !important; 
+            font-weight: 600 !important; 
+            letter-spacing: 0.5px !important; 
+            text-transform: uppercase !important; 
+        } 
+
+        .data-table tr:nth-child(even) { 
+            background-color: #f8fafc; 
+        } 
+
+        .data-table tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        .target-badge {
+            background: var(--badge-bg); 
+            color: var(--badge-text); 
+            padding: 4px 12px; 
+            border-radius: 9999px; 
+            font-size: 0.85rem; 
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; 
+            font-weight: 600; 
+            display: inline-block; 
+        }
+        /* td-public-css:start */
+        .tdp-page { max-width: 1100px; margin: 0 auto; padding: 10px 20px 40px; color: #334155; }
+        .tdp-intro { max-width: 760px; margin: 0 auto 2.2rem; text-align: center; color: #475569; line-height: 1.65; font-size: 1rem; }
+        .tdp-intro .tdp-blind { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em;
+            text-transform: uppercase; color: #6366c9; background: rgba(163,165,236,0.18); border: 1px solid rgba(163,165,236,0.6);
+            border-radius: 999px; padding: 3px 12px; margin-bottom: 12px; }
+        .tdp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(470px, 1fr)); gap: 22px; }
+        .tdp-card { display: grid; grid-template-columns: 190px 1fr; gap: 20px; align-items: start; background: #fff;
+            border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin: 0; text-align: left; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); }
+        .tdp-fig { margin: 0; }
+        .tdp-fig img { width: 100%; height: auto; display: block; border-radius: 6px; background: #000; cursor: zoom-in; }
+        .tdp-fig figcaption { font-size: 0.74rem; color: #64748b; text-align: center; margin-top: 7px; line-height: 1.4; }
+        .tdp-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+        .tdp-head h3 { margin: 0; font-size: 1.15rem; color: #0f172a; letter-spacing: 0.01em; text-transform: none; }
+        .tdp-badge { font-size: 0.7rem; font-weight: 600; color: #6366c9; background: rgba(163,165,236,0.18); border: 1px solid rgba(163,165,236,0.6); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+        .tdp-sub { margin: 4px 0 12px; font-size: 0.86rem; color: #64748b; line-height: 1.4; }
+        .tdp-cols, .tdp-pairs li { display: grid; grid-template-columns: 4.6em 1fr auto; gap: 8px; align-items: center; }
+        .tdp-cols { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8;
+            padding: 0 2px 5px; border-bottom: 1px solid #e2e8f0; }
+        .tdp-cols span:last-child { text-align: right; }
+        .tdp-pairs { list-style: none; margin: 0; padding: 0; }
+        .tdp-pairs li { padding: 7px 2px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+        .tdp-pairs li.tdp-group { display: block; font-size: 0.75rem; font-weight: 600; color: #475569; padding: 10px 2px 3px; border-bottom: 0; }
+        .tdp-pairs li.tdp-group a { font-weight: 500; }
+        .tdp-pair { font-weight: 600; color: #0f172a; white-space: nowrap; }
+        .tdp-st { justify-self: start; font-size: 0.72rem; font-weight: 600; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+        .st-ok { color: #15803d; background: #dcfce7; }
+        .st-eval { color: #b45309; background: #fef3c7; }
+        .st-wait { color: #475569; background: #f1f5f9; }
+        .tdp-prec { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; white-space: nowrap; color: #334155; }
+        .st-prelim { color: #6366c9; background: rgba(163,165,236,0.18); }
+        .tdp-val { color: #0f172a; }
+        .tdp-pending { margin: 8px 0 0; font-size: 0.9rem; color: #64748b; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+        .tdp-note { margin: 10px 0 0; font-size: 0.8rem; color: #64748b; line-height: 1.45; }
+        .tdp-foot { max-width: 760px; margin: 2rem auto 0; text-align: center; font-size: 0.8rem; color: #94a3b8; line-height: 1.6; }
+        .tdp-lightbox { position: fixed; inset: 0; background: rgba(15,23,42,0.88); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; cursor: zoom-out; }
+        .tdp-lightbox.open { display: flex; }
+        .tdp-lightbox img { max-width: 100%; max-height: 100%; border-radius: 6px; }
+        .tdp-lightbox button { position: absolute; top: 12px; right: 16px; background: none; border: 0; color: #fff; font-size: 2rem; line-height: 1; cursor: pointer; padding: 4px 10px; box-shadow: none; }
+        @media (max-width: 1100px) { .tdp-grid { grid-template-columns: 1fr; max-width: 680px; margin: 0 auto; } }
+        @media (max-width: 560px) {
+            .tdp-page { padding: 0 4px 30px; }
+            .tdp-card { grid-template-columns: 1fr; padding: 16px; gap: 14px; }
+            .tdp-fig { max-width: 260px; margin: 0 auto; }
+        }
+        /* td-public-css:end */
+    </style> 
+</head> 
+<body class="homepage is-preload"> 
+<div id="page-wrapper"> 
+
+    <!-- Header Wrapper --> 
+    <div id="header-wrapper-home"> 
+        <div class="container"> 
+            <header id="header">
+                <div class="inner">
+
+                   <div class="logo"> 
+                        <a href="index.html" id="logo"> 
+                            <img src="images/logo.png" alt="Logo" height="50px" width="auto"> 
+                            <span class="logo-text">(VST)<sup>2</sup></span>
+                        </a> 
+                    </div> 
+
+                    <nav id="nav">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li ><a href="people.html">People</a></li>
+                            <li>
+                                <a href="#">Lightcurves</a>
+                                <ul>
+                                    <li><a href="J0501-0733_page.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_page.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_page.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_page.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_page.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_page.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_page.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_page.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_page.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Time Delays</a>
+                                <ul>
+                                    <li><a href="J0501-0733_td.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_td.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_td.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_td.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_td.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_td.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_td.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_td.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_td.html">J0123-0455</a></li>
+                                    <li class="current_page_item"><a href="time_delays_summary.html">Summary</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">AGN </a>
+                                <ul>
+                                    <li><a href="J0501-0733_agn.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_agn.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_agn.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_agn.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_agn.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_agn.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_agn.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_agn.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_agn.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Ancillary Data</a>
+                                <ul>
+                                    <li><a href="J0501-0733_anc.html">J0501-0733</a></li>
+                                    <li><a href="J0542-2125_anc.html">J0542-2125</a></li>
+                                    <li><a href="J0722-3901_anc.html">J0722-3901</a></li>
+                                    <li><a href="J1029+2623_anc.html">J1029+2623</a></li>
+                                    <li><a href="J2107-1611_anc.html">J2107-1611</a></li>
+                                    <li><a href="J0335-1927_anc.html">J0335-1927</a></li>
+                                    <li><a href="J1330+1810_anc.html">J1330+1810</a></li>
+                                    <li><a href="J2329-1258_anc.html">J2329-1258</a></li>
+                                    <li><a href="J0123-0455_anc.html">J0123-0455</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="data.html">Data</a></li>                        </ul>
+                    </nav>
+                </div>
+            </header> 
+            <div id="banner"></div> 
+        </div> 
+    </div> 
+
+    <!-- Main Wrapper --> 
+    <div id="main-wrapper"> 
+        <div class="wrapper style1"> 
+            <div class="inner"> 
+                <section class="container box feature1"> 
+                    <div class="row"> 
+                        <div class="col-12"> 
+
+                            <!-- td-public:start -->
+                            <div class="hero-brand-section">
+                                <h1 class="hero-title">
+                                    <span class="dark-text">Time Delays</span>
+                                </h1>
+                            </div>
+                            <div class="tdp-page">
+                                <div class="tdp-intro">
+                                    <span class="tdp-blind">Blind analysis</span><br>
+                                    Time delays between the lensed quasar images from the (VST)&sup2; light curves.
+                                    The values are kept blind until publication: for each image pair we give the status of the measurement
+                                    and its relative precision.
+                                </div>
+                                <div class="tdp-grid">
+<article class="tdp-card" id="J0501-0733">
+<figure class="tdp-fig"><img src="images/J0501-0733_VST/J0501-0733_cutout_web.jpg" data-full="images/J0501-0733_VST/J0501-0733_cutout.png" alt="Image of J0501-0733" loading="lazy" width="640" data-zoom><figcaption>HST/F814W cutout with images A and B marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J0501-0733</h3><span class="tdp-badge">P3 Monitoring</span></div><p class="tdp-sub">Two lensed images (A, B)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li><span class="tdp-pair">A&ndash;B</span><span class="tdp-st st-eval">Under evaluation</span><span class="tdp-prec">&mdash;</span></li>
+</ul><p class="tdp-note">Two candidate solutions are still being compared.</p></div>
+</article>
+<article class="tdp-card" id="J0542-2125">
+<figure class="tdp-fig"><img src="images/J0542-2125_VST/J0542-2125_cutout_web.jpg" data-full="images/J0542-2125_VST/J0542-2125_cutout.png" alt="Image of J0542-2125" loading="lazy" width="640" data-zoom><figcaption>HST/F160W cutout with images A, B and C marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J0542-2125</h3><span class="tdp-badge">P3-P4 Monitoring</span></div><p class="tdp-sub">Three lensed images (A, B, C)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li><span class="tdp-pair">A&ndash;B</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-hi" title="Relative precision">&lt; 3%</span></li>
+</ul></div>
+</article>
+<article class="tdp-card" id="J0722-3901">
+<figure class="tdp-fig"><img src="images/J0722-3901_VST/J0722-3901_cutout_web.jpg" data-full="images/J0722-3901_VST/J0722-3901_cutout.png" alt="Image of J0722-3901" loading="lazy" width="640" data-zoom><figcaption>HST/F160W cutout with images A, B, C and D marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J0722-3901</h3><span class="tdp-badge">P3 Monitoring</span></div><p class="tdp-sub">Four lensed images (A, B, C, D)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li><span class="tdp-pair">A&ndash;BC</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-lo" title="Relative precision">30%</span></li>
+<li><span class="tdp-pair">A&ndash;D</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-lo" title="Relative precision">71%</span></li>
+<li><span class="tdp-pair">BC&ndash;D</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-lo" title="Relative precision">60%</span></li>
+</ul><p class="tdp-note">B and C are measured together as a single light curve (BC).</p></div>
+</article>
+<article class="tdp-card" id="J1029+2623">
+<figure class="tdp-fig"><img src="images/J1029+2623_VST/J1029+2623_cutout_web.jpg" data-full="images/J1029+2623_VST/J1029+2623_cutout.png" alt="Image of J1029+2623" loading="lazy" width="640" data-zoom><figcaption>HST/F160W cutout with images A, B and C marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J1029+2623</h3><span class="tdp-badge">P3-P4 Monitoring</span></div><p class="tdp-sub">Three lensed images (A, B, C)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li class="tdp-group">VST monitoring</li>
+<li><span class="tdp-pair">B&ndash;C</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-mid" title="Relative precision">11%</span></li>
+<li class="tdp-group">Archival light curves &middot; <a href="https://iopscience.iop.org/article/10.1088/0004-637X/764/2/186" target="_blank" rel="noopener noreferrer">Fohlmeister et al. 2013</a></li>
+<li><span class="tdp-pair">A&ndash;(BC)</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-hi" title="Relative precision">3.4%</span></li>
+</ul></div>
+</article>
+<article class="tdp-card" id="J2107-1611">
+<figure class="tdp-fig"><img src="images/J2107-1611_VST/J2107-1611_cutout_web.jpg" data-full="images/J2107-1611_VST/J2107-1611_cutout.png" alt="Image of J2107-1611" loading="lazy" width="640" data-zoom><figcaption>HST/F160W cutout with images A1&ndash;A3, B and C marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J2107-1611</h3><span class="tdp-badge">P3 Monitoring</span></div><p class="tdp-sub">Lensed images A1&ndash;A3, B and C</p><p class="tdp-pending"><span class="tdp-st st-wait">No variability</span> </p></div>
+</article>
+<article class="tdp-card" id="J0335-1927">
+<figure class="tdp-fig"><img src="images/J0335-1927_VST/J0335-1927_cutout_web.jpg" data-full="images/J0335-1927_VST/J0335-1927_cutout.png" alt="Image of J0335-1927" loading="lazy" width="640" data-zoom><figcaption>HST/F625W cutout with images A, B and C marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J0335-1927</h3><span class="tdp-badge">P3-P5 Monitoring</span></div><p class="tdp-sub">Three lensed images (A, B, C)</p><p class="tdp-pending"><span class="tdp-st st-wait">In progress</span> </p></div>
+</article>
+<article class="tdp-card" id="J1330+1810">
+<figure class="tdp-fig"><img src="images/J1330+1810_VST/J1330+1810_cutout_web.jpg" data-full="images/J1330+1810_VST/J1330+1810_cutout.png" alt="Image of J1330+1810" loading="lazy" width="640" data-zoom><figcaption>HST/F160W cutout with images A, B, C and D marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J1330+1810</h3><span class="tdp-badge">P4 Monitoring</span></div><p class="tdp-sub">Four lensed images (A, B, C, D)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li><span class="tdp-pair">AB&ndash;C</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-mid" title="Relative precision">13%</span></li>
+<li><span class="tdp-pair">AB&ndash;D</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-lo" title="Relative precision">17%</span></li>
+<li><span class="tdp-pair">C&ndash;D</span><span class="tdp-st st-ok">Measured</span><span class="tdp-prec p-mid" title="Relative precision">12%</span></li>
+</ul><p class="tdp-note">A and B are measured together as a single light curve (AB).</p></div>
+</article>
+<article class="tdp-card" id="J2329-1258">
+<figure class="tdp-fig"><img src="images/J2329-1258_VST/J2329-1258_cutout_web.jpg" data-full="images/J2329-1258_VST/J2329-1258_cutout.png" alt="Image of J2329-1258" loading="lazy" width="640" data-zoom><figcaption>HST/F814W cutout with images A and B marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J2329-1258</h3><span class="tdp-badge">P4-P5 Monitoring</span></div><p class="tdp-sub">Two lensed images (A, B)</p><div class="tdp-cols"><span>Pair</span><span>Status</span><span>Precision</span></div><ul class="tdp-pairs">
+<li><span class="tdp-pair">A&ndash;B</span><span class="tdp-st st-prelim">Preliminary</span><span class="tdp-prec p-mid" title="Relative precision">&lt; 10%</span></li>
+</ul><p class="tdp-note">Preliminary values: monitoring ongoing, not final.</p></div>
+</article>
+<article class="tdp-card" id="J0123-0455">
+<figure class="tdp-fig"><img src="images/J0123-0455_VST/J0123-0455_cutout_web.jpg" data-full="images/J0123-0455_VST/J0123-0455_cutout.png" alt="Image of J0123-0455" loading="lazy" width="640" data-zoom><figcaption>HST/F814W cutout with images A and B marked.</figcaption></figure>
+<div class="tdp-body"><div class="tdp-head"><h3>J0123-0455</h3><span class="tdp-badge">P4-P5 Monitoring</span></div><p class="tdp-sub">Two lensed images (A, B)</p><p class="tdp-pending"><span class="tdp-st st-wait">In progress</span> Monitoring ongoing.</p></div>
+</article>
+                                </div>
+                                <p class="tdp-foot">Click an image to enlarge it.</p>
+                            </div>
+                            <div class="tdp-lightbox" id="tdp-lightbox" aria-hidden="true"><button aria-label="Close">&times;</button><img alt=""></div>
+                            <script>
+                                (function () {
+                                    var lb = document.getElementById('tdp-lightbox'), im = lb.querySelector('img');
+                                    document.querySelectorAll('.tdp-fig img[data-zoom]').forEach(function (i) {
+                                        i.addEventListener('click', function () { im.src = i.dataset.full || i.src; im.alt = i.alt; lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); });
+                                    });
+                                    function close() { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); im.removeAttribute('src'); }
+                                    lb.addEventListener('click', close);
+                                    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+                                })();
+                            </script>
+                            <!-- td-public:end -->
+
+                        </div> 
+                    </div> 
+                </section> 
+            </div> 
+        </div> 
+    </div> 
+
+    <!-- Footer Wrapper --> 
+    <div id="footer-wrapper-logo"> 
+        <footer id="footer" class="container"> 
+            <div class="row"> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <section> 
+                        <h2 class="footer-heading">Contact Us <i class="fa fa-envelope" style="font-size:18px; margin-left: 6px;"></i></h2> 
+                        <dl class="contact"> 
+                            <a href="mailto:marianna.annunziatella@inaf.it">Marianna Annunziatella</a> 
+                        </dl> 
+                    </section> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Last Update</h2> 
+                    <p class="footer-subtext"><script>document.write( new Date(document.lastModified).toLocaleDateString() );</script></p> 
+                </div> 
+                <div class="col-3 col-6-medium col-12-small"> 
+                    <h2 class="footer-heading">Website Credits</h2> 
+                    <p class="footer-subtext">M. Annunziatella</p> 
+                </div> 
+            </div> 
+        </footer> 
+    </div> 
+
+</div> 
+
+<!-- Scripts --> 
+<script src="assets/js/jquery.min.js"></script> 
+<script src="assets/js/jquery.dropotron.min.js"></script> 
+<script src="assets/js/browser.min.js"></script> 
+<script src="assets/js/breakpoints.min.js"></script> 
+<script src="assets/js/util.js"></script> 
+<script src="assets/js/main.js"></script> 
+
+</body> 
+</html>

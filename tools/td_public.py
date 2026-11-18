@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the blind "Time Delays" overview page of the PUBLIC site (one page, no plots).
 
-  python3 tools/td_public.py ../VST_P3_P4        # run from the internal site root (~/Sites/website)
+  python3 tools/td_public.py ../vst-squared.github.io        # run from the internal site root (~/Sites/website)
 
 * Reads the image pairs and delays from T in tools/build_td.py, but writes ONLY the status and the
   relative precision (1 sigma / |delay|) into the page - never the delay values.
@@ -16,7 +16,7 @@ import os, re, sys, glob, importlib.util
 sys.dont_write_bytecode = True
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))          # internal site root
-PUB = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', 'VST_P3_P4'))
+PUB = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, '..', 'vst-squared.github.io'))
 
 spec = importlib.util.spec_from_file_location('build_td', os.path.join(HERE, 'tools', 'build_td.py'))
 bt = importlib.util.module_from_spec(spec); cwd = os.getcwd(); spec.loader.exec_module(bt); os.chdir(cwd)

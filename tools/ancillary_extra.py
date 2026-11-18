@@ -19,8 +19,8 @@ older than 10 yr not already on the pages go into one compact table card. Dates,
 release dates from the ESO, MAST, Gemini, KOA and SMOKA archives (queried 21-22 Oct 2026);
 survey bands from VizieR and the NOIRLab Data Lab (bands with detections within 30").
 Edit CARDS / ARCHIVE / BANDS / WAVE below and re-run:
-  python3 tools/ancillary_extra.py . ../VST_P3_P4        (both sites)
-  python3 tools/ancillary_extra.py . ../VST_P3_P4 J1029+2623
+  python3 tools/ancillary_extra.py . ../vst-squared.github.io        (both sites)
+  python3 tools/ancillary_extra.py . ../vst-squared.github.io J1029+2623
 """
 import os
 import re
@@ -195,7 +195,7 @@ CARDS = {
     'MUSE Data': [
         ESO('115.282P', 'Acebron', '16 Sep 2025', 'public', exposure='4.0 h'),
         ESO('116.28NR', 'Acebron', '29 Nov 2025', '29 Nov 2026', exposure='0.8 h', note=also('J0542-2125'))],
-    'FORS2 Data': [fors2('J0335-1927', 'Oct &ndash; Dec 2025', '27.7 h', 'Partly public (rest until Dec 2026)',
+    'FORS2 Data': [fors2('J0335-1927', 'Oct &ndash; Dec 2025', '13.8 h', 'Partly public (rest until Dec 2026)',
                          ['J0542-2125', 'J1029+2623'])],
     'HST Data': [
         HST('J0335-1927', '17726', 'Dahle', 'ACS/WFC', 'F435W, F475W, F625W', 'Oct 2025', 'public', note=TDC,
@@ -223,7 +223,7 @@ CARDS = {
         ESO('114.27PL', 'Sharon', '24 Nov 2024', 'public', exposure='0.7 h',
             note='Field centred on the western cluster component; the 1&prime; &times; 1&prime; MUSE field also covers the '
                  'eastern component and the lensed quasar (about 21&Prime; from the field centre).')],
-    'FORS2 Data': [fors2('J0542-2125', 'Oct &ndash; Dec 2025', '27.7 h', 'Oct &ndash; Dec 2026',
+    'FORS2 Data': [fors2('J0542-2125', 'Oct &ndash; Dec 2025', '13.8 h', 'Partly public (rest until Dec 2026)',
                          ['J0335-1927', 'J1029+2623'])],
     'HST Data': [
         HST('J0542-2125', '17243', 'Napier', 'ACS/WFC, WFC3/UVIS, WFC3/IR', 'F390W, F606W, F814W, F105W, F160W',
@@ -242,7 +242,7 @@ CARDS = {
 
  'J1029+2623': {
     'MUSE Data': [ESO('0102.A-0642(A)', 'Grillo', 'Mar &ndash; May 2019', 'public', exposure='4.8 h')],
-    'FORS2 Data': [fors2('J1029+2623', 'Dec 2025 &ndash; Mar 2026', '25.8 h', 'Dec 2026 &ndash; Mar 2027',
+    'FORS2 Data': [fors2('J1029+2623', 'Dec 2025 &ndash; Mar 2026', '12.9 h', 'Dec 2026 &ndash; Mar 2027',
                          ['J0335-1927', 'J0542-2125'])],
     'HST Data': [
         HST('J1029+2623', '12195', 'Oguri', 'ACS/WFC, WFC3/IR', 'F475W, F814W, F160W', 'Apr &ndash; May 2011', 'public',
@@ -315,7 +315,7 @@ BANDS = {
  'J0722-3901': [('delve', 'g r i z'), ('smss', 'v g r i z'), ('vhs', 'J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
  'J1029+2623': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('uhs', 'J H K'), ('gaia', 'G, BP, RP')],
  'J1330+1810': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('sdss', 'u g r i z'), ('uhs', 'J H K'), ('gaia', 'G, BP, RP')],
- 'J2107-1611': [('ls', 'g i'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
+ 'J2107-1611': [('ls', 'g i, z (partial coverage)'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
  'J2329-1258': [('ls', 'g r i z'), ('ps1', 'g r i z y'), ('smss', 'u v g r i z'), ('atlas', 'u g r i z'),
                 ('vhs', 'Y J K<sub>s</sub>'), ('gaia', 'G, BP, RP')],
 }

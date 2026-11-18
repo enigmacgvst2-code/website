@@ -25,9 +25,9 @@ ORDER = ['u', 'g', 'r', 'i', 'z', 'Y', 'J', 'H', 'Ks', 'K']
 COLOR = {'u': '#1d4ed8', 'g': '#0369a1', 'r': '#15803d', 'i': '#b45309', 'z': '#991b1b', 'Y': '#a16207',
          'J': '#7c2d12', 'H': '#57534e', 'Ks': '#1f2937', 'K': '#1f2937'}
 SURVEY = {'LS': 'Legacy Surveys DR10', 'VHS': 'VISTA VHS', 'UHS': 'UKIRT UHS', 'DES': 'DES DR2', 'SDSS': 'SDSS',
-          'ATLAS': 'VST-ATLAS', 'DECAM': 'DECam', 'ADHOC': 'VST/OmegaCAM (ad hoc)'}
+          'ATLAS': 'VST-ATLAS', 'DECAM': 'DECam', 'ADHOC': 'VST/OmegaCAM (ad hoc)', 'DELVE': 'DELVE DR3'}
 ZPREF = {'vhs': 'VHS', 'ls_dr10': 'LS DR10', 'sdss_dr17': 'SDSS DR17', 'atlas_er5': 'ATLAS ER5',
-         'des_dr2': 'DES DR2', 'gaia_gspc': 'Gaia XP (GSPC)', 'uhs_dr3': 'UHS DR3'}
+         'des_dr2': 'DES DR2', 'gaia_gspc': 'Gaia XP (GSPC)', 'uhs_dr3': 'UHS DR3', 'delve_dr3': 'DELVE DR3'}
 FILT_LABEL = {'Ks': 'K<sub>s</sub>'}
 
 # ---- second card: HST/JWST images (ANCILLARY_DATA/completeness_hst_jwst.csv, measure_completeness_hst_jwst.py)
@@ -59,9 +59,12 @@ I = ' ' * 24
 def f(x):
     return float(x) if x not in ('', None) else float('nan')
 
+# ground-based mosaics left out of the card: (field, band label). J0722: DELVE r not shown, r is the VST image (Marianna, 6 Nov 2026)
+GROUND_SKIP = {('J0722', 'r_DELVE')}
+
 def rows_for(t, data):
     with open(os.path.join(data, 'completeness.csv'), newline='') as fh:
-        rows = [r for r in csv.DictReader(fh) if r['field'] == t[:5]]
+        rows = [r for r in csv.DictReader(fh) if r['field'] == t[:5] and (r['field'], r['band']) not in GROUND_SKIP]
     for r in rows:
         r['filt'], _, surv = r['band'].partition('_')
         r['surv'] = SURVEY.get(surv, surv)

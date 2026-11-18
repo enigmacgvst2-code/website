@@ -12,7 +12,7 @@ VST colour-image card on the Ancillary pages (internal site for now).
   uses the cached halo/ghost models in color/_work) instead of the full-field cube (default --look banner = darker).
 
 For each target it reads the 8-bit RGB cube written by the colour-image scripts
-(<field>/color/<field>_ugriz_cube.fits in ANCILLARY_DATA, sky orientation from its TAN WCS),
+(TARGETS: cube in ANCILLARY_DATA, bands shown; sky orientation from its TAN WCS),
 cuts two lens-centred views and writes them to images/<target>_VST/:
   vst_color_3arcmin.jpg   3' x 3' at the native 0.21" pixels
   vst_color_10arcmin.jpg  10' x 10' at the native pixels
@@ -28,20 +28,54 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ancillary_extra import COORDS as LENS   # lens positions as on the pages
-TARGETS = {  # target: (cube relative to ANCILLARY_DATA, u-band source)
-    'J0335-1927': ('COOL_J0335-1927/color/COOL_J0335-1927_ugriz_cube.fits', 'VST-ATLAS'),
-    'J0542-2125': ('COOL_J0542-2125/color/COOL_J0542-2125_ugriz_cube.fits', 'DECam'),
-    'J1029+2623': ('SDSS_J1029+2623/color/SDSS_J1029+2623_ugriz_cube.fits', 'SDSS'),
+LS, VST = 'Legacy Surveys DR10', 'VST/OmegaCAM'
+# galaxy=True: galaxy-scale lens -> a third view, 30" x 30" on the lens (LENS_VIEW), user 5 Nov 2026.
+# wip=True: colour image still work in progress -> no card (an existing card is removed), user 5 Nov 2026.
+TARGETS = {  # target: cube relative to ANCILLARY_DATA, bands shown {band: image source} (wavelength order),
+    #   zoom = default --zoom-size (the three first cards were cut from the --look deep zoom previews, 29 Oct),
+    #   note = extra sentence for the card. Cubes and band choice as of 5 Nov 2026 (make_color_images.py runs):
+    #   default white balance everywhere, as the first three cards; J0501 = cores fixed (--fix-cores),
+    #   J0722 = PSF-matched (--psf-match); J2107 = g r i (LS z covers only 27% of the field);
+    #   J2329: the DECam u covers only the NW ~19% and got no amplitude (calibration.json), so g r i z.
+    'J0123-0455': dict(wip=True, cube='PS_J0123-0455/color/PS_J0123-0455_ugriz_cube.fits',
+                       bands={'u': 'SDSS DR17', 'g': LS, 'r': VST, 'i': LS, 'z': LS}),
+    'J0335-1927': dict(cube='COOL_J0335-1927/color/COOL_J0335-1927_ugriz_cube.fits', zoom=640,
+                       bands={'u': 'VST-ATLAS', 'g': LS, 'r': VST, 'i': LS, 'z': LS}),
+    'J0501-0733': dict(galaxy=True, cube='eRASS1_J0501-0733/color/eRASS1_J0501-0733_griz_cube.fits',
+                       bands={'g': LS, 'r': VST, 'i': LS, 'z': LS},
+                       note='Star cores recoloured with the colour of the ring around them (PSF differences between the bands).'),
+    'J0542-2125': dict(cube='COOL_J0542-2125/color/COOL_J0542-2125_ugriz_cube.fits', zoom=640,
+                       bands={'u': 'DECam', 'g': LS, 'r': VST, 'i': LS, 'z': LS}),
+    'J0722-3901': dict(galaxy=True, cube='J0722-3901/color/J0722-3901_griz_cube.fits',
+                       bands={'g': 'DELVE DR3', 'r': VST, 'i': 'DELVE DR3', 'z': 'DELVE DR3'},
+                       ),
+    'J1029+2623': dict(cube='SDSS_J1029+2623/color/SDSS_J1029+2623_ugriz_cube.fits', zoom=640,
+                       bands={'u': 'SDSS', 'g': LS, 'r': VST, 'i': LS, 'z': LS}),
+    'J1330+1810': dict(galaxy=True, cube='SDSS_J1330+1810/color/SDSS_J1330+1810_ugriz_cube.fits',
+                       bands={'u': 'SDSS DR17', 'g': LS, 'r': VST, 'i': LS, 'z': LS}),
+    'J2107-1611': dict(galaxy=True, cube='PSJ2107-1611/color/PSJ2107-1611_gri_cube.fits',
+                       bands={'g': LS, 'r': VST, 'i': LS},
+                       note='No z: the Legacy Surveys z covers only 27% of the field; red comes from r and i.'),
+    'J2329-1258': dict(wip=True, cube='WISE_2329-1258/color/WISE_2329-1258_ugriz_cube.fits',
+                       bands={'g': LS, 'r': VST, 'i': LS, 'z': LS},
+                       note='No u: the DECam u covers only the north-west fifth of the field.'),
 }
 VIEWS = [  # (file stem, size arcsec, output px or None = native, scale bar arcsec, bar label, caption)
     ('vst_color_10arcmin', 600, None, 60, '1&prime;', '10&prime; &times; 10&prime; field'),
     ('vst_color_3arcmin', 180, None, 30, '30&Prime;', '3&prime; &times; 3&prime; zoom on the lens'),
 ]
+LENS_VIEW = ('vst_color_30arcsec', 30, 560, 5, '5&Prime;', '30&Prime; &times; 30&Prime; zoom on the lens')  # galaxy-scale lenses,
+#   140 native px upsampled (Lanczos) to 560 px
 QUALITY = 88
-# bands in wavelength order: (band, image source (None = TARGETS u source), chip colour = the band's hue in the
-# colour recipe of make_color_images.py: u (0,0,1) g (0,.3,.7) r (.1,.8,.1) i (.6,.4,0) z (.5,0,0), darkened for white text)
-BANDS = [('u', None, '#1d4ed8'), ('g', 'Legacy Surveys DR10', '#0369a1'), ('r', 'VST/OmegaCAM', '#15803d'),
-         ('i', 'Legacy Surveys DR10', '#b45309'), ('z', 'Legacy Surveys DR10', '#991b1b')]
+
+def views(t):
+    return VIEWS + ([LENS_VIEW] if TARGETS[t].get('galaxy') else [])
+
+def size_label(size):
+    return f'{size//60}&prime;' if size >= 60 else f'{size}&Prime;'
+# chip colour = the band's hue in the colour recipe of make_color_images.py:
+# u (0,0,1) g (0,.3,.7) r (.1,.8,.1) i (.6,.4,0) z (.5,0,0), darkened for white text
+BAND_COLOR = {'u': '#1d4ed8', 'g': '#0369a1', 'r': '#15803d', 'i': '#b45309', 'z': '#991b1b'}
 CHANNEL = {'u': 'blue', 'g': 'blue + green', 'r': 'green', 'i': 'red + green', 'z': 'red'}
 I = ' ' * 24
 
@@ -115,7 +149,7 @@ def zoom_source(cube_fn, hdr, w2p, scale, ra, de, size):
     return np.ascontiguousarray(a.transpose(2, 0, 1)), x0, y0
 
 def make_images(t, data_dir, site_dir, zoom_size=None):
-    rel, _ = TARGETS[t]
+    rel = TARGETS[t]['cube']
     hdr, cube = read_cube(os.path.join(data_dir, rel))
     w2p, scale, east_left, north_up_y = wcs(hdr)
     x, y = w2p(*LENS[t])
@@ -123,13 +157,13 @@ def make_images(t, data_dir, site_dir, zoom_size=None):
         cube, x0, y0 = zoom_source(os.path.join(data_dir, rel), hdr, w2p, scale, *LENS[t], zoom_size)
         x, y = x-x0, y-y0
     info = {'scale': scale, 'field': (cube.shape[2]*scale/60, cube.shape[1]*scale/60), 'views': []}
-    for stem, size, px, *_ in VIEWS:
+    for stem, size, px, *_ in views(t):
         n = int(round(size/scale/2))*2
         a = cut(cube, x, y, n)
         if north_up_y: a = a[::-1]          # image rows go top-down: north up
         if not east_left: a = a[:, ::-1]    # east left
         im = Image.fromarray(np.ascontiguousarray(a))
-        if px and px < n:
+        if px and px != n:
             im = im.resize((px, px), Image.LANCZOS)
         out = os.path.join(site_dir, 'images', f'{t}_VST', stem + '.jpg')
         im.save(out, quality=QUALITY, optimize=True, progressive=True)
@@ -143,11 +177,13 @@ COMPASS = ('<svg class="sky-compass" viewBox="0 0 44 44" aria-hidden="true">'
            '<text x="36" y="5" text-anchor="middle">N</text><text x="3" y="40" text-anchor="middle">E</text></svg>')
 
 def card(t, info):
-    _, usrc = TARGETS[t]
-    chips = ' '.join(f'<span class="band-chip" style="--band:{col}" title="{band} band: {CHANNEL[band]} channel">'
-                     f'<b>{band}</b>{usrc if src is None else src}</span>' for band, src, col in BANDS)
+    bands = TARGETS[t]['bands']
+    blist = ' '.join(bands)
+    chips = ' '.join(f'<span class="band-chip" style="--band:{BAND_COLOR[band]}" title="{band} band: {CHANNEL[band]} channel">'
+                     f'<b>{band}</b>{src}</span>' for band, src in bands.items())
+    note = f'{blist} color image of the field; click to enlarge.' + (' ' + TARGETS[t]['note'] if TARGETS[t].get('note') else '')
     figs = []
-    for (stem, size, _px, bar, barlab, cap), (_, width) in zip(VIEWS, info['views']):
+    for (stem, size, _px, bar, barlab, cap), (_, width) in zip(views(t), info['views']):
         src = f'images/{t}_VST/{stem}.jpg'
         extra = ('' if size <= 180 else  # dashed box = the 3' view (no marks on the zoom, user)
                  f'{I}                    <span class="sky-box" style="width:{100*180/size:.3f}%;height:{100*180/size:.3f}%"></span>\n')
@@ -156,7 +192,7 @@ def card(t, info):
             f'{I}            <a class="sky-zoom" href="{src}" title="Click to enlarge">\n'
             f'{I}                <span class="sky-frame">\n'
             f'{I}                    <img src="{src}" width="{width}" height="{width}" loading="lazy" '
-            f'alt="u g r i z color image of {t}, {size//60}&prime; &times; {size//60}&prime;">\n'
+            f'alt="{blist} color image of {t}, {size_label(size)} &times; {size_label(size)}">\n'
             f'{extra}'
             f'{I}                    <span class="sky-scale" style="width:{100*bar/size:.3f}%"><span>{barlab}</span></span>\n'
             f'{I}                    {COMPASS}\n'
@@ -168,8 +204,8 @@ def card(t, info):
             f'{I}    <div class="dataset-header">\n'
             f'{I}        <h2>Color Image</h2>\n'
             f'{I}    </div>\n'
-            f'{I}    <p class="prog-note">u g r i z color image of the field; click to enlarge.</p>\n'
-            f'{I}    <div class="sky-pair">\n' + ''.join(figs) +
+            f'{I}    <p class="prog-note">{note}</p>\n'
+            f'{I}    <div class="{"sky-trio" if len(figs) == 3 else "sky-pair"}">\n' + ''.join(figs) +
             f'{I}    </div>\n'
             f'{I}    <div class="meta-grid">\n'
             f'{I}        <div class="meta-item band-list"><span class="meta-label">Images:</span> {chips}</div>\n'
@@ -187,6 +223,9 @@ CSS = """            /* anc-color-css:start */
             .card-spectrum .dataset-header { border-bottom-color: rgba(71, 85, 105, 0.2); }
             .sky-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 10px 0 18px 0; }
             @media (max-width: 768px) { .sky-pair { grid-template-columns: 1fr; } }
+            .sky-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 10px 0 18px 0; }
+            @media (max-width: 900px) { .sky-trio { grid-template-columns: 1fr 1fr; } }
+            @media (max-width: 600px) { .sky-trio { grid-template-columns: 1fr; } }
             .sky-fig { margin: 0; }
             .sky-zoom { display: block; border: none; cursor: zoom-in; }
             .sky-frame { position: relative; display: block; line-height: 0; border-radius: 6px; overflow: hidden; background: #000; }
@@ -255,22 +294,30 @@ def build(page, t, info):
         page = page[:i] + JS + page[i:]
     return page
 
+def remove(page):
+    """Drop the card, its CSS and its script (colour image withdrawn)."""
+    return JS_RE.sub('', CSS_RE.sub('', CARD_RE.sub('', page, count=1), count=1), count=1)
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('targets', nargs='*')
     p.add_argument('--data', default=os.path.expanduser('~/VST/ANCILLARY_DATA'))
     p.add_argument('--site', default='.')
-    p.add_argument('--zoom-size', type=float, default=None, help='cut the views from the make_color_images.py --zoom-only preview of this size (arcsec) centred on the lens, e.g. 640 for a --look deep render, instead of the cube')
+    p.add_argument('--zoom-size', type=float, default=None, help='cut the views from the make_color_images.py --zoom-only preview of this size (arcsec) centred on the lens, e.g. 640 for a --look deep render, instead of the cube (default: the zoom of TARGETS, else the cube)')
     a = p.parse_args()
     for t in a.targets or list(TARGETS):
         if t not in TARGETS:
             print('no colour image configured for', t); continue
         print(t)
-        info = make_images(t, a.data, a.site, a.zoom_size)
         fn = os.path.join(a.site, f'{t}_anc.html')
         raw = open(fn, 'rb').read().decode('utf-8')
         crlf = '\r\n' in raw
-        new = build(raw.replace('\r\n', '\n'), t, info)
+        if TARGETS[t].get('wip'):
+            new = remove(raw.replace('\r\n', '\n')) if CARD_RE.search(raw.replace('\r\n', '\n')) else raw.replace('\r\n', '\n')
+            print('  work in progress: no colour card')
+        else:
+            info = make_images(t, a.data, a.site, a.zoom_size or TARGETS[t].get('zoom'))
+            new = build(raw.replace('\r\n', '\n'), t, info)
         if crlf: new = new.replace('\n', '\r\n')
         if new != raw:
             open(fn, 'wb').write(new.encode('utf-8')); print('  updated  ', fn)

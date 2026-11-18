@@ -2,7 +2,7 @@
 """Rebuild the "Target Coordinates" table on the Data page (data.html).
 
   python3 tools/data_table.py                    # this site
-  python3 tools/data_table.py . ../VST_P3_P4     # this site and the public one
+  python3 tools/data_table.py . ../vst-squared.github.io     # this site and the public one
 
 Positions come from COORDS below (from the ancillary pages). The period badge next to each target is
 computed from data.json (P3 = nights up to 30 Sep 2025, P4 = Oct 2025 - Sep 2026, P5 = from Oct 2026),
