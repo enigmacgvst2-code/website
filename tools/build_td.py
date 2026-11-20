@@ -384,7 +384,7 @@ def build(name, c):
     path = f'{name}_td.html'
     src = strip_generated_script(open(path, encoding='utf-8').read())
     out = re.sub(r'<style>.*?</style>', lambda m: STYLE, src, count=1, flags=re.S)
-    out = re.sub(r'<title>.*?</title>', f'<title>VST P3-P5 - Time Delays ({name})</title>', out, count=1)
+    out = re.sub(r'<title>.*?</title>', f'<title>(VST)&#178; - Time Delays ({name})</title>', out, count=1)
     main = f'''<div id="main-wrapper">
                     <div class="wrapper style1">
                         <div class="inner">

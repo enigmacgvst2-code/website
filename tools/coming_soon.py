@@ -42,7 +42,7 @@ def coming_soon_td(t):
     out = re.sub(r'<div id="main-wrapper">.*?(?=<div id="footer-wrapper-logo">)', lambda m: main, out, count=1, flags=re.S)
     out = re.sub(r'<script>\s*\(function \(\) \{.*?</script>\s*', '', out, count=1, flags=re.S)        # drop tab/zoom script
     out = re.sub(r'<div class="lightbox".*?</div>\s*', '', out, count=1, flags=re.S)
-    out = re.sub(r'<title>.*?</title>', f'<title>VST P3-P5 - Time Delays ({t})</title>', out, count=1)
+    out = re.sub(r'<title>.*?</title>', f'<title>(VST)&#178; - Time Delays ({t})</title>', out, count=1)
     out, _ = S.replace_nav(out, S.set_current_page_item(S.extract_nav(out), f'{t}_td.html'))
     return out
 
