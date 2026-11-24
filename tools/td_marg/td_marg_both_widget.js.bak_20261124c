@@ -1,0 +1,267 @@
+/*
+ * td_marg_both_widget.js - live time-delay box with two methods (needs td_gmarg.js and td_marg.js):
+ *   "gauss" = ~/VST/gaussian_marginalization.py  (sum of all Gaussians, optional weights)
+ *   "pycs3" = PyCS3 combine_estimates as in run_dir/4b_marginalise_spline.py (tau threshold)
+ * Markup: a JSON script element with id "tdb-<target>" holding
+ *   { "label": "A-B", "values": [..], "errors": [..], "weights": null | [..], "names": null | [..],
+ *     "method": "gauss" | "pycs3", "methods": ["gauss", "pycs3"], "sigmathresh": 0.5, "testmode": true }
+ * and a div with class "tdb" and data-src="tdb-<target>" (optional data-editable="1").
+ */
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  var GSUM = [
+    { name: 'Median, 16–84%', v: 'median', m: 'err_minus', p: 'err_plus', col: '#4287f5', dash: '' },
+    { name: 'Mode, 68% HPD', v: 'mode', m: 'mode_err_minus', p: 'mode_err_plus', col: '#42daf5', dash: '7 4' },
+    { name: 'Mean ± std', v: 'mean', m: 'std', p: 'std', col: '#1e3a8a', dash: '2 4' }];
+  var COMP_COL = ['#e4572e', '#2e9e5b', '#a347c2', '#e6a700', '#8c564b', '#d6337f'];   // estimates (no blues: blues = summaries)
+  function ccol(k) { return COMP_COL[k % COMP_COL.length]; }
+  var TITLES = { gauss: 'Sum of Gaussians', pycs3: 'PyCS3 (τ threshold)' };
+  var SQ2PI = Math.sqrt(2 * Math.PI);
+
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function h(tag, cls, parent, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function f2(v) { return (v < 0 ? '&minus;' : '') + Math.abs(v).toFixed(2); }
+  function t2(v) { return (v < 0 ? '−' : '') + Math.abs(v).toFixed(2); }
+  function valErr(v, m, p) {
+    return Math.abs(m - p) < 0.005 ? f2(v) + ' &plusmn; ' + p.toFixed(2)
+      : f2(v) + '<span class="tdg-ud"><sup>+' + p.toFixed(2) + '</sup><sub>&minus;' + m.toFixed(2) + '</sub></span>';
+  }
+  function niceTicks(lo, hi, n) {
+    var span = hi - lo, step = Math.pow(10, Math.floor(Math.log10(span / n))), r = n / span * step;
+    if (r <= 0.15) step *= 10; else if (r <= 0.35) step *= 5; else if (r <= 0.75) step *= 2;
+    var out = []; for (var v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9 * step; v += step) out.push(+v.toFixed(10));
+    return { ticks: out, step: step };
+  }
+  function tickTxt(v, step) { var d = step < 1 ? (step < 0.1 ? 2 : 1) : 0; return (v < 0 ? '−' : '') + Math.abs(v).toFixed(d); }
+  function interp(v, xs, ys) {
+    if (v <= xs[0]) return ys[0];
+    if (v >= xs[xs.length - 1]) return ys[ys.length - 1];
+    var a = 0, b = xs.length - 1; while (b - a > 1) { var m = (a + b) >> 1; if (xs[m] <= v) a = m; else b = m; }
+    return ys[a] + (v - xs[a]) * (ys[b] - ys[a]) / (xs[b] - xs[a]);
+  }
+  function gauss(xs, mu, s, w) { return xs.map(function (x) { var z = (x - mu) / s; return w * Math.exp(-0.5 * z * z) / (s * SQ2PI); }); }
+
+  // generic figure in the style of gaussian_marginalization.py make_plot
+  // fig = { lo, hi, comps: [{xs, ys, dash, faint}], marg: {xs, ys}, sums: [{v, m, p, col, dash}], label }
+  function plot(box, fig) {
+    var W = Math.max(300, Math.min(760, Math.round(box.clientWidth || 760))), small = W < 520;
+    var L = small ? 40 : 52, R = 8, T = 10, PH = small ? 170 : 230, BAR = 22, NB = Math.max(fig.sums.length, 1);
+    var H = T + PH + NB * BAR + 14 + 40, lo = fig.lo, hi = fig.hi;
+    var top = 0; fig.marg.ys.forEach(function (v, k) { if (fig.marg.xs[k] >= lo && fig.marg.xs[k] <= hi && v > top) top = v; });
+    fig.comps.forEach(function (c) { c.ys.forEach(function (v) { if (v > top) top = v; }); });
+    var ytop = top * 1.12, y0 = T + PH, yb = H - 40;
+    var X = function (v) { return L + (v - lo) / (hi - lo) * (W - L - R); };
+    var Y = function (p) { return y0 - p / ytop * PH; };
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, class: 'tdg-svg', role: 'img',
+      'aria-label': 'Probability density of the time delay: the estimates, their combination and its summaries' }, box);
+    function path(xs, ys) {
+      var s = '', first = true;
+      for (var k = 0; k < xs.length; k++) {
+        if (xs[k] < lo || xs[k] > hi) continue;
+        s += (first ? 'M' : 'L') + X(xs[k]).toFixed(1) + ' ' + Y(ys[k]).toFixed(1); first = false;
+      }
+      return s;
+    }
+    var yt = niceTicks(0, ytop, small ? 4 : 5);
+    yt.ticks.forEach(function (v) {
+      if (v > ytop) return;
+      el('line', { x1: L - 5, x2: L, y1: Y(v), y2: Y(v), stroke: '#334155' }, svg);
+      el('text', { x: L - 8, y: Y(v) + 4, 'text-anchor': 'end', class: 'tdg-ax' }, svg, tickTxt(v, yt.step));
+    });
+    el('text', { x: 12, y: T + PH / 2, class: 'tdg-ax', transform: 'rotate(-90 12 ' + (T + PH / 2) + ')', 'text-anchor': 'middle' },
+       svg, small ? 'Prob. density' : 'Probability density');
+    el('line', { x1: L, x2: L, y1: T, y2: yb, stroke: '#334155' }, svg);
+    el('line', { x1: L, x2: W - R, y1: yb, y2: yb, stroke: '#334155' }, svg);
+    el('line', { x1: L, x2: W - R, y1: y0, y2: y0, stroke: '#0f172a', 'stroke-width': 0.8 }, svg);
+    var xt = niceTicks(lo, hi, small ? 4 : 6);
+    xt.ticks.forEach(function (v) {
+      el('line', { x1: X(v), x2: X(v), y1: yb, y2: yb + 5, stroke: '#334155' }, svg);
+      el('text', { x: X(v), y: yb + 18, 'text-anchor': 'middle', class: 'tdg-ax' }, svg, tickTxt(v, xt.step));
+    });
+    el('text', { x: (L + W - R) / 2, y: yb + 34, 'text-anchor': 'middle', class: 'tdg-axl' }, svg,
+       'Time delay ' + fig.label.replace(/-/g, '–') + ' (days)');
+    fig.comps.forEach(function (c) {
+      el('path', { d: path(c.xs, c.ys), fill: 'none', stroke: c.col, 'stroke-width': 2, 'stroke-opacity': c.faint ? 0.4 : 0.95,
+                   'stroke-dasharray': c.faint ? '5 4' : '' }, svg);
+    });
+    el('path', { d: path(fig.marg.xs, fig.marg.ys), fill: 'none', stroke: '#000', 'stroke-width': 2.6 }, svg);
+    fig.sums.forEach(function (s, k) {
+      var pv = interp(s.v, fig.marg.xs, fig.marg.ys);
+      el('line', { x1: X(s.v), x2: X(s.v), y1: y0, y2: Y(pv), stroke: s.col, 'stroke-width': 2.5, 'stroke-dasharray': s.dash }, svg);
+      var y = y0 + 14 + k * BAR;
+      el('line', { x1: X(s.v - s.m), x2: X(s.v + s.p), y1: y, y2: y, stroke: s.col, 'stroke-width': 2 }, svg);
+      [s.v - s.m, s.v + s.p].forEach(function (u) { el('line', { x1: X(u), x2: X(u), y1: y - 5, y2: y + 5, stroke: s.col, 'stroke-width': 2 }, svg); });
+      el('circle', { cx: X(s.v), cy: y, r: 4.5, fill: s.col }, svg);
+    });
+  }
+
+  function legendItem(lg, dash, color, width, text, faint) {
+    var it = h('span', 'tdg-li', lg), sv = el('svg', { width: 30, height: 10, 'aria-hidden': 'true' }, it);
+    el('line', { x1: 0, x2: 30, y1: 5, y2: 5, stroke: color, 'stroke-width': width, 'stroke-dasharray': dash, 'stroke-opacity': faint ? 0.4 : 1 }, sv);
+    it.appendChild(document.createTextNode(text));
+  }
+
+  function ok(v) { return typeof v === 'number' && isFinite(v); }
+  function rowName(d, k) { return d.names && d.names[k] ? d.names[k] : 'Estimate ' + (k + 1); }
+
+  function render(root, d, st) {
+    var res = root.querySelector('.tdg-res'), pl = root.querySelector('.tdg-plot'), lg = root.querySelector('.tdg-legend');
+    var note = root.querySelector('.tdg-note'), ctl = root.querySelector('.tdb-tau');
+    res.innerHTML = ''; pl.innerHTML = ''; lg.innerHTML = '';
+    Array.prototype.forEach.call(root.querySelectorAll('.tdb-tabs button'), function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-m') === st.method ? 'true' : 'false');
+    });
+    if (ctl) { ctl.hidden = st.method !== 'pycs3'; ctl.querySelector('b').textContent = st.tau.toFixed(2); }
+    // only rows with a time delay and a positive error (and weight) take part
+    var idx = [];
+    d.values.forEach(function (v, k) { if (ok(v) && ok(d.errors[k]) && d.errors[k] > 0 && ok(d.weights[k]) && d.weights[k] > 0) idx.push(k); });
+    var allRows = root.querySelectorAll('tbody tr');
+    var rows = idx.map(function (k) { return allRows[k]; });
+    Array.prototype.forEach.call(allRows, function (tr, k) {
+      if (idx.indexOf(k) < 0) tr.querySelector('.tdb-stat').innerHTML = '<span class="tdb-w">&mdash;</span>';
+    });
+    if (!idx.length) {
+      h('div', 'tdg-empty', res, 'Enter the time delays and their errors in the table below.');
+      note.innerHTML = '';
+      return;
+    }
+    var mu = idx.map(function (k) { return d.values[k]; }), sg = idx.map(function (k) { return d.errors[k]; });
+    var wts = idx.map(function (k) { return d.weights[k]; }), names = idx.map(function (k) { return rowName(d, k); });
+    var n = mu.length, lo = Infinity, hi = -Infinity, k;
+    for (k = 0; k < n; k++) { lo = Math.min(lo, mu[k] - 4 * sg[k]); hi = Math.max(hi, mu[k] + 4 * sg[k]); }
+    var nm = function (k) { return names[k] + ': ' + t2(mu[k]) + ' ± ' + sg[k].toFixed(2); };
+    if (st.method === 'gauss') {
+      var r = TDGMarg.marginalize(mu, sg, wts), stride = Math.max(1, Math.floor(r.x.length / 4000));
+      var xs = [], samp = [];
+      for (var j = 0; j < r.x.length; j += stride) { xs.push(r.x[j]); samp.push(j); }
+      var pick = function (a) { return samp.map(function (j) { return a[j]; }); };
+      GSUM.forEach(function (s, i) {
+        h('div', 'tdg-chip' + (i === 0 ? ' tdg-main' : ''), res, '<i style="background:' + s.col + '"></i><span class="tdg-sn">' +
+          s.name + '</span> <span class="tdg-v">' + valErr(r[s.v], r[s.m], r[s.p]) + ' d</span>');
+      });
+      plot(pl, { lo: lo, hi: hi, label: d.label, marg: { xs: xs, ys: pick(r.pdf) },
+        comps: r.components.map(function (c, i) { return { xs: xs, ys: pick(c), col: ccol(idx[i]) }; }),
+        sums: GSUM.map(function (s) { return { v: r[s.v], m: r[s.m], p: r[s.p], col: s.col, dash: s.dash }; }) });
+      for (k = 0; k < n; k++) legendItem(lg, '', ccol(idx[k]), 2.4, nm(k));
+      legendItem(lg, '', '#000', 2.6, 'Marginal (sum)');
+      rows.forEach(function (tr, i) {
+        tr.querySelector('.tdb-stat').innerHTML = '<span class="tdb-w">' + (100 * r.weights[i]).toFixed(0) + '%</span>';
+      });
+      Array.prototype.forEach.call(root.querySelectorAll('.tdb-win'), function (wi) { wi.disabled = false; });
+      note.innerHTML = 'Each estimate is a Gaussian; the marginal distribution is their weighted sum (equal weights unless stated). ' +
+        'Coloured curves: the weighted estimates, which add up to the marginal (black). Because the marginal is generally asymmetric, ' +
+        'three summaries are given: median with 16th&ndash;84th percentiles, mode with the 68% highest-density interval, ' +
+        'and mean with standard deviation. Computed live in your browser.';
+    } else {
+      var est = mu.map(function (v, i) { return { name: names[i], medians: [v], up: [sg[i]], down: [sg[i]] }; });
+      var q = TDMarg.combine(est, { sigmathresh: st.tau, testmode: d.testmode !== false }), c = q.combined, K = q.members.length;
+      var b = q.bins[0], cx = [], cy = [];
+      for (k = 0; k < b.length - 1; k++) { cx.push(0.5 * (b[k] + b[k + 1])); cy.push(c.lins[0][k] / (b[k + 1] - b[k])); }
+      var col = '#4287f5';
+      h('div', 'tdg-chip tdg-main', res, '<i style="background:' + col + '"></i><span class="tdg-sn">Combined, 16–84% (τ = ' +
+        st.tau.toFixed(2) + ')</span> <span class="tdg-v">' + valErr(c.medians[0], c.down[0], c.up[0]) + ' d</span>');
+      var gx = []; for (k = 0; k <= 800; k++) gx.push(lo + (hi - lo) * k / 800);
+      plot(pl, { lo: lo, hi: hi, label: d.label, marg: { xs: cx, ys: cy },
+        comps: mu.map(function (v, i) {
+          var used = q.members.indexOf(i) >= 0;
+          return { xs: gx, ys: gauss(gx, v, sg[i], 1 / K), col: ccol(idx[i]), faint: !used };
+        }),
+        sums: [{ v: c.medians[0], m: c.down[0], p: c.up[0], col: col, dash: '' }] });
+      for (k = 0; k < n; k++) legendItem(lg, q.members.indexOf(k) >= 0 ? '' : '5 4', ccol(idx[k]), 2.4,
+                                         nm(k) + (q.members.indexOf(k) >= 0 ? '' : ' (not combined)'), q.members.indexOf(k) < 0);
+      legendItem(lg, '', '#000', 2.6, 'Combined (PyCS3)');
+      var sig = TDMarg.sigmas(c, q.groups);
+      rows.forEach(function (tr, i) {
+        var used = q.members.indexOf(i) >= 0;
+        tr.querySelector('.tdb-stat').innerHTML = (used ? '<span class="tdb-yes">Combined</span>' : '<span class="tdb-no">Not combined</span>') +
+          ' <span class="tdb-w">' + sig[i][0].toFixed(2) + '&sigma;</span>';
+      });
+      Array.prototype.forEach.call(root.querySelectorAll('.tdb-win'), function (wi) { wi.disabled = true; });
+      note.innerHTML = 'PyCS3 combination (Bonvin et al. 2018; Millon et al. 2020), as in our pipeline: starting from the most precise estimate, ' +
+        'every estimate in tension with it by more than &tau;&sigma; is added and the distributions are summed with equal weights; the check is ' +
+        'repeated on the result. &tau; = 0 sums all estimates (same as &ldquo;Sum of Gaussians&rdquo;, but on PyCS3&rsquo;s coarser binning); ' +
+        'estimates not needed are shown faint and dashed. Weights are not used. Next to the status: tension with the combined value. ' +
+        'Computed live in your browser.';
+    }
+  }
+
+  function build(root) {
+    var d = JSON.parse(document.getElementById(root.getAttribute('data-src')).textContent);
+    var editable = root.getAttribute('data-editable') === '1';
+    if (!d.values || !d.values.length) d.values = [null, null, null];
+    if (!d.errors) d.errors = d.values.map(function () { return null; });
+    if (!d.weights) d.weights = d.values.map(function () { return 1; });
+    var methods = (d.methods || ['gauss', 'pycs3']).filter(function (m) { return m === 'gauss' ? window.TDGMarg : window.TDMarg; });
+    var tau0 = d.sigmathresh === undefined ? 0.5 : d.sigmathresh;
+    var st = { method: methods.indexOf(d.method) >= 0 ? d.method : methods[0], tau: tau0 };
+    root.innerHTML = '';
+    if (methods.length > 1) {
+      var tabs = h('div', 'tdb-tabs', root); tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', 'Method');
+      methods.forEach(function (m) {
+        var bt = h('button', '', tabs, TITLES[m]); bt.type = 'button'; bt.setAttribute('data-m', m);
+        bt.addEventListener('click', function () { st.method = m; update(); });
+      });
+    }
+    if (methods.indexOf('pycs3') >= 0) {
+      var ctl = h('div', 'tdb-tau', root, '<label>Tension threshold &tau; = <b></b>' +
+        '<input type="range" min="0" max="3" step="0.05" value="' + tau0 + '" aria-label="Tension threshold tau"></label>' +
+        '<button type="button" class="tdb-reset">Reset to ' + tau0.toFixed(2) + '</button>');
+      var sl = ctl.querySelector('input');
+      sl.addEventListener('input', function () { st.tau = parseFloat(sl.value); update(); });
+      ctl.querySelector('.tdb-reset').addEventListener('click', function () { sl.value = tau0; st.tau = tau0; update(); });
+    }
+    h('div', 'tdg-res', root);
+    h('div', 'tdg-plot', root);
+    h('div', 'tdg-legend', root);
+    var tbl = h('table', 'tdg-tbl', root, '<thead><tr><th>Estimate</th><th>Time delay (days)</th><th>Error (days)</th>' +
+      (editable ? '<th>Weight</th>' : '') + '<th></th></tr></thead><tbody></tbody>');
+    var tb = tbl.querySelector('tbody');
+    function addRow(k) {
+      var tr = h('tr', '', tb), label = rowName(d, k);
+      var nt = h('td', 'tdg-name', tr, '<i style="background:' + ccol(k) + '"></i>'); nt.appendChild(document.createTextNode(label));
+      (editable ? [['values', 'time delay'], ['errors', 'error'], ['weights', 'relative weight']] : [['values'], ['errors']]).forEach(function (f) {
+        var td = h('td', 'tdg-num', tr);
+        if (!editable) { td.innerHTML = ok(d[f[0]][k]) ? f2(d[f[0]][k]) : ''; return; }
+        var inp = h('input', 'tdg-in' + (f[0] === 'weights' ? ' tdb-win' : ''), td); inp.type = 'number'; inp.step = 'any';
+        inp.value = ok(d[f[0]][k]) ? d[f[0]][k] : '';
+        inp.setAttribute('aria-label', label + ' ' + f[1]);
+        inp.addEventListener('input', function () {
+          var x = inp.value.trim() === '' ? null : parseFloat(inp.value);
+          if (x !== null && (!isFinite(x) || (f[0] !== 'values' && x <= 0))) { inp.classList.add('bad'); d[f[0]][k] = null; update(); return; }
+          inp.classList.remove('bad'); d[f[0]][k] = (x === null && f[0] === 'weights') ? 1 : x; update();
+        });
+      });
+      h('td', 'tdb-stat tdg-num', tr);
+    }
+    d.values.forEach(function (v, k) { addRow(k); });
+    if (editable) {
+      var add = h('button', 'tdb-add', root, '+ Add estimate'); add.type = 'button';
+      add.addEventListener('click', function () {
+        d.values.push(null); d.errors.push(null); d.weights.push(1); if (d.names) d.names.push(null);
+        addRow(d.values.length - 1); update();
+        var ins = tb.lastChild.querySelector('input'); if (ins) ins.focus();
+      });
+    }
+    h('p', 'tdg-note', root);
+    function update() { render(root, d, st); }
+    update();
+    var lastW = root.clientWidth;
+    window.addEventListener('resize', function () { if (Math.abs(root.clientWidth - lastW) > 30) { lastW = root.clientWidth; update(); } });
+  }
+
+  function init() { Array.prototype.forEach.call(document.querySelectorAll('.tdb[data-src]'), build); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();

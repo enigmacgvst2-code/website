@@ -1,0 +1,218 @@
+[
+ {
+  "label": "agree tau0.5",
+  "tau": 0.5,
+  "testmode": true,
+  "ests": [
+   {
+    "name": "e1",
+    "medians": [
+     20.4
+    ],
+    "up": [
+     0.6
+    ],
+    "down": [
+     0.6
+    ]
+   },
+   {
+    "name": "e2",
+    "medians": [
+     20.6
+    ],
+    "up": [
+     0.5
+    ],
+    "down": [
+     0.5
+    ]
+   },
+   {
+    "name": "e3",
+    "medians": [
+     20.5
+    ],
+    "up": [
+     0.7
+    ],
+    "down": [
+     0.7
+    ]
+   }
+  ]
+ },
+ {
+  "label": "tension tau0.5",
+  "tau": 0.5,
+  "testmode": true,
+  "ests": [
+   {
+    "name": "e1",
+    "medians": [
+     20.0
+    ],
+    "up": [
+     0.5
+    ],
+    "down": [
+     0.5
+    ]
+   },
+   {
+    "name": "e2",
+    "medians": [
+     21.2
+    ],
+    "up": [
+     0.6
+    ],
+    "down": [
+     0.6
+    ]
+   },
+   {
+    "name": "e3",
+    "medians": [
+     20.6
+    ],
+    "up": [
+     0.8
+    ],
+    "down": [
+     0.8
+    ]
+   }
+  ]
+ },
+ {
+  "label": "tension tau0 (true marg)",
+  "tau": 0.0,
+  "testmode": true,
+  "ests": [
+   {
+    "name": "e1",
+    "medians": [
+     20.0
+    ],
+    "up": [
+     0.5
+    ],
+    "down": [
+     0.5
+    ]
+   },
+   {
+    "name": "e2",
+    "medians": [
+     21.2
+    ],
+    "up": [
+     0.6
+    ],
+    "down": [
+     0.6
+    ]
+   },
+   {
+    "name": "e3",
+    "medians": [
+     20.6
+    ],
+    "up": [
+     0.8
+    ],
+    "down": [
+     0.8
+    ]
+   }
+  ]
+ },
+ {
+  "label": "asym tau0.5",
+  "tau": 0.5,
+  "testmode": true,
+  "ests": [
+   {
+    "name": "e1",
+    "medians": [
+     -748.6
+    ],
+    "up": [
+     26.0
+    ],
+    "down": [
+     24.3
+    ]
+   },
+   {
+    "name": "e2",
+    "medians": [
+     -700.0
+    ],
+    "up": [
+     40.0
+    ],
+    "down": [
+     30.0
+    ]
+   },
+   {
+    "name": "e3",
+    "medians": [
+     -790.0
+    ],
+    "up": [
+     20.0
+    ],
+    "down": [
+     35.0
+    ]
+   }
+  ]
+ },
+ {
+  "label": "tension tau0.5 fine",
+  "tau": 0.5,
+  "testmode": false,
+  "nseed": 2,
+  "ests": [
+   {
+    "name": "e1",
+    "medians": [
+     20.0
+    ],
+    "up": [
+     0.5
+    ],
+    "down": [
+     0.5
+    ]
+   },
+   {
+    "name": "e2",
+    "medians": [
+     21.2
+    ],
+    "up": [
+     0.6
+    ],
+    "down": [
+     0.6
+    ]
+   },
+   {
+    "name": "e3",
+    "medians": [
+     20.6
+    ],
+    "up": [
+     0.8
+    ],
+    "down": [
+     0.8
+    ]
+   }
+  ]
+ }
+]
