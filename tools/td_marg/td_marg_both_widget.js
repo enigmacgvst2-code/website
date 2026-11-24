@@ -162,7 +162,7 @@
       });
       Array.prototype.forEach.call(root.querySelectorAll('.tdb-win'), function (wi) { wi.disabled = false; });
       note.innerHTML = 'Each estimate is a Gaussian; the marginal distribution is their weighted sum (equal weights unless stated). ' +
-        'Coloured curves: the weighted estimates, which add up to the marginal (black). Because the marginal is generally asymmetric, ' +
+        'Colored curves: the weighted estimates, which add up to the marginal (black). Because the marginal is generally asymmetric, ' +
         'three summaries are given: median with 16th&ndash;84th percentiles, mode with the 68% highest-density interval, ' +
         'and mean with standard deviation. Computed live in your browser.';
     } else {

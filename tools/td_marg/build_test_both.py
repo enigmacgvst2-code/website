@@ -25,7 +25,7 @@ content = '''<!-- Hero Section -->
 <!-- End Data Sections -->''' % json.dumps(DATA)
 a, b = src.index('<!-- Hero Section -->'), src.index('<!-- End Data Sections -->') + len('<!-- End Data Sections -->')
 page = src[:a] + content.replace('\n', nl) + src[b:]
-page = page.replace('<li><a href="td_marg_test.html">Marginalisation</a></li>', '<li class="current_page_item"><a href="td_marg_test.html">Marginalisation</a></li>')
+page = page.replace('<li><a href="td_marg_test.html">Marginalization</a></li>', '<li class="current_page_item"><a href="td_marg_test.html">Marginalization</a></li>')
 page = re.sub(r'<title>.*?</title>', '<title>(VST)&#178; - Time Delays marginalization</title>', page, count=1)
 page = re.sub(r'<li class="current_page_item"\s*><a href="data.html">Data</a></li>', '<li><a href="data.html">Data</a></li>', page)
 i = page.index('</style>'); page = page[:i] + CSS + nl + '    ' + page[i:]
