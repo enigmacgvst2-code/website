@@ -23,6 +23,8 @@ FIXED = {
     'index.html': 'VST monitoring of strongly lensed quasars to measure time delays.',
     'people.html': 'The team behind the (VST)² programme.',
     'data.html': 'Data products, access and target coordinates of the (VST)² monitoring campaign.',
+    'marginalization.html': 'Combine several estimates of the same quantity (sum of Gaussians or PyCS3 combination).',
+    'td_marg_test.html': 'Combine several estimates of the same quantity (sum of Gaussians or PyCS3 combination).',
 }
 
 def description(name):

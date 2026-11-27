@@ -1,9 +1,10 @@
-# Build <site>/td_marg_test.html: empty calculator (no values in the page). Run for each site, e.g.
-#   python3 tools/td_marg/build_test_both.py ../vst-squared.github.io   (git-excluded there: never published)
-#   python3 tools/td_marg/build_test_both.py .                          (internal site)
+# Build the empty calculator page (no values in the page). Run for each site, e.g.
+#   python3 tools/td_marg/build_public.py ../vst-squared.github.io      (public: marginalization.html + Tools menu)
+#   python3 tools/td_marg/build_test_both.py .                          (internal site: td_marg_test.html)
+# Optional 2nd argument = output file name (default td_marg_test.html), 3rd = page title (default 'Marginalization').
 # Both methods: ~/VST/gaussian_marginalization.py (td_gmarg.js) and PyCS3 combine_estimates (td_marg.js).
 import os, re, sys, json
-PUB = sys.argv[1]; HERE = os.path.dirname(os.path.abspath(__file__))
+PUB = sys.argv[1]; OUT = sys.argv[2] if len(sys.argv) > 2 else 'td_marg_test.html'; TITLE = sys.argv[3] if len(sys.argv) > 3 else 'Marginalization'; HERE = os.path.dirname(os.path.abspath(__file__))
 src = open(os.path.join(PUB, 'data.html'), encoding='utf-8', newline='').read()
 nl = '\r\n' if '\r\n' in src else '\n'
 CSS = open(os.path.join(HERE, 'td_marg_both.css')).read()
@@ -13,22 +14,23 @@ DATA = {"label": "", "values": [None, None, None], "errors": [None, None, None],
         "method": "gauss", "methods": ["gauss", "pycs3"], "sigmathresh": 0.5, "testmode": True}
 content = '''<!-- Hero Section -->
                             <div class="hero-brand-section">
-                                <h1 class="hero-title"><span class="dark-text">Time Delays marginalization</span></h1>
+                                <h1 class="hero-title"><span class="dark-text">%s</span></h1>
                             </div>
                             <div class="tdm-page">
                                 <article class="tdm-card">
-                                    <p class="tdm-sub tdm-sub0">Combine several estimates of the same time delay, each given as a value with its 1&sigma; error.</p>
+                                    <p class="tdm-sub tdm-sub0">Combine several estimates of the same quantity, each given as a value with its 1&sigma; error.</p>
                                     <script type="application/json" id="tdb-calc">%s</script>
                                     <div class="tdb" data-src="tdb-calc" data-editable="1"></div>
                                 </article>
                             </div>
-<!-- End Data Sections -->''' % json.dumps(DATA)
+<!-- End Data Sections -->''' % (TITLE, json.dumps(DATA))
 a, b = src.index('<!-- Hero Section -->'), src.index('<!-- End Data Sections -->') + len('<!-- End Data Sections -->')
 page = src[:a] + content.replace('\n', nl) + src[b:]
-page = page.replace('<li><a href="td_marg_test.html">Marginalization</a></li>', '<li class="current_page_item"><a href="td_marg_test.html">Marginalization</a></li>')
-page = re.sub(r'<title>.*?</title>', '<title>(VST)&#178; - Time Delays marginalization</title>', page, count=1)
+page = page.replace('<li><a href="%s">Marginalization</a></li>' % OUT, '<li class="current_page_item"><a href="%s">Marginalization</a></li>' % OUT)
+page = re.sub(r'(<meta name="description" content=")[^"]*', r'\1Combine several estimates of the same quantity (sum of Gaussians or PyCS3 combination). (VST)&#178;: Variable Source Time delays with the VST', page, count=1)
+page = re.sub(r'<title>.*?</title>', '<title>(VST)&#178; - %s</title>' % TITLE, page, count=1)
 page = re.sub(r'<li class="current_page_item"\s*><a href="data.html">Data</a></li>', '<li><a href="data.html">Data</a></li>', page)
 i = page.index('</style>'); page = page[:i] + CSS + nl + '    ' + page[i:]
 i = page.rindex('</body>'); page = page[:i] + '<script>' + nl + JS + nl + '</script>' + nl + page[i:]
-out = os.path.join(PUB, 'td_marg_test.html')
+out = os.path.join(PUB, OUT)
 open(out, 'w', encoding='utf-8', newline='').write(page); print('wrote', out)

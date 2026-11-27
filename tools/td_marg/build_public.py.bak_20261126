@@ -1,0 +1,29 @@
+# Public site: Tools > Marginalization menu on every page + <public>/marginalization.html (empty calculator, no values).
+#   cd ~/Sites/website; python3 tools/td_marg/build_public.py ../vst-squared.github.io
+# Idempotent. Rerun after ~/VST/build_website.sh (regenerated _lc pages come without the Tools menu).
+import os, re, sys, glob, subprocess
+PUB = sys.argv[1]; HERE = os.path.dirname(os.path.abspath(__file__)); OUT = 'marginalization.html'
+ITEM = '<li><a href="%s">Marginalization</a></li>' % OUT
+DATA_LI = re.compile(r'[ \t]*<li(\s+class="[^"]*")?\s*>\s*<a href="data.html">Data</a>\s*</li>')
+
+# Tools goes just BEFORE Data: as the last menu item, dropotron opens its dropdown off-screen (left of the window).
+TOOLS_BLK = re.compile(r'[ \t]*<li> \r?\n[ \t]*<a href="#">Tools</a> \r?\n[ \t]*<ul> \r?\n.*?</ul> \r?\n[ \t]*</li> \r?\n', re.S)
+
+def add_tools(h):
+    if '<nav id="nav">' not in h: return h
+    nl = '\r\n' if '\r\n' in h else '\n'
+    h = TOOLS_BLK.sub('', h)                      # drop any existing Tools block, then re-insert in place
+    m = DATA_LI.search(h)
+    if not m: return h
+    ind = ' ' * 28
+    block = nl.join([ind + '<li> ', ind + '    <a href="#">Tools</a> ', ind + '    <ul> ',
+                     ind + '        ' + ITEM + ' ', ind + '    </ul> ', ind + '</li> ']) + nl
+    return h[:m.start()] + block + h[m.start():]
+
+n = 0
+for f in sorted(glob.glob(os.path.join(PUB, '*.html'))):
+    if f.endswith('_backup.html') or os.path.basename(f) == OUT: continue
+    h = open(f, encoding='utf-8', newline='').read(); h2 = add_tools(h)
+    if h2 != h: open(f, 'w', encoding='utf-8', newline='').write(h2); n += 1
+print('Tools menu added/updated in', n, 'pages', flush=True)
+subprocess.check_call([sys.executable, os.path.join(HERE, 'build_test_both.py'), PUB, OUT])  # takes the menu from data.html
