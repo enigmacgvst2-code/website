@@ -80,9 +80,8 @@
 		'<b style="color:#82e682">r</b> VST/OmegaCAM</span><br>Image: M. Annunziatella</p>');
 })();
 
-// Christmas: snowfall + Santa hat on the logo (Nov 2026).
+// Christmas: Santa hat on the logo + tiny tree on the Home banner (Nov 2026; snow removed 27 Nov).
 // Shows only 27 Nov – 6 Jan. Preview any day with ?xmas=1, hide with ?xmas=0.
-// Snow is skipped when the visitor prefers reduced motion.
 (function () {
 	var q = location.search, d = new Date(), m = d.getMonth();
 	var on = (m === 10 && d.getDate() >= 27) || m === 11 || (m === 0 && d.getDate() <= 6);
@@ -96,7 +95,13 @@
 		'#logo{position:relative}' +
 		'#logo .xmas-hat{position:absolute;left:30px;top:-17px;width:46px;height:40px;' +
 		'transform:rotate(22deg);pointer-events:none;z-index:3;filter:drop-shadow(0 2px 2px rgba(0,0,0,.45))}' +
-		'#xmas-snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999}';
+		'#header-wrapper-home .xmas-tree{position:absolute;left:43.5%;top:91%;width:1.8%;min-width:22px;' +
+		'transform:translate(-50%,-100%);pointer-events:none;z-index:2;filter:drop-shadow(0 0 3px rgba(255,214,120,.35))}' +
+		'#header-wrapper-home .xmas-tree svg{display:block;width:100%;height:auto}' +
+		'@media (prefers-reduced-motion:no-preference){#header-wrapper-home .xmas-tree .tw{animation:xmasTw 2.4s ease-in-out infinite}' +
+		'#header-wrapper-home .xmas-tree .tw2{animation-delay:-1.2s}}' +
+		'@keyframes xmasTw{0%,100%{opacity:1}50%{opacity:.35}}' +
+		'@media screen and (max-width:736px){#header-wrapper-home .xmas-tree{display:none}}';
 	document.head.appendChild(css);
 
 	// Santa hat on the round logo in the header.
@@ -110,52 +115,20 @@
 			'<circle cx="41" cy="21" r="5" fill="#f6f6f6"/>' +
 			'</svg>');
 	}
-
-	// Gentle snowfall.
-	if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-	var cv = document.createElement('canvas');
-	cv.id = 'xmas-snow';
-	cv.setAttribute('aria-hidden', 'true');
-	document.body.appendChild(cv);
-	var ctx = cv.getContext('2d'), W, H, dpr, flakes = [], N;
-
-	function size() {
-		dpr = Math.min(window.devicePixelRatio || 1, 2);
-		W = window.innerWidth; H = window.innerHeight;
-		cv.width = W * dpr; cv.height = H * dpr;
-		ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-		N = W < 736 ? 35 : 80;
-		while (flakes.length < N) flakes.push(flake(true));
-		flakes.length = N;
+	// Tiny tree on the rocks of the Home banner, between the VST and Rubin.
+	var hero = document.getElementById('header-wrapper-home');
+	if (hero) {
+		hero.insertAdjacentHTML('beforeend',
+			'<span class="xmas-tree" aria-hidden="true"><svg viewBox="0 0 30 46">' +
+			'<rect x="13" y="38" width="4" height="7" fill="#5a3a22"/>' +
+			'<path d="M15 6 L4 22 H10 L2 32 H9 L0 40 H30 L21 32 H28 L20 22 H26 Z" fill="#1f6b3a"/>' +
+			'<path d="M15 6 L20 22 H26 L15 6 Z M20 22 L28 32 H21 Z M21 32 L30 40 H22 Z" fill="#17552d"/>' +
+			'<circle class="tw" cx="11" cy="20" r="1.4" fill="#ff5a5a"/>' +
+			'<circle class="tw tw2" cx="18" cy="27" r="1.4" fill="#ffd25a"/>' +
+			'<circle class="tw" cx="9" cy="33" r="1.4" fill="#6ec3ff"/>' +
+			'<circle class="tw tw2" cx="21" cy="36" r="1.4" fill="#ff5a5a"/>' +
+			'<circle class="tw tw2" cx="14" cy="14" r="1.2" fill="#6ec3ff"/>' +
+			'<path d="M15 0.5 L16.4 4.3 L20.3 4.3 L17.1 6.6 L18.3 10.4 L15 8.1 L11.7 10.4 L12.9 6.6 L9.7 4.3 L13.6 4.3 Z" fill="#ffd84a"/>' +
+			'</svg></span>');
 	}
-	function flake(anyY) {
-		var r = 1 + Math.random() * 2.4;
-		return { x: Math.random() * W, y: anyY ? Math.random() * H : -5,
-			r: r, vy: 0.25 + r * 0.22, a: 0.35 + Math.random() * 0.45,
-			ph: Math.random() * 6.28, sw: 0.3 + Math.random() * 0.6 };
-	}
-	var t = 0;
-	function frame() {
-		if (!document.hidden) {
-			t += 0.01;
-			ctx.clearRect(0, 0, W, H);
-			for (var i = 0; i < flakes.length; i++) {
-				var f = flakes[i];
-				f.y += f.vy;
-				f.x += Math.sin(t + f.ph) * f.sw * 0.5;
-				if (f.y > H + 5 || f.x < -10 || f.x > W + 10) { flakes[i] = flake(false); continue; }
-				ctx.beginPath();
-				ctx.arc(f.x, f.y, f.r, 0, 6.2832);
-				ctx.fillStyle = 'rgba(255,255,255,' + f.a + ')';
-				ctx.fill();
-				ctx.strokeStyle = 'rgba(120,145,200,' + (f.a * 0.6) + ')';
-				ctx.lineWidth = 0.8;
-				ctx.stroke();
-			}
-		}
-		requestAnimationFrame(frame);
-	}
-	size();
-	window.addEventListener('resize', size);
-	requestAnimationFrame(frame);
 })();
